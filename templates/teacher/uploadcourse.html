@@ -119,22 +119,6 @@
       font-size: 16px;
     }
 
-
-    @media(max-width:768px) {
-      /* Default: hide the sidebar column on small screens */
-      .layout { grid-template-columns: 0 1fr; }
-
-      /* When menu is toggled, show icons-only sidebar */
-      .layout.show { grid-template-columns: 60px 1fr; }
-
-      /* Hide labels in the sidebar and compact the nav */
-      .sidebar span { display: none; }
-      .nav-actions span { display: none; }
-
-      /* Ensure sidebar doesn't produce a visible strip */
-      .sidebar { min-width: 0; }
-    }
-
     a {
       text-decoration: none;
       color: black;
@@ -144,6 +128,7 @@
     .main {
       padding: 26px 30px;
       min-height: calc(100vh - 60px);
+      min-width: 0;
     }
 
     /* ===== PAGE HEADER ===== */
@@ -220,6 +205,7 @@
       outline: none;
       transition: 0.2s;
       background: #fafafa;
+      width: 100%;
     }
 
     .form-group input:focus,
@@ -482,8 +468,9 @@
       border-radius: 18px;
       width: 100%;
       max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
       box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
       animation: popIn 0.25s ease;
     }
 
@@ -506,6 +493,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
 
     .modal-header h3 {
@@ -543,6 +533,7 @@
       display: flex;
       gap: 10px;
       justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     .tab-switch {
@@ -730,6 +721,7 @@
       display: flex;
       align-items: center;
       gap: 9px;
+      max-width: calc(100vw - 32px);
     }
 
     @keyframes slideIn {
@@ -762,14 +754,54 @@
       margin-top: 30px;
     }
 
-    /* ===== RESPONSIVE ===== */
-    @media(max-width:768px) {
-      .main {
-        padding: 14px;
+    /* ===== RESPONSIVE — Tablet (max 900px) ===== */
+    @media (max-width: 900px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .layout.show {
+        grid-template-columns: 200px 1fr;
+      }
+    }
+
+    /* ===== RESPONSIVE — Mobile/Small (max 768px) ===== */
+    @media (max-width: 768px) {
+      /* Nav */
+      .top-nav {
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .logo {
+        font-size: 16px;
+      }
+
+      .nav-actions {
+        gap: 12px;
+        font-size: 13px;
+      }
+
+      .nav-actions span {
+        display: none;
+      }
+
+      /* Layout */
+      .layout {
+        grid-template-columns: 0 1fr;
+        position: relative;
       }
 
       .layout.show {
         grid-template-columns: 60px 1fr;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        min-width: 0;
+        position: relative;
+        z-index: 10;
       }
 
       .sidebar span {
@@ -778,10 +810,37 @@
 
       .sidebar li {
         justify-content: center;
+        padding: 12px;
       }
 
+      /* Main */
+      .main {
+        padding: 14px;
+        overflow-x: hidden;
+      }
+
+      /* Page header */
+      .page-header h1 {
+        font-size: 20px;
+      }
+
+      .page-header p {
+        font-size: 13px;
+      }
+
+      /* Create panel */
+      .create-panel {
+        padding: 18px 14px;
+      }
+
+      .create-panel h2 {
+        font-size: 16px;
+      }
+
+      /* Form grid: single column */
       .form-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
       }
 
       .form-group.full {
@@ -790,6 +849,117 @@
 
       .courses-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .create-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        font-size: 14px;
+      }
+
+      /* Course card actions: 2 columns */
+      .course-card-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        padding: 10px 14px 14px;
+      }
+
+      .action-btn {
+        padding: 10px 6px;
+        font-size: 11px;
+      }
+
+      /* Modal: slide up from bottom */
+      .modal-overlay {
+        padding: 8px;
+        align-items: flex-end;
+      }
+
+      .modal-box {
+        border-radius: 18px 18px 0 0;
+        max-width: 100%;
+        max-height: 95vh;
+      }
+
+      .modal-body {
+        padding: 16px;
+      }
+
+      .modal-footer {
+        flex-direction: row;
+        padding: 12px 16px;
+      }
+
+      .modal-submit-btn,
+      .modal-cancel-btn {
+        flex: 1;
+        text-align: center;
+        padding: 12px 10px;
+      }
+
+      .tab-switch {
+        flex-direction: column;
+      }
+
+      .tab-switch button {
+        padding: 10px;
+      }
+
+      /* Toast */
+      .toast {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        font-size: 13px;
+      }
+
+      /* Section title */
+      .section-title {
+        font-size: 16px;
+      }
+
+      /* Footer */
+      .foot {
+        font-size: 12px;
+        padding: 14px;
+      }
+    }
+
+    /* ===== RESPONSIVE — Extra small (max 480px) ===== */
+    @media (max-width: 480px) {
+      .top-nav {
+        padding: 8px 10px;
+      }
+
+      .layout.show {
+        grid-template-columns: 50px 1fr;
+      }
+
+      .sidebar li {
+        padding: 10px;
+      }
+
+      .sidebar i {
+        font-size: 15px;
+      }
+
+      .create-panel {
+        padding: 14px 10px;
+        border-radius: 12px;
+      }
+
+      .page-header h1 {
+        font-size: 18px;
+      }
+
+      .courses-grid {
+        gap: 12px;
+      }
+
+      .modal-box {
+        border-radius: 14px 14px 0 0;
       }
     }
   </style>
