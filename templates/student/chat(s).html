@@ -276,7 +276,7 @@ a{
 </style>
 </head>
 
-<body>
+<body {% if active_user %}class="chat-open"{% endif %}>
 
 
 <header class="top-nav">
@@ -431,7 +431,8 @@ function openChat(name) {
 
 /* BACK TO USER LIST */
 function backToUsers() {
-    document.body.classList.remove("chat-open");
+    // navigate back to chat list so server clears the active chat
+    window.location.href = "{{ url_for('student_chat') }}";
 }
 </script>
 
