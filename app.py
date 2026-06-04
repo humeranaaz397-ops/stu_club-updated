@@ -9,21 +9,21 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = 'super_secret_student_club_key_12345'
 
-# Database configuration
-DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'humera0825',
-    'database': 'student_club_db'
-}
-
+# # Database configuration
 # DB_CONFIG = {
-#     'host': 'monorail.proxy.rlwy.net',
+#     'host': 'localhost',
 #     'user': 'root',
-#     'password': 'BCiIdEtLkFOAGlpRiVKzaWysCEOMNscO',
-#     'database': 'railway',
-#     'port': 35427
+#     'password': 'humera0825',
+#     'database': 'student_club_db'
 # }
+
+DB_CONFIG = {
+    'host': 'acela.proxy.rlwy.net',
+    'user': 'root',
+    'password': 'eRMmuqWlpZmdLTjsBCGeyXkFOCvrrgEo',
+    'database': 'railway',
+    'port': 20065
+}
 
 # Upload directories
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
