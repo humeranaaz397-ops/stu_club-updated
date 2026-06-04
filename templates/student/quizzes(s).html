@@ -270,6 +270,16 @@ p{
         padding: 14px;
     }
 
+    /* Sidebar uses grid columns; avoid fixed width so hidden column stays hidden */
+    .sidebar { min-width: 0; }
+
+    /* Hero adjustments to span full width next to small sidebar */
+    .hero { padding: 14px; }
+    .hero-text { max-width: none; width: 100%; }
+    .hero-actions { justify-content: center; width: 100%; }
+    .hero-actions input { width: 70%; min-width: 120px; }
+    .hero-image img { max-width: 140px; margin: 0 auto; }
+
     .hero {
         flex-direction: column;
         text-align: center;
