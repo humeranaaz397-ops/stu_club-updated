@@ -39,6 +39,11 @@ body{
     font-weight:bold;
 }
 
+.logo span{
+    display:inline-block;
+    white-space:nowrap;
+}
+
 .logo i{ cursor:pointer; }
 
 .nav-actions{
@@ -272,7 +277,7 @@ a{
 </style>
 </head>
 
-<body>
+<body{% if active_user %} class="chat-open"{% endif %}>
 
  
 <header class="top-nav">
@@ -426,7 +431,7 @@ function openChat(name) {
 }
  
 function backToUsers() {
-    document.body.classList.remove("chat-open");
+    window.location.href = "{{ url_for('teacher_chat') }}";
 }
 </script>
 

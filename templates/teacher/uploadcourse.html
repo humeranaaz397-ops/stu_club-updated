@@ -121,13 +121,18 @@
 
 
     @media(max-width:768px) {
-      .layout.show {
-        grid-template-columns: 60px 1fr;
-      }
+      /* Default: hide the sidebar column on small screens */
+      .layout { grid-template-columns: 0 1fr; }
 
-      .sidebar span {
-        display: none;
-      }
+      /* When menu is toggled, show icons-only sidebar */
+      .layout.show { grid-template-columns: 60px 1fr; }
+
+      /* Hide labels in the sidebar and compact the nav */
+      .sidebar span { display: none; }
+      .nav-actions span { display: none; }
+
+      /* Ensure sidebar doesn't produce a visible strip */
+      .sidebar { min-width: 0; }
     }
 
     a {

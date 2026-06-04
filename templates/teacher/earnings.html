@@ -26,24 +26,34 @@
         
         .foot { background-color:#2c2a99; color:white; text-align:center; padding:18px; font-size:16px; }
         
-        @media(max-width:768px) {
-            .layout.show { grid-template-columns:60px 1fr; }
-            .sidebar span { display:none; }
-            .top-nav { padding:12px 14px; }
-            .nav-actions span { display:none; }
-            .layout { grid-template-columns:0px 1fr; }
-            .sidebar li { justify-content:center; }
-            .content { padding:12px; }
+        @media (max-width: 768px) {
+            /* Hide sidebar column by default, show icons-only when toggled */
+            .layout { grid-template-columns: 0 1fr; }
+            .layout.show { grid-template-columns: 60px 1fr; }
+
+            /* Hide labels and compact nav */
+            .sidebar span { display: none; }
+            .nav-actions span { display: none; }
+            .top-nav { padding: 12px 14px; }
+
+            /* Prevent visible gray strip from collapsed sidebar */
+            .sidebar { min-width: 0; }
+
+            .sidebar li { justify-content: center; }
+            .content { padding: 12px; }
+
+            /* Make earnings card full-width on mobile */
+            .earnings-card { display: block; width: 100%; box-sizing: border-box; }
         }
         
         a { text-decoration:none; color:black; }
         
         /* EARNINGS STYLES */
-        .content { flex:1; padding:40px; background:#f9fafb; color:#111827; }
-        .header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; }
+        .content { flex:1; padding:24px; background:#f9fafb; color:#111827; }
+        .header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px; }
         .header h1 { font-size:28px; color:#1e3a8a; }
         
-        .earnings-card { background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:15px; padding:30px; box-shadow:0 10px 25px rgba(37,99,235,0.2); margin-bottom:40px; display:inline-block; min-width:300px; }
+        .earnings-card { background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:15px; padding:20px; box-shadow:0 10px 25px rgba(37,99,235,0.2); margin-bottom:20px; display:block; width:100%; box-sizing:border-box; min-width:0; }
         .earnings-card h3 { font-size:16px; font-weight:500; opacity:0.9; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
         .earnings-card .amount { font-size:42px; font-weight:700; }
         
@@ -67,9 +77,9 @@
     justify-content: space-between;
     align-items: center;
     background-color: #f0f4ff;
-    padding: 20px;
+    padding: 16px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 .hero-text {
     max-width: 60%;
@@ -102,7 +112,7 @@
     border-radius: 10px;
 }        
         @media (max-width: 768px) {
-            .hero { flex-direction: column; text-align: center; padding: 20px 16px; }
+            .hero { flex-direction: column; text-align: center; padding: 14px 12px; }
             .hero-text { max-width: 100%; }
             .hero-text h1 { font-size: 20px; }
             .hero-actions { flex-direction: column; width: 100%; }

@@ -270,8 +270,11 @@ p{
         padding: 14px;
     }
 
-    /* Sidebar uses grid columns; avoid fixed width so hidden column stays hidden */
-    .sidebar { min-width: 0; }
+    /* Ensure sidebar doesn't push content on small screens */
+    .sidebar {
+        width: 60px;
+        min-width: 60px;
+    }
 
     /* Hero adjustments to span full width next to small sidebar */
     .hero { padding: 14px; }

@@ -333,8 +333,8 @@ a{
     <input type="text" placeholder="🔍 Search conversations">
     <div class="chats-content">
         {% for u in connected_users %}
-        <a href="{{ url_for('student_chat', active_chat=u.user_id) }}" style="text-decoration: none; color: inherit;" onclick="window.location.href='{{ url_for('student_chat') }}?active_chat={{ u.user_id }}'; return false;">
-            <div class="user-item {% if active_chat_id and active_chat_id == u.user_id|string %}active-chat{% endif %}" style="display: flex; justify-content: space-between; align-items: center; touch-action: manipulation;">
+        <a href="{{ url_for('student_chat', active_chat=u.user_id) }}" style="text-decoration: none; color: inherit;">
+            <div class="user-item {% if active_chat_id and active_chat_id == u.user_id|string %}active-chat{% endif %}" style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <img src="https://ui-avatars.com/api/?name={{ u.name|urlencode }}&background=random" width="50" height="50" style="border-radius:50%">
                     <div>
