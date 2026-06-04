@@ -111,67 +111,47 @@ body {
         }
 
 
-@media(max-width:768px){
-    .layout.show{
-        grid-template-columns:60px 1fr;
-    }
+a { text-decoration: none; color: black; }
 
-    .sidebar span{
-        display:none;
-    }
+/* ===== RESPONSIVE — Tablet (max 900px) ===== */
+@media (max-width: 900px) {
+    .layout.show { grid-template-columns: 200px 1fr; }
 }
 
-a{
-    text-decoration:none;
-    color:black;
-}
-
+/* ===== RESPONSIVE — Mobile (max 768px) ===== */
 @media (max-width: 768px) {
+    .top-nav { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+    .logo { font-size: 16px; }
+    .nav-actions { gap: 10px; font-size: 13px; }
+    .nav-actions span { display: none; }
 
- 
-  .top-nav {
-    padding: 12px 14px;
-  }
+    .layout { grid-template-columns: 0 1fr; position: relative; }
+    .layout.show { grid-template-columns: 60px 1fr; }
 
-  .nav-actions span {
-    display: none;
-  }
+    .sidebar { min-width: 0; }
+    .sidebar span { display: none; }
+    .sidebar li { justify-content: center; padding: 12px 8px; }
 
+    .container { padding: 14px; margin: 10px auto; }
+    h2 { font-size: 18px; margin-bottom: 14px; }
 
-  .layout {
-    grid-template-columns: 0px 1fr;
-  }
+    table { display: block; overflow-x: auto; white-space: nowrap; }
 
-  .layout.show {
-    grid-template-columns: 60px 1fr;
-  }
+    .upload-box { flex-direction: column; }
+    .folder-actions { flex-direction: column; }
+    .action-buttons { flex-direction: column; }
 
-
-  .sidebar span {
-    display: none;
-  }
-
-  .sidebar li {
-    justify-content: center;
-  }
-
-
-  .main-content {
-    padding: 12px;
-  }
-  
-.upload-box{
-flex-direction:column;
+    .video-box { padding: 14px; width: 95%; }
+    .foot { font-size: 12px; padding: 14px; }
 }
 
-.folder-actions{
-flex-direction:column;
-}
-
-.action-buttons{
-flex-direction:column;
-}
-
+/* ===== RESPONSIVE — Extra small (max 480px) ===== */
+@media (max-width: 480px) {
+    .top-nav { padding: 8px 10px; }
+    .layout.show { grid-template-columns: 50px 1fr; }
+    .sidebar li { padding: 10px 6px; }
+    .container { padding: 10px; }
+    h2 { font-size: 16px; }
 }
 
 .container{
@@ -581,11 +561,11 @@ controls></video>
 /* SIDEBAR */
 
 function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
 
-document
-.getElementById("layout")
-.classList.toggle("show");
-
+function logout() {
+    window.location.href = "/logout";
 }
 
 /* DATA */
