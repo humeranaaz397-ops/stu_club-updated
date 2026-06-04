@@ -128,6 +128,33 @@ os.makedirs(os.path.join(app.root_path, 'static', 'uploads', 'materials'), exist
 os.makedirs(os.path.join(app.root_path, 'static', 'uploads', 'videos'), exist_ok=True)
 os.makedirs(os.path.join(app.root_path, 'static', 'uploads', 'courses'), exist_ok=True)
 
+# 0. Check if 'users' table exists. If not, initialize database from db.sql!
+try:
+    _conn = get_db()
+    _cursor = _conn.cursor()
+    _cursor.execute("SHOW TABLES LIKE 'users'")
+    if not _cursor.fetchone():
+        db_sql_path = os.path.join(app.root_path, 'db.sql')
+        if os.path.exists(db_sql_path):
+            with open(db_sql_path, 'r', encoding='utf-8') as f:
+                sql_script = f.read()
+            statements = sql_script.split(';')
+            for statement in statements:
+                stmt = statement.strip()
+                if not stmt:
+                    continue
+                if stmt.upper().startswith("CREATE DATABASE") or stmt.upper().startswith("USE "):
+                    continue
+                try:
+                    _cursor.execute(stmt)
+                except Exception:
+                    pass
+            _conn.commit()
+    _cursor.close()
+    _conn.close()
+except Exception:
+    pass
+
 try:
     _conn = get_db()
     _cursor = _conn.cursor()
@@ -214,7 +241,7 @@ except Exception:
 try:
     _conn = get_db()
     _cursor = _conn.cursor()
-    
+
     # 1. Alter courses (status column)
     try:
         _cursor.execute("ALTER TABLE courses ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'approved'")
@@ -5554,6 +5581,6 @@ def add_notification(user_id, message):
         if 'cursor' in locals(): cursor.close()
         if 'conn' in locals(): conn.close()
 
-# Run Server
+# Run Flask Server
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
