@@ -240,111 +240,73 @@ p{
 }
 .submit-btn:hover { background: #218838; }
 
-@media (max-width: 992px) {
-    .hero-text h1 { font-size: 22px; }
-    .hero-image img { max-width: 180px; }
-}
-
 @media (max-width: 768px) {
-    /* Make sidebar an overlay and keep main content full-width */
-    .layout { grid-template-columns: 1fr; }
-    .sidebar {
-        position: fixed;
-        left: -260px;
-        top: 60px;
-        width: 220px;
-        height: calc(100vh - 60px);
-        z-index: 2000;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.12);
-        border-right: none;
-        background: #f5f5f5;
-        overflow-y: auto;
-        transition: left 0.25s ease;
+
+    .top-nav {
+        padding: 12px 14px;
     }
-    .layout.show .sidebar { left: 0; }
-    .sidebar ul { padding-top: 8px; }
-    .sidebar li { padding: 12px 14px; }
-    .sidebar i { min-width: 28px; text-align: center; }
 
-    /* Hide long text labels to save space */
-    .sidebar span { display: none; }
-    .top-nav .logo span { display: none; }
-    .nav-actions a span { display: none; }
+    .nav-actions span {
+        display: none;
+    }
 
-    /* Top nav compact */
-    .top-nav { padding: 10px 12px; }
-    .nav-actions { gap: 8px; }
+    .layout {
+        grid-template-columns: 0 1fr;
+    }
 
-    /* Hero stacks vertically and centers */
-    .hero { flex-direction: column; text-align: center; gap: 12px; padding: 16px; }
-    .hero-text { max-width: 100%; }
-    .hero-image img { max-width: 140px; }
+    .layout.show {
+        grid-template-columns: 60px 1fr;
+    }
 
-    /* Cards become full width stacked */
+    .sidebar span {
+        display: none;
+    }
+
+    .sidebar li {
+        justify-content: center;
+    }
+
+    .content {
+        padding: 14px;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text {
+        width: 100%;
+    }
+
+    .hero-text h1 {
+        font-size: 20px;
+    }
+
+    .hero-sub {
+        font-size: 14px;
+    }
+
+    .hero-image {
+        text-align: center;
+    }
+
+    .hero-image img {
+        max-width: 100%;
+    }
+
     .quiz-card { flex-direction: column; gap: 12px; align-items: stretch; text-align: left; }
     .quiz-card > div { width: 100%; }
     .take-btn { align-self: flex-end; }
 
-    .content { padding: 12px; }
-
-    /* Quiz interface adjustments for touch */
-    .quiz-interface { padding: 18px; }
-    .question-text { font-size: 16px; }
-    .option-label { padding: 12px; font-size: 15px; }
-    .submit-btn { width: 100%; padding: 14px; }
-
-    /* Make search input and buttons more compact */
-    .hero-actions { width: 100%; display: flex; }
-    .hero-actions input { padding: 10px; }
-    .hero-actions .ask-btn.small { padding: 10px 12px; }
 }
 
 @media (max-width: 480px) {
-    .hero-text h1 { font-size: 20px; }
-    .hero-sub { font-size: 14px; }
-    .hero-image img { max-width: 120px; }
-    .option-label { padding: 10px; font-size: 14px; }
-    .take-btn { padding: 10px 14px; }
+    .quiz-card { gap: 10px; }
+    .hero-text h1 { font-size: 18px; }
+    .hero-sub { font-size: 13px; }
+    .submit-btn { width: 100%; }
 }
-
-@media(max-width:768px){
-    .layout.show{
-        grid-template-columns:60px 1fr;
-    }
-
-    .sidebar span{
-        display:none;
-    }
-}
-
-@media (max-width: 768px) {
-
-  .top-nav {
-    padding: 12px 14px;
-  }
-
-  .nav-actions span {
-    display: none;
-  }
-
- 
-  .layout {
-    grid-template-columns: 0px 1fr;
-  }
-
-  .layout.show {
-    grid-template-columns: 60px 1fr;
-  }
-
-  .sidebar span {
-    display: none;
-  }
-
-  .sidebar li {
-    justify-content: center;
-  }
-}
-
 </style>
 </head>
 <body>
