@@ -1,1209 +1,1226 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Event Management</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
- 
-
-.top-nav{
-    background:#2c2a99;
-    color:white;
-    padding:14px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:1000;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:20px;
-    font-weight:bold;
-}
-
-.logo i{
-    cursor:pointer;
-}
-
-.nav-actions{
-    display:flex;
-    gap:18px;
-    align-items:center;
-}
-
- 
-
-.layout{
-    display:grid;
-    grid-template-columns:0px 1fr;
-    transition:0.35s ease;
-}
-
-.layout.show{
-    grid-template-columns:220px 1fr;
-}
- 
-
-.sidebar{
-    background:lightgrey;
-    min-height:calc(100vh - 60px);
-    border-right:1px solid #ddd;
-    overflow:hidden;
-}
-
-.sidebar ul{
-    list-style:none;
-    padding-top:10px;
-}
-
-.sidebar li{
-    padding:14px 18px;
-}
-
-.sidebar li:hover{
-    background:#e5efff;
-}
-
-.sidebar a{
-    text-decoration:none;
-    color:black;
-    display:flex;
-    gap:12px;
-    align-items:center;
-}
-
-.sidebar li.active{
-    background:#e5efff;
-    border-left:4px solid #2563eb;
-}
-
- 
-
-.main{
-    padding:30px;
-}
-
-.hero{
-    background:#eef3ff;
-    border-radius:12px;
-    padding:25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
-
-.hero h1{
-    font-size:34px;
-    margin-bottom:10px;
-}
-
-.hero p{
-    font-size:18px;
-    color:#333;
-    margin-bottom:14px;
-}
-
-.hero img{
-    width:260px;
-    height:150px;
-    object-fit:cover;
-    border-radius:10px;
-}
-
- 
-
-.search-bar{
-    display:flex;
-    gap:10px;
-    margin-top:4px;
-}
-
-.search-bar input{
-    padding:11px 16px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:15px;
-    width:300px;
-    outline:none;
-}
-
-.search-bar input:focus{
-    border-color:#2c2a99;
-}
-
-.search-bar button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:11px 22px;
-    border-radius:8px;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.search-bar button:hover{
-    background:#1a4fbe;
-}
-
- 
-
-.create-event-btn{
-    background:#2c2a99;
-    color:white;
-    border:none;
-    padding:12px 24px;
-    border-radius:8px;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer;
-    margin-bottom:25px;
-}
-
-.create-event-btn i{
-    margin-right:8px;
-}
-
- 
-
-.teacher-form{
-    background:#f4f4f4;
-    padding:25px;
-    border-radius:12px;
-    margin-bottom:30px;
-    display:none;
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
-}
-
-.form-group{
-    display:flex;
-    flex-direction:column;
-}
-
-.form-group label{
-    font-weight:700;
-    margin-bottom:8px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-}
-
-.form-group textarea{
-    resize:none;
-}
-
-.full{
-    grid-column:1 / 3;
-}
-
- 
-
-.btn-area{
-    display:flex;
-    gap:15px;
-    margin-top:22px;
-    flex-wrap:wrap;
-}
-
-.btn{
-    border:none;
-    padding:11px 24px;
-    border-radius:7px;
-    color:white;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.form-save-btn{
-    background:#d17a00;
-}
-
-.post-btn{
-    background:#0000ff;
-}
-
-.show-btn{
-    background:#15985d;
-}
-
- 
-
-.event-area{
-    background:#f4f4f4;
-    border-radius:12px;
-    padding:25px;
-}
-
-.event-card{
-    background:white;
-    border-radius:12px;
-    padding:22px;
-    margin-bottom:22px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.event-header{
-    display:flex;
-    gap:20px;
-}
-
-.event-img{
-    width:220px;
-    height:145px;
-    object-fit:cover;
-    border-radius:10px;
-}
-
-.event-content{
-    flex:1;
-}
-
-.tag{
-    display:inline-block;
-    background:#e9f5ff;
-    color:#2563eb;
-    padding:6px 14px;
-    border-radius:20px;
-    margin-bottom:10px;
-    font-weight:600;
-}
-
-.event-content h3{
-    font-size:24px;
-    margin-bottom:8px;
-}
-
-.event-content p{
-    color:#333;
-    margin-bottom:8px;
-    line-height:1.5;
-}
-
-.event-info{
-    display:flex;
-    flex-wrap:wrap;
-    gap:18px;
-    margin:12px 0;
-}
-
-.apply-btn{
-    background:#0000ff;
-    color:white;
-    text-decoration:none;
-    padding:10px 22px;
-    border-radius:7px;
-    display:inline-block;
-    margin-top:8px;
-    font-weight:600;
-}
-
- 
-
-.actions{
-    border-top:1px solid #ccc;
-    margin-top:18px;
-    padding-top:16px;
-    display:flex;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    gap:12px;
-}
-
-.action-btn{
-    border:none;
-    background:transparent;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-}
-
-.action-btn i{
-    margin-right:7px;
-}
-
-.edit-btn{
-    color:#2563eb;
-}
-
-.delete-btn{
-    color:red;
-}
-
-.view-btn{
-    color:#15985d;
-}
-
- 
-
-.comment-section{
-    display:none;
-    margin-top:18px;
-    border-top:1px solid #eee;
-    padding-top:14px;
-}
-
-.comment-section textarea{
-    width:100%;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    resize:none;
-    margin-bottom:10px;
-}
-
-.comment-section .comment-post-btn{
-    background:#2c2a99;
-    color:white;
-    border:none;
-    padding:8px 18px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:700;
-    margin-bottom:12px;
-}
-
-.comment{
-    background:#f4f4f4;
-    border-radius:8px;
-    padding:10px 14px;
-    margin-bottom:8px;
-    font-size:15px;
-}
-
- 
-
-.no-results{
-    text-align:center;
-    padding:30px;
-    color:#888;
-    font-size:17px;
-    display:none;
-}
-
- 
-
-.foot{
-    background:#2c2a99;
-    color:white;
-    text-align:center;
-    padding:18px;
-}
-
- 
-
-@media(max-width:992px){
-
-    .hero{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:20px;
-    }
-
-    .hero img{
-        width:100%;
-        height:220px;
-    }
-
-    .event-header{
-        flex-direction:column;
-    }
-
-    .event-img{
-        width:100%;
-        height:220px;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .full{
-        grid-column:1;
-    }
-}
-
-@media(max-width:768px){
-
-    .layout.show{
-        grid-template-columns:60px 1fr;
-    }
-
-    .sidebar span{
-        display:none;
-    }
-
-    .nav-actions span{
-        display:none;
-    }
-
-    .search-bar input{
-        width:100%;
-    }
-
-    .search-bar{
-        flex-wrap:wrap;
-    }
-}
-
-@media(max-width:576px){
-
-    .main{
-        padding:18px;
-    }
-
-    .hero h1{
-        font-size:26px;
-    }
-
-    .btn-area{
-        flex-direction:column;
-    }
-
-    .btn{
-        width:100%;
-    }
-}
-
-
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:25px;
-      margin:55px 0 30px;
-    }
-
-    .stat-card{
-      background:#d1d1d1;
-      border-radius:12px;
-      padding:22px 25px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      min-height:95px;
-    }
-
-    .stat-card h4{
-      font-size:20px;
-      font-weight:800;
-      margin:0;
-    }
-
-    .stat-card h3{
-      font-size:26px;
-      font-weight:800;
-      margin:0;
-    }
-
-    .stat-card i{
-      font-size:26px;
-    }
-
-
- .create-event-btn{
-    background:#2c2a99;
-    color:white;
-    border:none;
-    padding:12px 24px;
-    border-radius:8px;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer;
-    margin-bottom:25px;
-    display:block;         
-    margin-left:auto;      
-}
- 
-@media(max-width:768px){
-    .layout.show{
-        grid-template-columns:60px 1fr;
-    }
-
-    .sidebar span{
-        display:none;
-    }
-}
- 
-@media (max-width: 768px) {
-
- 
-  .top-nav {
-    padding: 12px 14px;
-  }
-
-  .nav-actions span {
-    display: none;
-  }
-
- 
-  .layout {
-    grid-template-columns: 0px 1fr;
-  }
-
-  .layout.show {
-    grid-template-columns: 60px 1fr;
-  }
-
- 
-  .sidebar span {
-    display: none;
-  }
-
-  .sidebar li {
-    justify-content: center;
-  }
-
- 
-  .main-content {
-    padding: 12px;
-  }
-
- 
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-
-  .hero-text {
-    max-width: 100%;
-  }
-
-  .hero-text h1 {
-    font-size: 22px;
-  }
-
-  .hero-sub {
-    font-size: 14px;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-  }
-
-  .hero-actions input {
-    width: 100%;
-  }
-
-  .hero-image img {
-    max-width: 100%;
-    height: auto;
-  }
-  #para1, #para2, #para3, #para4 {
-    height: 80px;
-    width: 100%; 
-  }
-} 
-
-body {
-  overflow-x: hidden;
-}
-
-.main {
-  width: 100%;
-  overflow: hidden;
-}
-
-img {
-  max-width: 100%;
-}
-
- 
-@media (max-width: 900px) {
-  .stats {
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin: 25px 0;
-  }
-}
-
- 
-@media (max-width: 768px) {
-  .top-nav {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .logo span {
-    font-size: 16px;
-  }
-
-  .layout,
-  .layout.show {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .main {
-    padding: 15px;
-  }
-
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 18px;
-  }
-
-  .hero h1 {
-    font-size: 24px;
-  }
-
-  .hero p {
-    font-size: 15px;
-  }
-
-  .hero img {
-    width: 100%;
-    height: 180px;
-  }
-
-  .search-bar {
-    flex-direction: column;
-  }
-
-  .search-bar input,
-  .search-bar button {
-    width: 100%;
-  }
-
-  .create-event-btn {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .event-area {
-    padding: 14px;
-  }
-
-  .event-card {
-    padding: 15px;
-  }
-
-  .event-header {
-    flex-direction: column;
-  }
-
-  .event-img {
-    width: 100%;
-    height: 180px;
-  }
-
-  .event-content h3 {
-    font-size: 20px;
-  }
-
-  .event-info {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .action-btn {
-    background: #f4f4f4;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .full {
-    grid-column: auto;
-  }
-}
-
- 
-@media (max-width: 480px) {
-  .nav-actions {
-    gap: 12px;
-  }
-
-  .hero h1 {
-    font-size: 21px;
-  }
-
-  .stat-card {
-    padding: 18px;
-  }
-
-  .stat-card h4 {
-    font-size: 16px;
-  }
-
-  .stat-card h3 {
-    font-size: 22px;
-  }
-
-  .actions {
-    grid-template-columns: 1fr;
-  }
-
-  .apply-btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .btn-area {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-  }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Event Management</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+
+        .top-nav {
+            background: #2c2a99;
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            cursor: pointer;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+
+
+        .layout {
+            display: grid;
+            grid-template-columns: 0px 1fr;
+            transition: 0.35s ease;
+        }
+
+        .layout.show {
+            grid-template-columns: 220px 1fr;
+        }
+
+
+        .sidebar {
+            background: lightgrey;
+            min-height: calc(100vh - 60px);
+            border-right: 1px solid #ddd;
+            overflow: hidden;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-top: 10px;
+        }
+
+        .sidebar li {
+            padding: 14px 18px;
+        }
+
+        .sidebar li:hover {
+            background: #e5efff;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .sidebar li.active {
+            background: #e5efff;
+            border-left: 4px solid #2563eb;
+        }
+
+
+
+        .main {
+            padding: 30px;
+        }
+
+        .hero {
+            background: #eef3ff;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 14px;
+        }
+
+        .hero img {
+            width: 260px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .search-bar input {
+            padding: 11px 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            width: 300px;
+            outline: none;
+        }
+
+        .search-bar input:focus {
+            border-color: #2c2a99;
+        }
+
+        .search-bar button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background: #1a4fbe;
+        }
+
+
+
+        .create-event-btn {
+            background: #2c2a99;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 25px;
+        }
+
+        .create-event-btn i {
+            margin-right: 8px;
+        }
+
+
+
+        .teacher-form {
+            background: #f4f4f4;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        .full {
+            grid-column: 1 / 3;
+        }
+
+
+
+        .btn-area {
+            display: flex;
+            gap: 15px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 24px;
+            border-radius: 7px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .form-save-btn {
+            background: #d17a00;
+        }
+
+        .post-btn {
+            background: #0000ff;
+        }
+
+        .show-btn {
+            background: #15985d;
+        }
+
+
+
+        .event-area {
+            background: #f4f4f4;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .event-header {
+            display: flex;
+            gap: 20px;
+        }
+
+        .event-img {
+            width: 220px;
+            height: 145px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .event-content {
+            flex: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e9f5ff;
+            color: #2563eb;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .event-content h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .event-content p {
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .event-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 12px 0;
+        }
+
+        .apply-btn {
+            background: #0000ff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 7px;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+
+
+        .actions {
+            border-top: 1px solid #ccc;
+            margin-top: 18px;
+            padding-top: 16px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .action-btn {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .action-btn i {
+            margin-right: 7px;
+        }
+
+        .edit-btn {
+            color: #2563eb;
+        }
+
+        .delete-btn {
+            color: red;
+        }
+
+        .view-btn {
+            color: #15985d;
+        }
+
+
+
+        .comment-section {
+            display: none;
+            margin-top: 18px;
+            border-top: 1px solid #eee;
+            padding-top: 14px;
+        }
+
+        .comment-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        .comment-section .comment-post-btn {
+            background: #2c2a99;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .comment {
+            background: #f4f4f4;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 17px;
+            display: none;
+        }
+
+
+
+        .foot {
+            background: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+
+
+        @media(max-width:992px) {
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .hero img {
+                width: 100%;
+                height: 220px;
+            }
+
+            .event-header {
+                flex-direction: column;
+            }
+
+            .event-img {
+                width: 100%;
+                height: 220px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: 1;
+            }
+        }
+
+        @media(max-width:768px) {
+
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+
+            .search-bar {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media(max-width:576px) {
+
+            .main {
+                padding: 18px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .btn-area {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 55px 0 30px;
+        }
+
+        .stat-card {
+            background: #d1d1d1;
+            border-radius: 12px;
+            padding: 22px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 95px;
+        }
+
+        .stat-card h4 {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .stat-card h3 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .stat-card i {
+            font-size: 26px;
+        }
+
+
+        .create-event-btn {
+            background: #2c2a99;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 25px;
+            display: block;
+            margin-left: auto;
+        }
+
+        @media(max-width:768px) {
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+
+            .top-nav {
+                padding: 12px 14px;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+
+            .layout {
+                grid-template-columns: 0px 1fr;
+            }
+
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+
+            .sidebar span {
+                display: none;
+            }
+
+            .sidebar li {
+                justify-content: center;
+            }
+
+
+            .main-content {
+                padding: 12px;
+            }
+
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 22px;
+            }
+
+            .hero-sub {
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions input {
+                width: 100%;
+            }
+
+            .hero-image img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            #para1,
+            #para2,
+            #para3,
+            #para4 {
+                height: 80px;
+                width: 100%;
+            }
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .main {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin: 25px 0;
+            }
+        }
+
+
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .logo span {
+                font-size: 16px;
+            }
+
+            .layout,
+            .layout.show {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 15px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 18px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero img {
+                width: 100%;
+                height: 180px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input,
+            .search-bar button {
+                width: 100%;
+            }
+
+            .create-event-btn {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .event-area {
+                padding: 14px;
+            }
+
+            .event-card {
+                padding: 15px;
+            }
+
+            .event-header {
+                flex-direction: column;
+            }
+
+            .event-img {
+                width: 100%;
+                height: 180px;
+            }
+
+            .event-content h3 {
+                font-size: 20px;
+            }
+
+            .event-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .action-btn {
+                background: #f4f4f4;
+                padding: 10px;
+                border-radius: 8px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .nav-actions {
+                gap: 12px;
+            }
+
+            .hero h1 {
+                font-size: 21px;
+            }
+
+            .stat-card {
+                padding: 18px;
+            }
+
+            .stat-card h4 {
+                font-size: 16px;
+            }
+
+            .stat-card h3 {
+                font-size: 22px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .apply-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .btn-area {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
- 
-<header class="top-nav">
-    <div class="logo">
-        <i class="fa-solid fa-bars" onclick="side()"></i>
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>Student Club</span>
-    </div>
 
-    <div class="nav-actions">
-       <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
-        <a href="/teacher/notifications" style="color:white">
-            
-            <i class="fa-regular fa-bell"></i>
-        </a>
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-bars" onclick="side()"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
 
-        <a href="/teacher/profile" style="color:white;  text-decoration: none;">
-            <i class="fa-solid fa-user"></i>
-            <span>{{ session.get('name', 'Teacher') }}</span>
-        </a>
+        <div class="nav-actions">
+            <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+            <a href="/teacher/notifications" style="color:white">
 
-       
-         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
-    </div>
-</header>
+                <i class="fa-regular fa-bell"></i>
+            </a>
 
-<div class="layout" id="layout">
+            <a href="/teacher/profile" style="color:white;  text-decoration: none;">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ session.get('name', 'Teacher') }}</span>
+            </a>
 
- 
-<aside class="sidebar">
-    <ul>
-        
-        <li ><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span> Dashboard</span></a></li>
+
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+        </div>
+    </header>
+
+    <div class="layout" id="layout">
+
+
+        <aside class="sidebar">
+            <ul>
+
+                <li><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span>
+                            Dashboard</span></a></li>
                 <li><a href="/teacher/earnings"><i class="fa-solid fa-wallet"></i><span>Earnings</span></a></li>
-                <li><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload Material</span></a></li>
-                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload Video</span></a></li>
-        <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i> <span>Create Course</span></a></li>
-                <li><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create Quiz</span></a></li>
-                <li ><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live Classes</span></a></li>
-                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer Q&A</span></a></li>
-                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post Notification</span></a></li>
-                <li ><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat</span></a></li>
-                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find People</span></a></li>
-         </ul>
-</aside>
-
-
- 
-
-<div class="main">
-
-    <!-- HERO -->
-
-    <div class="hero">
-
-        <div>
-            <h1>Create & Manage Events 🚀</h1>
-            <p>Create events and post them for students.</p>
-
-            
-            <div class="search-bar">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search events, hackathons or workshops...">
-                <button onclick="searchEvents()">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search
-                </button>
-            </div>
-        </div>
-
-        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=900&auto=format&fit=crop" alt="Hero">
-
-    </div>
-
-    
-
-    <button class="create-event-btn" onclick="toggleForm()">
-        <i class="fa-solid fa-plus"></i> Create Event
-    </button>
-
-
-     <div class="stats">
-      <div class="stat-card">
-        <div>
-          <h4>Total Events</h4>
-          <h3>{{ teacher_stats.total }}</h3>
-        </div>
-        <i class="fa-solid fa-calendar-days"></i>
-      </div>
-
-      <div class="stat-card">
-        <div>
-          <h4>Approved</h4>
-          <h3>{{ teacher_stats.approved }}</h3>
-        </div>
-        <i class="fa-solid fa-circle-check" style="color:#15985d;"></i>
-      </div>
-
-      <div class="stat-card">
-        <div>
-          <h4>Pending</h4>
-          <h3>{{ teacher_stats.pending }}</h3>
-        </div>
-        <i class="fa-solid fa-clock" style="color:#d17a00;"></i>
-      </div>
-    </div>
+                <li><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload
+                            Material</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload
+                            Video</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i>
+                        <span>Create Course</span></a></li>
+                <li><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create
+                            Quiz</span></a></li>
+                <li><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live
+                            Classes</span></a></li>
+                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer
+                            Q&A</span></a></li>
+                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post
+                            Notification</span></a></li>
+                <li><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat</span></a>
+                </li>
+                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find
+                            People</span></a></li>
+            </ul>
+        </aside>
 
 
 
-   
 
-    <div class="teacher-form" id="teacherForm">
+        <div class="main">
 
-        <div class="form-grid">
+            <!-- HERO -->
 
-            <div class="form-group">
-                <label>Event Title</label>
-                <input type="text" id="title" placeholder="Enter event title">
+            <div class="hero">
+
+                <div>
+                    <h1>Create & Manage Events 🚀</h1>
+                    <p>Create events and post them for students.</p>
+
+
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Search events, hackathons or workshops...">
+                        <button onclick="searchEvents()">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </div>
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=900&auto=format&fit=crop"
+                    alt="Hero">
+
             </div>
 
-            <div class="form-group">
-                <label>Event Type</label>
-                <select id="type">
-                    <option>Hackathon</option>
-                    <option>Workshop</option>
-                    <option>Seminar</option>
-                    <option>Live Class</option>
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label>Event Date</label>
-                <input type="date" id="date">
-            </div>
 
-            <div class="form-group">
-                <label>Location</label>
-                <input type="text" id="location" placeholder="Enter location (or Link for Online)">
-            </div>
-            
-            <div class="form-group">
-                <label>Mode</label>
-                <select id="mode">
-                    <option value="Online">Online</option>
-                    <option value="Offline">Offline</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Prize / Certificate</label>
-                <input type="text" id="prize" placeholder="Prize ₹1,00,000">
-            </div>
-
-            <div class="form-group">
-                <label>Apply Link</label>
-                <input type="text" id="applyLink" placeholder="Paste form link">
-            </div>
-
-            <div class="form-group full">
-                <label>Description</label>
-                <textarea rows="4" id="description"></textarea>
-            </div>
-
-            <div class="form-group full">
-                <label>Image URL</label>
-                <input type="text" id="image" placeholder="Paste image link">
-            </div>
-
-            <div class="form-group full">
-                <label>Price (₹) - Enter 0 for Free</label>
-                <input type="number" id="price" placeholder="0.00" min="0" step="0.01" value="0">
-            </div>
-
-        </div>
-
- 
-
-        <div class="btn-area">
-
-            <button class="btn form-save-btn">
-                <i class="fa-solid fa-bookmark"></i> Save
+            <button class="create-event-btn" onclick="toggleForm()">
+                <i class="fa-solid fa-plus"></i> Create Event
             </button>
 
-            <button class="btn post-btn" onclick="postEvent()">
-                <i class="fa-solid fa-paper-plane"></i> Post
-            </button>
 
-            <button class="btn show-btn" onclick="showEvents()">
-                <i class="fa-solid fa-eye"></i> Show
-            </button>
+            <div class="stats">
+                <div class="stat-card">
+                    <div>
+                        <h4>Total Events</h4>
+                        <h3>{{ teacher_stats.total }}</h3>
+                    </div>
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
 
-        </div>
+                <div class="stat-card">
+                    <div>
+                        <h4>Approved</h4>
+                        <h3>{{ teacher_stats.approved }}</h3>
+                    </div>
+                    <i class="fa-solid fa-circle-check" style="color:#15985d;"></i>
+                </div>
 
-    </div>
+                <div class="stat-card">
+                    <div>
+                        <h4>Pending</h4>
+                        <h3>{{ teacher_stats.pending }}</h3>
+                    </div>
+                    <i class="fa-solid fa-clock" style="color:#d17a00;"></i>
+                </div>
+            </div>
 
-   
 
-    <div class="event-area" id="eventArea">
 
-        <p class="no-results" id="noResults" {% if teacher_events %}style="display:none;"{% else %}style="display:block;"{% endif %}>
-            <i class="fa-solid fa-magnifying-glass"></i> No events found.
-        </p>
 
-        {% for item in teacher_events %}
-        <div class="event-card" data-event-id="{{ item.id }}">
-            <div class="event-header">
-                <img class="event-img" src="{{ item.image_url or 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=900&auto=format&fit=crop' }}" alt="{{ item.event_type }}">
 
-                <div class="event-content">
-                    <span class="tag">{{ item.event_type }}</span>
-                    <span class="status-badge" style="float:right; padding:5px 10px; border-radius:20px; font-size:12px; font-weight:600;
+            <div class="teacher-form" id="teacherForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Event Title</label>
+                        <input type="text" id="title" placeholder="Enter event title">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Type</label>
+                        <select id="type">
+                            <option>Hackathon</option>
+                            <option>Workshop</option>
+                            <option>Seminar</option>
+                            <option>Live Class</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Date</label>
+                        <input type="date" id="date">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="location" placeholder="Enter location (or Link for Online)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mode</label>
+                        <select id="mode">
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prize / Certificate</label>
+                        <input type="text" id="prize" placeholder="Prize ₹1,00,000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Apply Link</label>
+                        <input type="text" id="applyLink" placeholder="Paste form link">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea rows="4" id="description"></textarea>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Image URL</label>
+                        <input type="text" id="image" placeholder="Paste image link">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Price (₹) - Enter 0 for Free</label>
+                        <input type="number" id="price" placeholder="0.00" min="0" step="0.01" value="0">
+                    </div>
+
+                </div>
+
+
+
+                <div class="btn-area">
+
+                    <button class="btn form-save-btn">
+                        <i class="fa-solid fa-bookmark"></i> Save
+                    </button>
+
+                    <button class="btn post-btn" onclick="postEvent()">
+                        <i class="fa-solid fa-paper-plane"></i> Post
+                    </button>
+
+                    <button class="btn show-btn" onclick="showEvents()">
+                        <i class="fa-solid fa-eye"></i> Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="event-area" id="eventArea">
+
+                <p class="no-results" id="noResults" {% if teacher_events %}style="display:none;" {% else
+                    %}style="display:block;" {% endif %}>
+                    <i class="fa-solid fa-magnifying-glass"></i> No events found.
+                </p>
+
+                {% for item in teacher_events %}
+                <div class="event-card" data-event-id="{{ item.id }}">
+                    <div class="event-header">
+                        <img class="event-img"
+                            src="{{ item.image_url or 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=900&auto=format&fit=crop' }}"
+                            alt="{{ item.event_type }}">
+
+                        <div class="event-content">
+                            <span class="tag">{{ item.event_type }}</span>
+                            <span class="status-badge" style="float:right; padding:5px 10px; border-radius:20px; font-size:12px; font-weight:600;
                         {% if item.status == 'approved' %}background:#d1fae5; color:#065f46;
                         {% elif item.status == 'pending' %}background:#fef3c7; color:#92400e;
                         {% else %}background:#fee2e2; color:#991b1b;{% endif %}">
-                        {{ item.status|capitalize }}
-                    </span>
-                    <h3>{{ item.title }}</h3>
-                    <p>{{ item.description }}</p>
+                                {{ item.status|capitalize }}
+                            </span>
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.description }}</p>
 
-                    <div class="event-info">
-                        <span><i class="fa-regular fa-calendar"></i> {{ item.event_date.strftime('%d %b %Y') if item.event_date else '' }}</span>
-                        <span><i class="fa-solid fa-location-dot"></i> {{ item.location }}</span>
-                        <span><i class="fa-solid fa-globe"></i> {{ item.mode }}</span>
-                        {% if item.prize %}
-                        <span><i class="fa-solid fa-trophy"></i> {{ item.prize }}</span>
-                        {% endif %}
-                        {% if item.price > 0 %}
-                        <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹{{ item.price }}</span>
-                        {% else %}
-                        <span><i class="fa-solid fa-circle-check" style="color:green;"></i> Free</span>
-                        {% endif %}
+                            <div class="event-info">
+                                <span><i class="fa-regular fa-calendar"></i> {{ item.event_date.strftime('%d %b %Y') if
+                                    item.event_date else '' }}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{ item.location }}</span>
+                                <span><i class="fa-solid fa-globe"></i> {{ item.mode }}</span>
+                                {% if item.prize %}
+                                <span><i class="fa-solid fa-trophy"></i> {{ item.prize }}</span>
+                                {% endif %}
+                                {% if item.price > 0 %}
+                                <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹{{ item.price }}</span>
+                                {% else %}
+                                <span><i class="fa-solid fa-circle-check" style="color:green;"></i> Free</span>
+                                {% endif %}
+                            </div>
+
+                            {% if item.apply_link %}
+                            <a href="{{ item.apply_link }}" target="_blank" class="apply-btn">
+                                <i class="fa-solid fa-link"></i> Apply Link
+                            </a>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    {% if item.apply_link %}
-                    <a href="{{ item.apply_link }}" target="_blank" class="apply-btn">
-                        <i class="fa-solid fa-link"></i> Apply Link
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="actions">
-                <button class="action-btn like-btn" style="cursor: default;" disabled>
-                    <i class="fa-solid fa-heart"></i><span class="like-count">{{ item.likes_count }}</span> Likes
-                </button>
-                <button class="action-btn comment-btn" onclick="toggleComments({{ item.id }})">
-                    <i class="fa-solid fa-comment"></i> {{ item.comments|length }} Comments
-                </button>
-                <button class="action-btn delete-btn" onclick="deleteTeacherEvent({{ item.id }})">
-                    <i class="fa-solid fa-trash"></i> Delete
-                </button>
-            </div>
-
-            <div class="comment-section" id="comment-section-{{ item.id }}">
-                <div class="comment-list" style="margin-top: 10px;">
-                    {% for c in item.comments %}
-                    <div class="comment" style="background:#f4f4f4; border-radius:8px; padding:10px 14px; margin-bottom:8px; font-size:15px;">
-                        <strong>{{ c.student_name }}:</strong> {{ c.comment_text }}
+                    <div class="actions">
+                        <button class="action-btn like-btn" style="cursor: default;" disabled>
+                            <i class="fa-solid fa-heart"></i><span class="like-count">{{ item.likes_count }}</span>
+                            Likes
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments({{ item.id }})">
+                            <i class="fa-solid fa-comment"></i> {{ item.comments|length }} Comments
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteTeacherEvent({{ item.id }})">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
                     </div>
-                    {% else %}
-                    <div style="font-size:14px;color:#888;padding:5px;">No comments on this event yet.</div>
-                    {% endfor %}
+
+                    <div class="comment-section" id="comment-section-{{ item.id }}">
+                        <div class="comment-list" style="margin-top: 10px;">
+                            {% for c in item.comments %}
+                            <div class="comment"
+                                style="background:#f4f4f4; border-radius:8px; padding:10px 14px; margin-bottom:8px; font-size:15px;">
+                                <strong>{{ c.student_name }}:</strong> {{ c.comment_text }}
+                            </div>
+                            {% else %}
+                            <div style="font-size:14px;color:#888;padding:5px;">No comments on this event yet.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
+
             </div>
+
         </div>
-        {% endfor %}
 
     </div>
 
-</div>
+    <footer class="foot">
+        &copy; 2026 Student Club All rights reserved
+    </footer>
 
-</div>
 
-<footer class="foot">
-    &copy; 2026 Student Club All rights reserved
-</footer>
 
- 
+    <script>
 
-<script>
- 
-
-function side(){
-    document.getElementById("layout").classList.toggle("show");
-}
-
-function logout() {
-    window.location.href = "{{ url_for('logout') }}";
-}
-
- 
-
-function toggleForm(){
-    let form      = document.getElementById("teacherForm");
-    let eventArea = document.getElementById("eventArea");
-
-    if(form.style.display === "block"){
-        form.style.display      = "none";
-        eventArea.style.display = "block";
-    } else {
-        form.style.display      = "block";
-        eventArea.style.display = "none";
-    }
-}
-
- 
-
-function showEvents(){
-    let eventArea = document.getElementById("eventArea");
-    eventArea.style.display = (eventArea.style.display === "none") ? "block" : "none";
-}
- 
-
-function searchEvents(){
-    let query   = document.getElementById("searchInput").value.trim().toLowerCase();
-    let cards   = document.querySelectorAll(".event-card");
-    let visible = 0;
-
-    cards.forEach(card => {
-        let text = card.innerText.toLowerCase();
-        if(text.includes(query)){
-            card.style.display = "block";
-            visible++;
-        } else {
-            card.style.display = "none";
+        function side() {
+            document.getElementById("layout").classList.toggle("show");
         }
-    });
 
- 
-    document.getElementById("noResults").style.display = (visible === 0) ? "block" : "none";
-}
 
- 
-document.getElementById("searchInput").addEventListener("keyup", function(e){
-    if(e.key === "Enter") searchEvents();
-   
-    searchEvents();
-});function postEvent(){
-    let title       = document.getElementById("title").value.trim();
-    let type        = document.getElementById("type").value;
-    let date        = document.getElementById("date").value;
-    let location    = document.getElementById("location").value.trim();
-    let prize       = document.getElementById("prize").value.trim();
-    let applyLink   = document.getElementById("applyLink").value.trim();
-    let description = document.getElementById("description").value.trim();
-    let image       = document.getElementById("image").value.trim();
-    let price       = document.getElementById("price") ? document.getElementById("price").value.trim() : "0.0";
-    let mode        = document.getElementById("mode") ? document.getElementById("mode").value : "Online";
-
-    if(title === "" || date === "" || location === "" || description === ""){
-        alert("Please fill all required fields");
-        return;
-    }
-
-    const payload = {
-        title: title,
-        event_type: type,
-        event_date: date,
-        location: location,
-        prize: prize,
-        apply_link: applyLink,
-        description: description,
-        image_url: image,
-        price: price,
-        mode: mode
-    };
-
-    fetch('/teacher/events', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-    .then(r => r.json())
-    .then(res => {
-        if (res.success) {
-            alert('Event created successfully and is pending admin approval!');
-            location.reload();
-        } else {
-            alert('Failed to submit event: ' + res.message);
+        function logout() {
+            window.location.href = "{{ url_for('logout') }}";
         }
-    })
-    .catch(err => {
-        console.error(err);
-        alert('An error occurred.');
-    });
-}
 
-function deleteTeacherEvent(eventId) {
-    if (confirm('Are you sure you want to delete this event? This will delete all registrations as well.')) {
-        fetch(`/teacher/event/delete/${eventId}`, { method: 'POST' })
-        .then(r => r.json())
-        .then(res => {
-            if (res.success) {
-                location.reload();
+
+        function toggleForm() {
+            let form = document.getElementById("teacherForm");
+            let eventArea = document.getElementById("eventArea");
+
+            if (form.style.display === "block") {
+                form.style.display = "none";
+                eventArea.style.display = "block";
             } else {
-                alert('Delete failed: ' + res.message);
+                form.style.display = "block";
+                eventArea.style.display = "none";
             }
-        })
-        .catch(err => console.error(err));
-    }
-}
+        }
 
-function toggleComments(eventId) {
-    const sect = document.getElementById("comment-section-" + eventId);
-    if(sect) {
-        sect.style.display = (sect.style.display === "block") ? "none" : "block";
-    }
-}
 
-</script>
+
+        function showEvents() {
+            let eventArea = document.getElementById("eventArea");
+            eventArea.style.display = (eventArea.style.display === "none") ? "block" : "none";
+        }
+
+
+        function searchEvents() {
+            let query = document.getElementById("searchInput").value.trim().toLowerCase();
+            let cards = document.querySelectorAll(".event-card");
+            let visible = 0;
+
+            cards.forEach(card => {
+                let text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = "block";
+                    visible++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+
+            document.getElementById("noResults").style.display = (visible === 0) ? "block" : "none";
+        }
+
+
+        document.getElementById("searchInput").addEventListener("keyup", function (e) {
+            if (e.key === "Enter") searchEvents();
+
+            searchEvents();
+        }); function postEvent() {
+            let title = document.getElementById("title").value.trim();
+            let type = document.getElementById("type").value;
+            let date = document.getElementById("date").value;
+            let location = document.getElementById("location").value.trim();
+            let prize = document.getElementById("prize").value.trim();
+            let applyLink = document.getElementById("applyLink").value.trim();
+            let description = document.getElementById("description").value.trim();
+            let image = document.getElementById("image").value.trim();
+            let price = document.getElementById("price") ? document.getElementById("price").value.trim() : "0.0";
+            let mode = document.getElementById("mode") ? document.getElementById("mode").value : "Online";
+
+            if (title === "" || date === "" || location === "" || description === "") {
+                alert("Please fill all required fields");
+                return;
+            }
+
+            const payload = {
+                title: title,
+                event_type: type,
+                event_date: date,
+                location: location,
+                prize: prize,
+                apply_link: applyLink,
+                description: description,
+                image_url: image,
+                price: price,
+                mode: mode
+            };
+
+            fetch('/teacher/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        alert('Event created successfully and is pending admin approval!');
+                        location.reload();
+                    } else {
+                        alert('Failed to submit event: ' + res.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('An error occurred.');
+                });
+        }
+
+        function deleteTeacherEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event? This will delete all registrations as well.')) {
+                fetch(`/teacher/event/delete/${eventId}`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success) {
+                            location.reload();
+                        } else {
+                            alert('Delete failed: ' + res.message);
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+
+        function toggleComments(eventId) {
+            const sect = document.getElementById("comment-section-" + eventId);
+            if (sect) {
+                sect.style.display = (sect.style.display === "block") ? "none" : "block";
+            }
+        }
+
+    </script>
 
 </body>
+
 </html>
