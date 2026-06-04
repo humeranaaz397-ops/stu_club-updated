@@ -26,6 +26,7 @@
 .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
 .logo i { cursor:pointer; }
 .nav-actions { display:flex; gap:15px; align-items:center; font-size:14px; }
+.nav-actions a { color:white; display:flex; align-items:center; gap:6px; }
 a { text-decoration:none; color:black; }
 
 /* ===== LAYOUT ===== */
@@ -376,15 +377,57 @@ tbody tr:hover { background:#fafbff; }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:1024px){ .cards{ grid-template-columns:repeat(2,1fr); } .scroll-hint{ display:block; } }
+
 @media(max-width:768px){
-  .main{ padding:14px; }
-  .page-title h1{ font-size:20px; }
-  .cards{ grid-template-columns:repeat(2,1fr)!important; gap:10px; }
-  .pending-cards-grid{ grid-template-columns:1fr; }
-  .layout.show{ grid-template-columns:60px 1fr; }
-  .sidebar span{ display:none; }
-  .sidebar li{ justify-content:center; }
-  .scroll-hint{ display:block; }
+  /* Nav */
+  .top-nav { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+  .logo { font-size: 16px; }
+  .nav-actions { gap: 10px; font-size: 13px; }
+  .nav-actions span { display: none; }
+
+  /* Layout & Sidebar */
+  .layout { grid-template-columns: 0 1fr; position: relative; }
+  .layout.show { grid-template-columns: 60px 1fr; }
+  .sidebar { min-width: 0; }
+  .sidebar span { display: none; }
+  .sidebar li { justify-content: center; padding: 12px; }
+
+  /* Main */
+  .main { padding: 14px; overflow-x: hidden; }
+  .page-title h1 { font-size: 20px; }
+  .page-title p  { font-size: 13px; }
+
+  /* Stat cards - 2 per row */
+  .cards { grid-template-columns: repeat(2,1fr) !important; gap: 10px; }
+  .card h3 { font-size: 22px; }
+
+  /* Tabs bar - wrap on mobile */
+  .tabs-bar { display: flex; flex-wrap: wrap; width: 100%; }
+  .tab-btn  { flex: 1; justify-content: center; padding: 10px 12px; font-size: 13px; }
+
+  /* Pending cards - single column */
+  .pending-cards-grid { grid-template-columns: 1fr; }
+
+  /* Scroll hint */
+  .scroll-hint { display: block; }
+
+  /* Modal */
+  .modal-content { max-height: 95vh; }
+
+  /* Footer */
+  .foot { font-size: 12px; padding: 14px; }
+}
+
+@media(max-width:480px){
+  .top-nav { padding: 8px 10px; }
+  .layout.show { grid-template-columns: 50px 1fr; }
+  .sidebar li { padding: 10px; }
+  .main { padding: 10px; }
+  .cards { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .card { padding: 14px 12px; }
+  .card h3 { font-size: 20px; }
+  .tab-btn { font-size: 12px; padding: 9px 8px; }
+  .pending-card-header h3 { font-size: 14px; }
 }
 </style>
 </head>

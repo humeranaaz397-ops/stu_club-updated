@@ -10,55 +10,122 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background-color:#f9fafb; color:#111827; }
 
-        .top-nav { background:#2c2a99; color:white; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+        .top-nav { background:#2c2a99; color:white; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(44,42,153,0.3); }
         .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:bold; }
         .logo i { cursor:pointer; }
         .nav-actions { display:flex; gap:15px; align-items:center; font-size:14px; }
-        
+        .nav-actions a { color:white; display:flex; align-items:center; gap:6px; }
+
         .layout { display:grid; grid-template-columns:0px 1fr; transition:0.35s ease; min-height:calc(100vh - 60px); }
         .layout.show { grid-template-columns:220px 1fr; }
-        
+
         .sidebar { background:lightgrey; min-height:calc(100vh - 60px); border-right:1px solid #ddd; overflow:hidden; transition:0.35s ease; }
         .sidebar ul { list-style:none; padding-top:10px; }
         .sidebar li { padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.25s; }
         .sidebar li:hover { background:#e5efff; color:#2563eb; }
         .sidebar i { min-width:22px; }
         .sidebar li.active { background:#e5efff; color:#2563eb; border-left:4px solid #2563eb; }
-        
+
         .foot { background-color:#2c2a99; color:white; text-align:center; padding:18px; font-size:16px; }
         a { text-decoration:none; color:inherit; }
 
-        .content { padding: 40px; }
-        .header { margin-bottom: 30px; }
-        .header h1 { font-size: 28px; color: #1e3a8a; margin-bottom: 10px; }
+        /* ===== MAIN ===== */
+        .content { padding: 30px; min-width: 0; }
+        .header { margin-bottom: 24px; }
+        .header h1 { font-size: 26px; font-weight: 800; color: #1e1b4b; margin-bottom: 6px; display:flex; align-items:center; gap:10px; }
+        .header p  { color: #6b7280; font-size: 14px; }
 
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #f3f4f6; }
-        th { background: #f9fafb; font-weight: 600; color: #4b5563; }
-        
+        /* ===== CARD ===== */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+        /* ===== SCROLL HINT (hidden on desktop, shown on tablet/mobile) ===== */
+        .scroll-hint {
+            display: none;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        /* ===== TABLE WRAPPER — key for responsive horizontal scroll ===== */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #c7c7c7 transparent;
+        }
+        .table-wrapper::-webkit-scrollbar { height: 5px; }
+        .table-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 10px; }
+
+        /* ===== TABLE ===== */
+        table { width: 100%; min-width: 750px; border-collapse: collapse; table-layout: auto; }
+
+        /* Force display reset so media queries can't accidentally break table layout */
+        thead, tbody { display: table-row-group; }
+        thead        { display: table-header-group; }
+        tr           { display: table-row; }
+        th, td       { display: table-cell; }
+
+        th { padding: 13px 15px; text-align: left; background: #f9fafb; font-weight: 600; color: #4b5563; font-size: 14px; white-space: nowrap; border-bottom: 1px solid #e5e7eb; }
+        td { padding: 15px; text-align: left; border-bottom: 1px solid #f3f4f6; font-size: 14px; vertical-align: middle; white-space: nowrap; }
+        tbody tr:hover { background: #fafafa; }
+        tbody tr:last-child td { border-bottom: none; }
+
         .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
-        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-pending  { background: #fef3c7; color: #d97706; }
         .status-approved { background: #dcfce7; color: #16a34a; }
         .status-rejected { background: #fee2e2; color: #dc2626; }
 
-        .btn { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; color: white; transition: 0.2s; }
+        .btn { padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: white; transition: 0.2s; }
         .btn-approve { background: #16a34a; }
         .btn-approve:hover { background: #15803d; }
         .btn-reject { background: #dc2626; margin-left: 5px; }
         .btn-reject:hover { background: #b91c1c; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        @media(max-width:768px) {
-            .layout.show { grid-template-columns:60px 1fr; }
-            .sidebar span { display:none; }
-            .top-nav { padding:12px 14px; }
-            .nav-actions span { display:none; }
-            .layout { grid-template-columns:0px 1fr; }
-            .sidebar li { justify-content:center; }
-            .content { padding: 20px; }
-            table { display: block; overflow-x: auto; white-space: nowrap; }
+        /* ===== TABLET ≤ 1024px ===== */
+        @media (max-width: 1024px) {
+            .scroll-hint { display: block; }
+        }
+
+        /* ===== MOBILE ≤ 768px ===== */
+        @media (max-width: 768px) {
+            .top-nav { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+            .nav-actions span { display: none; }
+
+            .layout { grid-template-columns: 0px 1fr; }
+            .layout.show { grid-template-columns: 60px 1fr; }
+
+            .sidebar { min-width: 0; }
+            .sidebar span { display: none; }
+            .sidebar li { justify-content: center; padding: 12px; }
+
+            .content { padding: 14px; }
+            .header h1 { font-size: 20px; }
+            .header p  { font-size: 13px; }
+
+            /* Scroll hint always visible on mobile */
+            .scroll-hint { display: block; }
+
+            /* Keep table cells as table-cells — never convert to block */
+            th, td {
+                padding: 10px 10px !important;
+                font-size: 13px !important;
+                display: table-cell !important;
+            }
+        }
+
+        /* ===== EXTRA SMALL ≤ 480px ===== */
+        @media (max-width: 480px) {
+            .top-nav  { padding: 8px 10px; }
+            .layout.show { grid-template-columns: 50px 1fr; }
+            .sidebar li { padding: 10px; }
+            .content  { padding: 10px; }
+            .card     { padding: 12px; }
+            .btn      { padding: 7px 10px; font-size: 12px; }
+            .btn-reject { margin-left: 4px; }
         }
     </style>
 </head>
@@ -107,11 +174,15 @@
 
         <main class="content">
             <div class="header">
-                <h1>Withdrawal Requests</h1>
+                <h1><i class="fa-solid fa-money-bill-transfer" style="color:#2c2a99;"></i> Withdrawal Requests</h1>
                 <p>Manage teacher earnings withdrawal requests.</p>
             </div>
 
+            <!-- Scroll hint: visible on tablet/mobile -->
+            <p class="scroll-hint">&#8592; swipe to scroll table &#8594;</p>
+
             <div class="card">
+              <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -162,6 +233,7 @@
                         {% endif %}
                     </tbody>
                 </table>
+              </div><!-- /table-wrapper -->
             </div>
         </main>
     </div>
