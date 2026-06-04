@@ -16,12 +16,19 @@
             box-shadow:0 2px 12px rgba(44,42,153,0.3);
         }
         .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
-        
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+
+        /* Layout & sidebar to match other student pages */
+        .layout{ display:grid; grid-template-columns:0 1fr; transition:grid-template-columns 0.35s ease; }
+        .layout.show{ grid-template-columns:60px 1fr; }
+        .sidebar{ background:lightgrey; min-height:calc(100vh - 60px); border-right:1px solid #ddd; overflow:hidden; transition:0.35s ease; }
+        .sidebar ul{ list-style:none; padding-top:10px; }
+        .sidebar li{ padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.25s; }
+        .sidebar li:hover, .sidebar li.active{ background:#e5efff; color:#2563eb; }
+        .sidebar li.active { border-left:4px solid #2563eb; }
+
+        .content{ padding:24px; }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
         
         .score-card {
             background: white;
@@ -91,6 +98,28 @@
             margin-top: 10px;
         }
         .back-btn:hover { background: #1e1b4b; transform: translateY(-2px); }
+        
+        /* Responsive adjustments similar to other pages */
+        @media (max-width: 768px) {
+          .top-nav { padding: 12px 14px; }
+          .layout { grid-template-columns: 0 1fr; }
+          .layout.show { grid-template-columns: 60px 1fr; }
+          .sidebar span { display: none; }
+          .sidebar li { justify-content: center; }
+          .container { margin: 20px auto; padding: 0 14px; }
+          .score-card { padding: 20px; }
+          .score-card h1 { font-size: 22px; }
+          .score-circle { width: 96px; height: 96px; margin: 16px auto; }
+          .score-circle span { font-size: 26px; }
+          .q-text { font-size: 15px; }
+          .option-item { padding: 10px; }
+          .back-btn { width: 100%; text-align: center; }
+        }
+        @media (max-width: 480px) {
+          .score-card { padding: 16px; }
+          .score-circle { width: 80px; height: 80px; }
+          .score-circle span { font-size: 22px; }
+        }
     </style>
 </head>
 <body>
@@ -99,10 +128,30 @@
             <i class="fa-solid fa-graduation-cap"></i>
             <span>Student Club</span>
         </div>
-        <a href="{{ url_for('student_dashboard') }}" style="color:white; font-size:14px; font-weight:600; text-decoration:none;">Dashboard</a>
+        <div class="nav-actions">
+            <a href="{{ url_for('student_dashboard') }}" style="color:white; font-size:14px; font-weight:600; text-decoration:none;">Dashboard</a>
+            <i class="fa-solid fa-bars" style="margin-left:10px; cursor:pointer;" onclick="side()"></i>
+        </div>
     </header>
 
-    <div class="container">
+    <div class="layout" id="layout">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+                <li><a href="{{ url_for('student_qa') }}"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+                <li><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study Materials</span></a></li>
+                <li><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+                <li><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+                <li><a href="{{ url_for('student_courses') }}"><i class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+                <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+                <li><a href="{{ url_for('student_chat') }}"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a></li>
+                <li class="active"><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+                <li><a href="{{ url_for('student_progress') }}"><i class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+            </ul>
+        </aside>
+
+        <div class="content">
+            <div class="container">
         <div class="score-card">
             <h1>Quiz Results</h1>
             <p>You have successfully submitted the quiz.</p>
@@ -159,6 +208,11 @@
             {% endif %}
         </div>
         {% endfor %}
+            </div>
+        </div>
     </div>
+    <script>
+        function side(){ document.getElementById("layout").classList.toggle("show"); }
+    </script>
 </body>
 </html>
