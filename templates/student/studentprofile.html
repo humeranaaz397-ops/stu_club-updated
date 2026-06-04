@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        .top-nav {
+            background: #2c2a99;
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            cursor: pointer;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+        }
+
+
+        .layout {
+            display: grid;
+            grid-template-columns: 0px 1fr;
+            transition: grid-template-columns 0.35s ease;
+        }
+
+        .layout.show {
+            grid-template-columns: 220px 1fr;
+        }
+
+
+        .sidebar {
+            background: lightgrey;
+            min-height: calc(100vh - 60px);
+            border-right: 1px solid #ddd;
+            overflow: hidden;
+            transition: 0.35s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-top: 10px;
+        }
+
+        .sidebar li {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .sidebar li:hover {
+            background: #e5efff;
+            color: #2563eb;
+        }
+
+        .sidebar i {
+            min-width: 22px;
+        }
+
+        /* ACTIVE ITEM */
+        .sidebar li.active {
+            background: #e5efff;
+            color: #2563eb;
+            border-left: 4px solid #2563eb;
+        }
+
+
+
+        .foot {
+            background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            transition: 0.3s ease;
+        }
+
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: whitesmoke;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pending,
+        .pending1 {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+        }
+
+        .pending1 {
+            margin-left: 5px;
+            margin-right: 10px;
+        }
+
+        .pending-item,
+        .pending-item1,
+        .pending-item2 {
+            background: #e9ccd2;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .item-matter {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item-matter1 {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #4361ee;
+        }
+
+        .quiz-score {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .save {
+            background: #4361ee;
+            color: white;
+        }
+
+        .cancel {
+            background: #ccc;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media(max-width:768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+
+            .top-nav {
+                padding: 12px 14px;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+            .layout {
+                grid-template-columns: 0px 1fr;
+            }
+
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+
+            .sidebar span {
+                display: none;
+            }
+
+            .sidebar li {
+                justify-content: center;
+            }
+
+
+            .main-content {
+                padding: 12px;
+            }
+
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 22px;
+            }
+
+            .hero-sub {
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions input {
+                width: 100%;
+            }
+
+            .hero-image img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text {
+            max-width: 60%;
+        }
+
+        .hero-text h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .hero-sub {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .hero-actions input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .hero-actions .ask-btn.small {
+            padding: 10px 16px;
+            font-size: 14px;
+        }
+
+        .hero-image img {
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .ask-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        .ask-btn:hover {
+            background-color: #2c2a99;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-bars" onclick="side()"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
+
+        <div class="nav-actions">
+            <a href="{{ url_for('student_dashboard') }}" style="color: white;"><i
+                    class="fa-regular fa-calendar"></i></a>
+
+            <a href="{{ url_for('student_notifications') }}" style="color:white; position: relative;">
+                <i class="fa-regular fa-bell"></i>
+            
+            {% if total_alerts and total_alerts > 0 %}
+            <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+            {% endif %}
+        </a>
+
+            <a href="{{ url_for('student_profile') }}" style="color:white">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ session.get('name', 'Student') }}</span>
+            </a>
+
+
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+
+        </div>
+    </header>
+
+    <div class="layout" id="layout">
+
+
+        <aside class="sidebar">
+            <ul>
+
+                <li><a href="{{ url_for('student_dashboard') }}"><i
+                            class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+                <li><a href="{{ url_for('student_qa') }}"><i
+                            class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+                <li><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study
+                            Materials</span></a></li>
+                <li><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video
+                            Learning</span></a></li>
+                <li><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live
+                            Classes</span></a></li>
+                <li><a href="{{ url_for('student_courses') }}"><i
+                            class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+                <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find
+                            People</span></a></li>
+                <li><a href="{{ url_for('student_chat') }}"><i
+                            class="fa-solid fa-comment-dots"></i><span>Chat</span></a></li>
+                 <li><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+                <li><a href="{{ url_for('student_dashboard') }}"><i
+                            class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+                <!-- <li><i class="fa-solid fa-book"></i><span>My Notes</span></li> -->
+
+            </ul>
+        </aside>
+
+
+        <div class="content">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'success' %}
+            <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#d4edda; color:#155724;">
+                {{ message }}
+            </div>
+            {% else %}
+            <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#f8d7da; color:#721c24;">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Progress over perfection! ✨</h1>
+                    <p class="hero-sub">See your committed to lifelong learning.</p>
+                    <div class="hero-actions">
+                        <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+                        <button id="searchBtn" class="ask-btn small">Search</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://i.postimg.cc/MpsfB82G/1768424747086.png" alt="Students studying together">
+                </div>
+            </div>
+
+            <h1 style="margin:30px 0;">My Profile</h1>
+            <p>Manage your account and view your Achievements</p>
+            <br>
+            <div class="profile-layout">
+
+                <div class="card">
+                    <div style="text-align:center;">
+                        <div
+                            style="margin:auto;border-radius:50%;background:#4361ee;height:150px;width:150px;padding-top:50px;color:white;">
+                            <h1>{{ user.name[:2].upper() if user.name else 'ST' }}</h1>
+                        </div><br>
+                        <h4>{{ user.name }}</h4>
+                        <b>Student</b>
+                    </div>
+                    <br>
+                    <p>✉️ {{ user.email }}<br><br>📞 {{ user.phone }}<br><br>🎂 Age: {{ user.age }} | Gender: {{
+                        user.gender }}<br><br>🏫 {{ user.class_level }} - {{ user.stream }}
+                        {% if user.competitive_exam %}<br><br>🎯 Preparing for: {{ user.competitive_exam }}{% endif %}
+                    </p><br>
+                    <button onclick="openModal()"
+                        style="width:100%;height:50px;background:#4361ee;border-radius:10px;font-weight:bolder;border:none;font-size:20px;color:white;cursor:pointer;">📝Edit
+                        Profile</button>
+                </div>
+
+                <div class="card">
+                    <h1>Quick stats</h1><br><br>
+                    <p><i class="fa-solid fa-book-open"></i> Enrolled Courses <b>{{ enrolled_courses|length }}</b></p>
+                    <br><br>
+                    <p><i class="fa-solid fa-award"></i> Certificates <b>{{ certificates|length }}</b></p><br><br>
+                    <p><i class="fa-solid fa-users"></i> Connections <b>{{ connections_count }}</b></p><br><br>
+                </div>
+            </div>
+
+            <div class="pending">
+                <h3>Enrolled Courses</h3>
+                {% if enrolled_courses %}
+                {% for course in enrolled_courses %}
+                <div class="pending-item" style="margin-bottom: 15px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <h4>{{ course.title }}</h4>
+                        <span style="font-size: 13px; font-weight: bold; color: #4361ee;">{{ course.progress }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" data-progress="{{ course.progress }}"></div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color:#888; padding:10px 0;">Not enrolled in any courses yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="pending1">
+                <h3 style="font-size: 30px;"> Certificates</h3>
+                {% if certificates %}
+                {% for cert in certificates %}
+                <div class="pending-item2" style="margin-bottom:15px;">
+                    <div class="item-matter1">
+                        <i class="fa-solid fa-award" style="font-size:80px; color:#4361ee;"></i>
+                        <div>
+                            <h4>{{ cert.course_title }}</h4>
+                            <br>
+                            <p>Code: <strong>{{ cert.certificate_code }}</strong></p>
+                            <p>Issued: {{ cert.issued_at.strftime('%Y-%m-%d') if cert.issued_at else '' }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color:#888; padding:10px 0;">No certificates earned yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="pending1">
+                <h3 style="font-size: 30px;">Recent Activity</h3>
+
+                {% if recent_quizzes or recent_videos or recent_questions %}
+                {% for quiz in recent_quizzes %}
+                <div class="pending-item1">
+                    <div class="item-matter">
+                        <div>
+                            <h3>Completed Quiz</h3>
+                            <h4>{{ quiz.title }} (Score: {{ quiz.score }}%)</h4>
+                        </div>
+                        <div class="quiz-score">
+                            <ul type="none" style="display: flex; align-items: center; gap: 20px;">
+                                <li>{{ quiz.created_at.strftime('%Y-%m-%d') if quiz.created_at else '' }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% for video in recent_videos %}
+                <div class="pending-item1">
+                    <div class="item-matter">
+                        <div>
+                            <h3>Watched video</h3>
+                            <h4>{{ video.title }}</h4>
+                        </div>
+                        <div class="quiz-score">
+                            <ul type="none" style="display: flex; align-items: center; gap: 20px;">
+                                <li>{{ video.watched_at.strftime('%Y-%m-%d') if video.watched_at else '' }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% for q in recent_questions %}
+                <div class="pending-item1">
+                    <div class="item-matter">
+                        <div>
+                            <h3>Asked question</h3>
+                            <h4 style="font-weight: normal; font-style: italic;">"{{ q.question_text }}"</h4>
+                        </div>
+                        <div class="quiz-score">
+                            <ul type="none" style="display: flex; align-items: center; gap: 20px;">
+                                <li>{{ q.created_at.strftime('%Y-%m-%d') if q.created_at else '' }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color:#888; padding:10px 0;">No recent activity logged.</p>
+                {% endif %}
+            </div>
+
+            <div class="modal" id="editModal">
+                <div class="modal-content" style="max-width: 450px;">
+                    <h2>Edit Profile</h2>
+                    <form action="{{ url_for('student_profile') }}" method="POST">
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Full
+                            Name</label>
+                        <input type="text" name="name" value="{{ user.name }}"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Phone
+                            Number</label>
+                        <input type="text" name="phone" value="{{ user.phone }}"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Age</label>
+                        <input type="number" name="age" value="{{ user.age }}"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Gender</label>
+                        <select name="gender"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+                            <option value="Male" {% if user.gender=='Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if user.gender=='Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if user.gender=='Other' %}selected{% endif %}>Other</option>
+                        </select>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Class
+                            Level</label>
+                        <input type="text" name="class_level" value="{{ user.class_level }}"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Stream /
+                            Branch</label>
+                        <input type="text" name="stream" value="{{ user.stream }}"
+                            style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;"
+                            required>
+
+                        <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Competitive Exam</label>
+                        <select name="competitive_exam" style="width:100%; padding:8px; margin:5px 0; border:1px solid #ccc; border-radius:5px;">
+                            <option value="">None</option>
+                            <option value="NEET" {% if user.competitive_exam == 'NEET' %}selected{% endif %}>NEET</option>
+                            <option value="JEE" {% if user.competitive_exam == 'JEE' %}selected{% endif %}>JEE</option>
+                            <option value="UPSC" {% if user.competitive_exam == 'UPSC' %}selected{% endif %}>UPSC</option>
+                            <option value="GATE" {% if user.competitive_exam == 'GATE' %}selected{% endif %}>GATE</option>
+                            <option value="CAT" {% if user.competitive_exam == 'CAT' %}selected{% endif %}>CAT</option>
+                            <option value="Other" {% if user.competitive_exam == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+
+                        <div class="modal-buttons" style="margin-top:15px; display:flex; gap:10px;">
+                            <button type="submit" class="save"
+                                style="flex:1; height:40px; border:none; border-radius:5px; background:#4361ee; color:white; font-weight:bold; cursor:pointer;">Save
+                                Changes</button>
+                            <button type="button" class="cancel" onclick="closeModal()"
+                                style="flex:1; height:40px; border:none; border-radius:5px; background:#ccc; font-weight:bold; cursor:pointer;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+
+    <script>
+        function side() {
+            document.getElementById("layout").classList.toggle("show");
+        }
+
+        function openModal() {
+            document.getElementById("editModal").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        function logout() {
+            window.location.href = "{{ url_for('logout') }}";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".progress").forEach(el => {
+                const progress = el.getAttribute("data-progress");
+                if (progress) {
+                    el.style.width = progress + "%";
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,744 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Users - Student Club</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+    * {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+          
+/* ================= TOP NAV ================= */
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+/* ================= LAYOUT ================= */
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+/* WHEN SIDEBAR OPEN */
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+/* ACTIVE ITEM */
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+/* ================= FOOTER ================= */
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+        /* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  /* TOP NAV */
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  /* LAYOUT */
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  /* SIDEBAR */
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    padding: 12px;
+  }
+}
+/* ===== MAIN ===== */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+  overflow: hidden;
+}
+.title { margin-bottom: 20px; }
+.title h1 { font-size: 26px; color: #1f2937; margin-bottom: 4px; }
+.title p  { color: #6b7280; font-size: 14px; }
+
+/* ===== CARDS ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.card {
+  padding: 18px 14px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 10px 22px rgba(0,0,0,0.18); }
+.card:active { transform: scale(0.97); }
+.card p  { font-size: 12px; margin-bottom: 8px; opacity: 0.9; }
+.card h3 { font-size: 24px; font-weight: bold; }
+.card.blue   { background: linear-gradient(135deg,#667eea,#764ba2); }
+.card.green  { background: linear-gradient(135deg,#f093fb,#f5576c); }
+.card.purple { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+.card.orange { background: linear-gradient(135deg,#fa709a,#fee140); }
+
+/* ===== FILTERS ===== */
+.filters {
+  background: white;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+#search {
+  flex: 1;
+  min-width: 160px;
+  padding: 9px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+}
+#search:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.tabs { display: flex; gap: 8px; }
+.tabs button {
+  padding: 8px 14px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+.tabs button:hover  { border-color: #2563eb; color: #2563eb; }
+.tabs button.active { background: #2c2a99; color: white; border-color: #2c2a99; }
+
+/* ===== SCROLL HINT ===== */
+.scroll-hint {
+  display: none;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 6px;
+  text-align: right;
+  padding-right: 2px;
+}
+
+/* ===== TABLE WRAPPER — KEY for responsive scroll ===== */
+.table-wrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Show scrollbar always on touch devices so users know it scrolls */
+  scrollbar-width: thin;
+  scrollbar-color: #c7c7c7 transparent;
+}
+.table-wrapper::-webkit-scrollbar { height: 5px; }
+.table-wrapper::-webkit-scrollbar-track { background: transparent; }
+.table-wrapper::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 10px; }
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  min-width: 700px;      /* Forces scroll when viewport is smaller */
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Explicit display reset — prevents any inherited grid/flex breaking table layout */
+thead, tbody { display: table-row-group; }
+thead        { display: table-header-group; }
+tr           { display: table-row; }
+th, td       { display: table-cell; }
+
+thead#mainHead { background: #2c2a99; }
+thead#mainHead th { color: white; }
+
+th {
+  padding: 13px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  color: #374151;
+}
+td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #4b5563;
+  font-size: 14px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+tbody tr:hover { background: #f9fafb; }
+tbody tr:last-child td { border-bottom: none; }
+
+.cell-name { white-space: normal; min-width: 140px; }
+.cell-name strong { color: #1f2937; display: block; font-size: 14px; }
+.cell-name small  { color: #6b7280; font-size: 12px; display: block; margin-top: 2px; }
+
+/* ===== PENDING HEAD ===== */
+.pending-head th {
+  background: #2c2a99;
+  color: white;
+  padding: 13px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ===== BADGES ===== */
+.status {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.active-status    { background: #d1fae5; color: #065f46; }
+.pending-status   { background: #fef3c7; color: #92400e; }
+.suspended-status { background: #fee2e2; color: #991b1b; }
+
+/* ===== BUTTONS ===== */
+.action-btns { display: flex; gap: 5px; flex-wrap: nowrap; }
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.btn:hover    { opacity: 0.82; }
+.btn-blue     { background: #2563eb; color: white; }
+.btn-yellow   { background: #f59e0b; color: white; }
+.btn-red      { background: #dc2626; color: white; }
+.btn-green    { background: #16a34a; color: white; }
+
+/* ===== CV MODAL ===== */
+.cv-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  background: rgba(0,0,0,0.72);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.cv-content {
+  width: 90%; max-width: 900px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 95vh;
+  min-height: 60vh;
+}
+.cv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: #2c2a99;
+  color: white;
+  flex-shrink: 0;
+}
+.cv-header button {
+  background: red; color: white; border: none;
+  padding: 7px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;
+}
+#cvFrame { width: 100%; min-height: 500px; height: calc(100% - 56px); border: none; }
+
+/* ===== FOOTER ===== */
+.foot {
+  background: #2c2a99;
+  color: white;
+  text-align: center;
+  padding: 17px;
+  font-size: 15px;
+}
+
+
+
+
+/* ==============================================
+   TABLET  ≤ 1024px
+   ============================================== */
+@media (max-width: 1024px) {
+  .cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .scroll-hint { display: block; }
+}
+
+/* ==============================================
+   MOBILE + TABLET SHARED  ≤ 768px
+   ============================================== */
+@media (max-width: 768px) {
+
+  /* NAV */
+  .uname { display: none; }
+
+  /* SIDEBAR — icon-only strip */
+  .layout.show .sidebar { width: 52px; }
+  .sidebar span { display: none; }
+  .sidebar li { justify-content: center; padding: 13px 8px; }
+  .sidebar li.active { border-left: 3px solid #2563eb; }
+
+  /* MAIN */
+  .main { padding: 12px 10px; }
+  .title h1 { font-size: 20px; }
+  .title p  { font-size: 12px; }
+
+  /* CARDS — 2 columns always */
+  .cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  .card    { padding: 14px 12px; }
+  .card h3 { font-size: 20px; }
+  .card p  { font-size: 11px; }
+
+  /* FILTERS */
+  .filters { flex-direction: column; align-items: stretch; gap: 9px; padding: 11px; }
+  #search  { min-width: unset; width: 100%; font-size: 13px; }
+  .tabs    { justify-content: space-between; }
+  .tabs button { flex: 1; padding: 7px 4px; font-size: 12px; text-align: center; }
+
+  /* SCROLL HINT — always visible on mobile */
+  .scroll-hint { display: block; }
+
+  /* TABLE — min-width forces horizontal scroll */
+  table   { min-width: 700px; }
+
+  /* Cell sizes — must keep display:table-cell always */
+  th, td  {
+    padding: 10px 10px !important;
+    font-size: 13px !important;
+    display: table-cell !important;
+  }
+
+  .btn    { padding: 5px 7px; font-size: 11px; }
+  .status { font-size: 11px; padding: 4px 8px; }
+
+  /* CV MODAL */
+  .cv-content { width: 100%; height: 92vh; }
+  #cvFrame    { height: 100%; }
+}
+
+/* ==============================================
+   SMALL MOBILE  ≤ 400px
+   ============================================== */
+@media (max-width: 400px) {
+  .top-nav { padding: 10px 12px; }
+  .logo { font-size: 15px; gap: 7px; }
+  .tabs button { font-size: 11px; padding: 6px 2px; }
+  .card h3 { font-size: 17px; }
+  .card p  { font-size: 10px; }
+  .main    { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="top-nav">
+  <div class="logo">
+    <i class="fa-solid fa-bars" onclick="side()"></i>
+    <i class="fa-solid fa-graduation-cap"></i>
+    <span>Student Club</span>
+  </div>
+  <div class="nav-actions" >
+    <a href="/admin/notifications" style="color: white;"><i class="fa-regular fa-bell"></i></a>
+    <a href="/student/dashboard" style="color: white;">
+      <i class="fa-solid fa-user"></i>
+      <span class="uname">{{ current_user.name if current_user else 'Admin' }}</span>
+    </a>
+    <i class="fa-solid fa-right-from-bracket" onclick="logout()"></i>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout" id="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+      <li class="active"><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+      
+      <li><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+      <li><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+      <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+      <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+      <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+      <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <section class="title">
+      <h1>Manage Users</h1>
+      <p>Approve, manage, and moderate platform users</p>
+    </section>
+
+    <!-- Cards -->
+    <section class="cards">
+      <div class="card blue">  <p>Total Users</p>      <h3>{{ total_users }}</h3></div>
+      <div class="card green"> <p>Students</p>         <h3>{{ total_students }}</h3></div>
+      <div class="card purple"><p>Teachers</p>         <h3>{{ total_teachers }}</h3></div>
+      <div class="card orange"><p>Pending Approval</p> <h3>{{ pending_approval }}</h3></div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+      <input type="text" id="search" placeholder="Search users by name or email…" oninput="searchUsers()">
+      <div class="tabs">
+        <button class="active" onclick="filterUsers('all',this)">All</button>
+        <button onclick="filterUsers('student',this)">Students</button>
+        <button onclick="filterUsers('teacher',this)">Teachers</button>
+        <button onclick="filterUsers('pending',this)">Pending</button>
+      </div>
+    </section>
+
+    <!-- Scroll Hint -->
+    <p class="scroll-hint">⟵ swipe to scroll table ⟶</p>
+
+    <!-- Table Wrapper — overflow-x:auto makes table scroll horizontally -->
+    <div class="table-wrapper">
+      <table>
+        <thead id="mainHead">
+          <tr>
+            <th>User</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Courses</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+      </table>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+<!-- CV Modal -->
+<div id="cvModal" class="cv-modal">
+  <div class="cv-content">
+    <div class="cv-header">
+      <h2>Teacher Resume</h2>
+      <button onclick="closeCV()">✖ Close</button>
+    </div>
+    <iframe id="cvFrame"></iframe>
+  </div>
+</div>
+
+<!-- User Details Modal -->
+<div id="userModal" class="cv-modal">
+  <div class="cv-content" style="max-width: 600px; min-height: 400px; height: auto;">
+    <div class="cv-header">
+      <h2 id="userModalTitle">User Details</h2>
+      <button onclick="closeUserModal()">✖ Close</button>
+    </div>
+    <div id="userModalBody" style="padding: 20px; overflow-y: auto;">
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* SIDEBAR */
+function side(){ document.getElementById("layout").classList.toggle("show"); }
+function logout(){ window.location.href = "/logout"; }
+
+/* DATA */
+const users = {{ users_json | safe }};
+
+let currentFilter="all";
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+
+function renderUsers(filter,term){
+  const tbody=document.getElementById("userTable");
+  const head =document.getElementById("mainHead");
+  tbody.innerHTML="";
+
+  let list=users;
+  if(term) list=list.filter(u=>u.name.toLowerCase().includes(term)||u.email.toLowerCase().includes(term));
+
+  /* PENDING VIEW */
+  if(filter==="pending"){
+    head.style.display="none";
+    const rows=list.filter(u=>u.status==="pending");
+    if(!rows.length){
+      tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:#6b7280;">No pending users.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML=`<tr class="pending-head"><th>Teacher</th><th>Stream</th><th>Subject</th><th>CV</th><th>Status</th><th>Actions</th></tr>`;
+    rows.forEach(u=>{
+      tbody.innerHTML+=`
+      <tr>
+        <td class="cell-name"><strong>${u.name}</strong><small>${u.email}</small></td>
+        <td>${u.stream}</td>
+        <td>${u.subject}</td>
+        <td><button class="btn btn-blue" onclick="viewCV('${u.cv}')">View CV</button></td>
+        <td><span class="status pending-status">Pending</span></td>
+        <td><div class="action-btns">
+          <button class="btn btn-green" onclick="acceptTeacher(${u.id})">Accept</button>
+          <button class="btn btn-red"   onclick="rejectTeacher(${u.id})">Reject</button>
+        </div></td>
+      </tr>`;
+    });
+    return;
+  }
+
+  /* NORMAL VIEW */
+  head.style.display="table-header-group";
+  const rows=list.filter(u=>filter==="all"||u.role===filter);
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:#6b7280;">No users found.</td></tr>`;
+    return;
+  }
+  rows.forEach(u=>{
+    tbody.innerHTML+=`
+    <tr>
+      <td class="cell-name"><strong>${u.name}</strong><small>${u.email}</small></td>
+      <td>${cap(u.role)}</td>
+      <td><span class="status ${u.status}-status">${cap(u.status)}</span></td>
+      <td>${u.joined}</td>
+      <td>${u.courses}</td>
+      <td><div class="action-btns">
+        <button class="btn btn-blue"   onclick="viewUser(${u.id})">View</button>
+        <button class="btn btn-yellow" onclick="editUser(${u.id})">Edit</button>
+        <button class="btn btn-red"    onclick="suspendUser(${u.id})">Suspend</button>
+      </div></td>
+    </tr>`;
+  });
+}
+
+function filterUsers(type,btn){
+  currentFilter=type;
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  renderUsers(type,document.getElementById("search").value.trim().toLowerCase());
+}
+function searchUsers(){
+  renderUsers(currentFilter,document.getElementById("search").value.trim().toLowerCase());
+}
+
+function viewUser(id){
+  const u=users.find(x=>x.id==id);
+  if (!u) return;
+  
+  document.getElementById("userModalTitle").innerText = (u.role === "student" ? "Student" : "Teacher") + " Details: " + u.name;
+  
+  let html = `<p><strong>Name:</strong> ${u.name}</p>
+              <p><strong>Email:</strong> ${u.email}</p>
+              <p><strong>Joined:</strong> ${u.joined}</p>`;
+              
+  if (u.role === "student") {
+    html += `<p><strong>Stream:</strong> ${u.stream}</p>
+             <h4 style="margin-top: 15px; margin-bottom: 10px;">Enrolled Courses:</h4>`;
+             
+    if (u.enrolled && u.enrolled.length > 0) {
+      html += `<ul style="list-style: none; padding: 0;">`;
+      u.enrolled.forEach(course => {
+        html += `<li style="padding: 8px; border: 1px solid #ddd; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                   <span>${course.title}</span>
+                   <button onclick="removeCourseAccess(${u.id}, ${course.id})" class="btn btn-red">Remove Access</button>
+                 </li>`;
+      });
+      html += `</ul>`;
+    } else {
+      html += `<p>No enrolled courses.</p>`;
+    }
+  } else {
+    html += `<p><strong>Subject:</strong> ${u.subject}</p>`;
+  }
+  
+  document.getElementById("userModalBody").innerHTML = html;
+  document.getElementById("userModal").style.display = "flex";
+}
+
+function closeUserModal(){
+  document.getElementById("userModal").style.display="none";
+}
+document.getElementById("userModal").addEventListener("click",function(e){if(e.target===this)closeUserModal();});
+
+function removeCourseAccess(studentId, courseId) {
+  if (confirm("Are you sure you want to remove this student's access to this course?")) {
+    fetch('/admin/remove-course-access/' + studentId + '/' + courseId, { method: 'POST' })
+      .then(r => r.json())
+      .then(res => {
+        alert(res.message);
+        location.reload();
+      });
+  }
+}
+
+function editUser(id)     {alert("Edit user functionality for ID: " + id);}
+function suspendUser(id)  {
+  if(confirm("Are you sure you want to suspend/delete this user?")){
+    fetch('/admin/suspend-user/' + id, {method: 'POST'})
+    .then(r => r.json())
+    .then(res => {
+      alert(res.message);
+      location.reload();
+    });
+  }
+}
+function acceptTeacher(id){
+  fetch('/approve-teacher/' + id, {method: 'POST'})
+  .then(r => r.json())
+  .then(res => {
+    alert(res.message);
+    location.reload();
+  });
+}
+function rejectTeacher(id){
+  if(confirm("Are you sure you want to reject this teacher application?")){
+    fetch('/reject-teacher/' + id, {method: 'POST'})
+    .then(r => r.json())
+    .then(res => {
+      alert(res.message);
+      location.reload();
+    });
+  }
+}
+
+function viewCV(cv){
+  document.getElementById("cvModal").style.display="flex";
+  document.getElementById("cvFrame").src="/static/uploads/resumes/"+cv;
+}
+function closeCV(){
+  document.getElementById("cvModal").style.display="none";
+  document.getElementById("cvFrame").src="";
+}
+document.getElementById("cvModal").addEventListener("click",function(e){if(e.target===this)closeCV();});
+
+renderUsers("all");
+</script>
+</body>
+</html>

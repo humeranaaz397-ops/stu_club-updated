@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Course Videos</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6fb;
+  margin: 0;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+           
+
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+@media (max-width: 768px) {
+
+ 
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+
+  .main-content {
+    padding: 12px;
+  }
+  
+.upload-box{
+flex-direction:column;
+}
+
+.folder-actions{
+flex-direction:column;
+}
+
+.action-buttons{
+flex-direction:column;
+}
+
+}
+
+.container{
+width:95%;
+max-width:1250px;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+h2{
+color:#1e40af;
+margin-bottom:20px;
+}
+
+
+
+.upload-box{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:25px;
+}
+
+.upload-box input,
+.upload-box button{
+padding:10px;
+flex:1;
+min-width:180px;
+}
+
+
+
+button{
+background:#2563eb;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+padding:10px;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete-folder-btn{
+background:#dc2626;
+}
+
+.delete-folder-btn:hover{
+background:#b91c1c;
+}
+
+.edit-folder-btn{
+background:#f59e0b;
+}
+
+.edit-folder-btn:hover{
+background:#d97706;
+}
+
+
+
+.folder-container{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+.folder-card{
+background:#f8f9ff;
+border-radius:10px;
+padding:20px;
+border:1px solid #ddd;
+transition:0.3s;
+}
+
+.folder-card:hover{
+transform:translateY(-5px);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.folder-card i{
+font-size:55px;
+color:#2563eb;
+margin-bottom:12px;
+cursor:pointer;
+}
+
+.folder-card h3{
+margin-bottom:8px;
+cursor:pointer;
+}
+
+.folder-card p{
+color:gray;
+margin-bottom:15px;
+}
+
+.folder-actions{
+display:flex;
+gap:10px;
+}
+
+
+
+.video-page{
+display:none;
+}
+
+.back-btn{
+margin-bottom:20px;
+}
+
+.video-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+.video-card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.video-card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.video-info{
+padding:15px;
+}
+
+.video-info h4{
+margin-bottom:10px;
+}
+
+.video-info p{
+margin-bottom:12px;
+color:gray;
+}
+
+.action-buttons{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+
+.video-modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.video-box{
+width:90%;
+max-width:800px;
+background:white;
+padding:20px;
+border-radius:10px;
+position:relative;
+}
+
+.video-box video{
+width:100%;
+border-radius:10px;
+}
+
+.close-btn{
+position:absolute;
+top:10px;
+right:15px;
+font-size:25px;
+cursor:pointer;
+color:red;
+}
+
+@media(max-width:768px){
+
+.layout.show{
+grid-template-columns:60px 1fr;
+}
+
+.sidebar span{
+display:none;
+}
+
+.upload-box{
+flex-direction:column;
+}
+
+.folder-actions{
+flex-direction:column;
+}
+
+.action-buttons{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+   
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/admin/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/admin/profile" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+       
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        
+    <li ><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+    <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+    <li><a href="/admin/dashboard?tab=payments"><i class="fa-solid fa-indian-rupee-sign"></i><span>Payments</span></a></li>
+    <li class="active"><a href="/admin/courses"><i class="fa-solid fa-book-open"></i><span>Course Approvals</span></a></li>
+    <li ><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+    <li><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+    <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+    <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+    <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+    <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+  
+         </ul>
+</aside>
+
+<!-- MAIN -->
+<main>
+<div class="container">
+<div id="homePage">
+<h2>📚 Admin Course Management</h2>
+
+<!-- Courses Table -->
+<table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+        <tr style="background:#2c2a99; color:white; text-align:left;">
+            <th style="padding:12px;">Course</th>
+            <th style="padding:12px;">Creator</th>
+            <th style="padding:12px;">Status</th>
+            <th style="padding:12px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="{{ course.cover_image_url }}" alt="Cover" style="width:60px; height:40px; object-fit:cover; border-radius:4px;">
+                    <strong>{{ course.title }}</strong>
+                </div>
+            </td>
+            <td style="padding:12px;">{{ course.creator_name }}</td>
+            <td style="padding:12px;">
+                {% if course.status == 'approved' %}
+                    <span style="background:green; color:white; padding:4px 8px; border-radius:4px; font-size:12px;">Approved</span>
+                {% elif course.status == 'rejected' %}
+                    <span style="background:red; color:white; padding:4px 8px; border-radius:4px; font-size:12px;">Rejected</span>
+                {% else %}
+                    <span style="background:orange; color:white; padding:4px 8px; border-radius:4px; font-size:12px;">Pending</span>
+                {% endif %}
+            </td>
+            <td style="padding:12px;">
+                <button onclick="openReviewModal('{{ course.id }}', '{{ course.title }}', '{{ course.status }}', '{{ course.price_type }}', '{{ course.price }}', '{{ course.upi_id }}')" style="background:#f59e0b;">
+                    <i class="fa-solid fa-pen-to-square"></i> Review/Edit
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div id="reviewModal" class="video-modal">
+    <div class="video-box">
+        <span class="close-btn" onclick="closeReviewModal()">×</span>
+        <h3 id="modalTitle" style="margin-bottom: 20px;">Review Course</h3>
+        <form id="reviewForm" method="POST" action="" enctype="multipart/form-data">
+            <input type="hidden" id="actionInput" name="action" value="approve">
+            
+            <div style="margin-bottom: 15px;">
+                <label>Price Type</label>
+                <select name="price_type" id="priceTypeSelect" style="width:100%; padding:8px; margin-top:5px;" onchange="togglePrice(this)">
+                    <option value="free">Free</option>
+                    <option value="paid">Paid</option>
+                </select>
+            </div>
+            
+            <div id="priceDiv" style="margin-bottom: 15px; display:none;">
+                <label>Price (₹)</label>
+                <input type="number" name="price" id="priceInput" style="width:100%; padding:8px; margin-top:5px;" value="0">
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="button" onclick="submitReview('approve')" style="background:green; flex:1;">Approve / Save</button>
+                <button type="button" onclick="submitReview('reject')" style="background:red; flex:1;">Reject</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openReviewModal(id, title, status, priceType, price, upiId) {
+        document.getElementById('videoModal') ? document.getElementById('videoModal').style.display = 'none' : null;
+        document.getElementById('reviewModal').style.display = 'flex';
+        document.getElementById('modalTitle').innerText = "Review Course: " + title;
+        document.getElementById('reviewForm').action = "/admin/review-course/" + id;
+        
+        document.getElementById('priceTypeSelect').value = priceType || 'free';
+        document.getElementById('priceInput').value = price || 0;
+        
+        togglePrice(document.getElementById('priceTypeSelect'));
+    }
+    
+    function closeReviewModal() {
+        document.getElementById('reviewModal').style.display = 'none';
+    }
+    
+    function togglePrice(selectElement) {
+        if (selectElement.value === 'paid') {
+            document.getElementById('priceDiv').style.display = 'block';
+        } else {
+            document.getElementById('priceDiv').style.display = 'none';
+        }
+    }
+    
+    function submitReview(actionType) {
+        document.getElementById('actionInput').value = actionType;
+        document.getElementById('reviewForm').submit();
+    }
+</script>
+</main>
+</div>
+<footer class="foot">
+@ 2026 Student Club All rights reserved
+</footer>
+
+
+
+
+
+<!-- VIDEO PLAYER -->
+
+<div class="video-modal"
+id="videoModal">
+
+<div class="video-box">
+
+<span class="close-btn"
+onclick="closeVideo()">
+
+×
+
+</span>
+
+<video id="player"
+controls></video>
+
+</div>
+
+</div>
+
+<script>
+
+/* SIDEBAR */
+
+function side(){
+
+document
+.getElementById("layout")
+.classList.toggle("show");
+
+}
+
+/* DATA */
+
+let courseVideos={
+
+"Web Development":[
+
+{
+title:"HTML Basics",
+thumbnail:"https://i.ytimg.com/vi/qz0aGYrrlhU/maxresdefault.jpg",
+video:"https://www.w3schools.com/html/mov_bbb.mp4",
+duration:"10:22"
+},
+
+{
+title:"CSS Flexbox",
+thumbnail:"https://i.ytimg.com/vi/JJSoEo8JSnc/maxresdefault.jpg",
+video:"https://www.w3schools.com/html/movie.mp4",
+duration:"12:10"
+}
+
+],
+
+"Python Programming":[
+
+{
+title:"Python Intro",
+thumbnail:"https://i.ytimg.com/vi/_uQrJ0TkZlc/maxresdefault.jpg",
+video:"https://www.w3schools.com/html/mov_bbb.mp4",
+duration:"09:30"
+}
+
+]
+
+};
+
+/* LOAD FOLDERS */
+
+function loadFolders(){
+
+let container=
+document.getElementById("folderContainer");
+
+container.innerHTML="";
+
+for(let course in courseVideos){
+
+let count=
+courseVideos[course].length;
+
+let card=
+document.createElement("div");
+
+card.className="folder-card";
+
+card.innerHTML=`
+
+<i class="fa-solid fa-folder"
+onclick="openFolder('${course}')"></i>
+
+<h3 onclick="openFolder('${course}')">
+${course}
+</h3>
+
+<p>${count} Videos</p>
+
+<div class="folder-actions">
+
+<button class="edit-folder-btn"
+onclick="editFolder('${course}')">
+
+✏️ Edit
+
+</button>
+
+<button class="delete-folder-btn"
+onclick="deleteFolder('${course}')">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+}
+
+}
+
+loadFolders();
+
+/* OPEN PAGE */
+
+function openFolder(course){
+
+document
+.getElementById("homePage")
+.style.display="none";
+
+document
+.getElementById("videoPage")
+.style.display="block";
+
+document
+.getElementById("courseTitle")
+.innerText=course;
+
+let grid=
+document.getElementById("videoGrid");
+
+grid.innerHTML="";
+
+courseVideos[course]
+.forEach((video,index)=>{
+
+let card=
+document.createElement("div");
+
+card.className="video-card";
+
+card.innerHTML=`
+
+<img src="${video.thumbnail}">
+
+<div class="video-info">
+
+<h4>${video.title}</h4>
+
+<p>Duration : ${video.duration}</p>
+
+<div class="action-buttons">
+
+<button
+onclick="watchVideo('${video.video}')">
+
+▶ Watch
+
+</button>
+
+<button
+onclick="editVideo('${course}',${index})">
+
+✏️ Edit
+
+</button>
+
+<button
+onclick="deleteVideo('${course}',${index})">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+/* BACK */
+
+function goBack(){
+
+document
+.getElementById("homePage")
+.style.display="block";
+
+document
+.getElementById("videoPage")
+.style.display="none";
+
+}
+
+/* WATCH VIDEO */
+
+function watchVideo(src){
+
+document
+.getElementById("videoModal")
+.style.display="flex";
+
+let player=
+document.getElementById("player");
+
+player.src=src;
+
+player.play();
+
+}
+
+/* CLOSE VIDEO */
+
+function closeVideo(){
+
+document
+.getElementById("videoModal")
+.style.display="none";
+
+document
+.getElementById("player")
+.pause();
+
+}
+
+/* DELETE VIDEO */
+
+function deleteVideo(course,index){
+
+let confirmDelete=
+confirm("Delete this video?");
+
+if(confirmDelete){
+
+courseVideos[course]
+.splice(index,1);
+
+openFolder(course);
+
+loadFolders();
+
+}
+
+}
+
+/* EDIT VIDEO */
+
+function editVideo(course,index){
+
+let currentTitle=
+courseVideos[course][index].title;
+
+let newTitle=
+prompt(
+"Edit Video Title",
+currentTitle
+);
+
+if(newTitle &&
+newTitle.trim()!==""){
+
+courseVideos[course][index]
+.title=newTitle;
+
+openFolder(course);
+
+}
+
+}
+
+/* DELETE FOLDER */
+
+function deleteFolder(course){
+
+let confirmDelete=
+confirm(
+"Delete complete folder?"
+);
+
+if(confirmDelete){
+
+delete courseVideos[course];
+
+loadFolders();
+
+goBack();
+
+}
+
+}
+
+/* EDIT FOLDER */
+
+function editFolder(course){
+
+let newName=
+prompt(
+"Edit Folder Name",
+course
+);
+
+if(newName &&
+newName.trim()!=="" &&
+!courseVideos[newName]){
+
+courseVideos[newName]=
+courseVideos[course];
+
+delete courseVideos[course];
+
+loadFolders();
+
+}
+
+}
+
+/* UPLOAD */
+
+async function uploadFolder(){
+
+let course=
+document.getElementById("course").value;
+
+let files=
+document.getElementById("video").files;
+
+if(!course || files.length===0){
+
+alert(
+"Please enter course name and select videos"
+);
+
+return;
+
+}
+
+if(!courseVideos[course]){
+
+courseVideos[course]=[];
+
+}
+
+for(let file of files){
+
+let url=
+URL.createObjectURL(file);
+
+let video=
+document.createElement("video");
+
+video.src=url;
+
+await new Promise(resolve=>{
+video.onloadedmetadata=resolve;
+});
+
+/* DURATION */
+
+let minutes=
+Math.floor(video.duration/60);
+
+let seconds=
+Math.floor(video.duration%60)
+.toString()
+.padStart(2,"0");
+
+let duration=
+`${minutes}:${seconds}`;
+
+/* THUMBNAIL */
+
+video.currentTime=1;
+
+await new Promise(resolve=>{
+video.onseeked=resolve;
+});
+
+let canvas=
+document.createElement("canvas");
+
+canvas.width=300;
+canvas.height=150;
+
+let ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+video,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+let thumbnail=
+canvas.toDataURL();
+
+/* SAVE */
+
+courseVideos[course].push({
+
+title:file.name,
+thumbnail:thumbnail,
+video:url,
+duration:duration
+
+});
+
+}
+
+loadFolders();
+
+alert(
+"Folder Uploaded Successfully"
+);
+
+document
+.getElementById("video")
+.value="";
+
+document
+.getElementById("course")
+.value="";
+
+}
+
+</script>
+
+        
+</body>
+</html>

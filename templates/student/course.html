@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+
+.top-nav{
+    background: #2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+.content{
+
+    padding:20px;
+    width: 100%;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+p{
+    color:#555;
+}
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+.ask-btn.small  {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.ask-btn.small:hover {
+    background-color: #1e40af;
+}
+    
+@media (max-width: 768px) {
+
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  
+ 
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions input {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card{
+    min-height:unset;
+  }
+}
+/* FILTER BUTTONS */
+.filter-wrap{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.filter-btn{
+  padding:10px 18px;
+  border:1px solid #ddd;
+  background:white;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+  font-size:14px;
+  font-weight:600;
+}
+
+.filter-btn:hover{
+  border-color:#4361ee;
+  color:#4361ee;
+}
+
+.filter-btn.active{
+  background:#4361ee;
+  color:white;
+}
+
+/* RESULTS ROW */
+.results-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.results-row h2{
+  font-size:24px;
+  font-weight:bold;
+}
+
+.results-count{
+  background:white;
+  border:1px solid #ddd;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:14px;
+  color:#666;
+}
+
+/* COURSE GRID */
+.courses-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  align-items:stretch;
+  grid-auto-rows:1fr;
+}
+
+/* COURSE CARD */
+.card{
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:460px;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card-thumb{
+  position:relative;
+  height:180px;
+}
+
+.card-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* RIBBON */
+.ribbon{
+  position:absolute;
+  top:10px;
+  left:10px;
+  padding:5px 10px;
+  border-radius:5px;
+  font-size:12px;
+  font-weight:bold;
+  color:white;
+}
+
+.ribbon.free{
+  background:#06d6a0;
+}
+
+.ribbon.paid{
+  background:#f72585;
+}
+
+/* WISHLIST BUTTON */
+.wish-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:35px;
+  height:35px;
+  border:none;
+  border-radius:50%;
+  background:white;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* CERTIFICATE BADGE */
+.cert-badge{
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  background:rgba(0,0,0,0.7);
+  color:white;
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:11px;
+}
+
+/* CARD BODY */
+.card-body{
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  flex:1;
+}
+
+.card-category{
+  color:#4361ee;
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+
+.card-title{
+  font-size:18px;
+  font-weight:bold;
+  line-height:1.4;
+}
+
+.card-desc{
+  color:#666;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* META */
+.card-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  font-size:13px;
+  color:#666;
+}
+
+.rating{
+  font-weight:bold;
+  color:black;
+}
+
+/* DATE TAG */
+.date-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.date-tag{
+  background:#f3f4f6;
+  padding:5px 10px;
+  border-radius:6px;
+  font-size:12px;
+  color:#666;
+}
+
+/* PRICE */
+.price-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.price-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.price-now{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.price-now.free{
+  color:#06d6a0;
+}
+
+.price-old{
+  text-decoration:line-through;
+  color:#888;
+  font-size:14px;
+}
+
+.discount-tag{
+  background:#ffe5f0;
+  color:#f72585;
+  padding:4px 8px;
+  border-radius:5px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* PROGRESS */
+.prog-wrap{
+  margin-top:5px;
+}
+
+.prog-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666;
+  margin-bottom:5px;
+}
+
+.prog-track{
+  width:100%;
+  height:6px;
+  background:#ddd;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.prog-fill{
+  height:100%;
+  background:#4361ee;
+}
+
+/* CARD BUTTONS */
+.card-actions{
+  display:flex;
+  gap:10px;
+  margin-top:auto;
+}
+
+.btn{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.btn-primary{
+  background:#4361ee;
+  color:white;
+}
+
+.btn-primary:hover{
+  background:#3451d1;
+}
+
+.btn-outline{
+  background:white;
+  border:1px solid #ddd;
+}
+
+.btn-free{
+  background:#06d6a0;
+  color:white;
+}
+
+/* NO RESULTS */
+.no-results{
+  text-align:center;
+  padding:60px 20px;
+  color:#666;
+}
+
+.no-results i{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+/* LOAD MORE */
+.load-more-wrap{
+  text-align:center;
+  margin-top:35px;
+}
+
+.btn-load{
+  padding:12px 30px;
+  border:2px solid #4361ee;
+  background:white;
+  color:#4361ee;
+  border-radius:30px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn-load:hover{
+  background:#4361ee;
+  color:white;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:1000;
+}
+.modal-overlay.show{
+  display:flex;
+}
+
+.modal{
+  background:white;
+  width:100%;
+  max-width:600px;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.modal-thumb img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-body h2{
+  margin-bottom:10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.stars{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  color:#f59e0b;
+  font-size:14px;
+}
+
+.meta-item{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.close-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  background:white;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.modal-info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+  margin:20px 0;
+}
+
+.info-box{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:#f8f9ff;
+  padding:12px;
+  border-radius:10px;
+}
+
+.modal-price-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#1b1464;
+  color:white;
+  padding:14px 20px;
+  border-radius:10px;
+  display:none;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+  .results-row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .courses-grid{
+    grid-template-columns:1fr;
+  }
+
+  .card-actions{
+    flex-direction:column;
+  }
+
+  .modal-actions{
+    flex-direction:column;
+  }
+}
+
+@media(max-width:500px){
+
+  .filter-wrap{
+    justify-content:center;
+  }
+
+  .results-row h2{
+    font-size:20px;
+  }
+
+  .card-title{
+    font-size:16px;
+  }
+
+  .price-now{
+    font-size:18px;
+  }
+}/* =========================
+   STATS STRIP
+========================= */
+
+.stats-strip{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:25px 0;
+}
+
+/* STAT CARD */
+.stat-pill{
+    flex:1;
+    min-width:220px;
+    background:white;
+    border-radius:18px;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    transition:0.3s;
+    border:1px solid #f1f1f1;
+    position:relative;
+    overflow:hidden;
+}
+
+/* HOVER EFFECT */
+.stat-pill:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(67,97,238,0.15);
+}
+
+/* LEFT COLOR LINE */
+.stat-pill::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:5px;
+    height:100%;
+    background:#4361ee;
+}
+
+/* DOT */
+.dot{
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#4361ee;
+    flex-shrink:0;
+    box-shadow:0 0 10px rgba(67,97,238,0.4);
+}
+
+.dot.green{
+    background:#06d6a0;
+    box-shadow:0 0 10px rgba(6,214,160,0.4);
+}
+
+/* TEXT */
+.stat-pill span{
+    flex:1;
+    font-size:14px;
+    color:#666;
+    font-weight:500;
+}
+
+/* NUMBER */
+.stat-pill strong{
+    font-size:24px;
+    font-weight:700;
+    color:#111;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .stats-strip{
+        gap:14px;
+    }
+
+    .stat-pill{
+        min-width:100%;
+        padding:16px;
+    }
+
+    .stat-pill strong{
+        font-size:20px;
+    }
+}
+
+@media(max-width:480px){
+
+    .stats-strip{
+        flex-direction:column;
+    }
+
+    .stat-pill{
+        border-radius:14px;
+        gap:10px;
+    }
+
+    .stat-pill span{
+        font-size:13px;
+    }
+
+    .stat-pill strong{
+        font-size:18px;
+    }
+
+    .dot{
+        width:14px;
+        height:14px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/student/events" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+
+        <a href="/student/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/student/dashboard" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+        <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        
+        <li ><a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('student_qa') }}"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+        <li><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study Materials</span></a></li>
+        <li><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+        <li><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+        <li class="active"><a href="{{ url_for('student_courses') }}"><i class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+        <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+        <li><a href="{{ url_for('student_chat') }}"><i class="fa-solid fa-comment-dots"></i><span>Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+         <li><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+        <li ><a href="{{ url_for('student_progress') }}"><i class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+        
+
+    </ul>
+</aside>
+
+
+<div class="content">
+<div class="hero">
+      <div class="hero-text">
+        <h1>Turn curiosity into capability ✨</h1>
+        <p class="hero-sub">New skills today. Better opportunities tomorrow.</p>
+
+        <div class="hero-actions">
+          <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+          <button id="searchBtn" class="ask-btn small">Search</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/mDJR78Vv/1768420226019.png" alt="Students studying together">
+      </div>
+    </div>
+    
+    <h1>My Courses!</h1>
+    <p>"Track your learning progress and earn Certificates"</p>
+    
+    <!-- STATS -->
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="dot"></div>
+        <span>Total Courses</span>
+        <strong>{{ courses|length }}</strong>
+      </div>
+      <div class="stat-pill">
+        <div class="dot green"></div>
+        <span>Available on Page</span>
+        <strong id="totalCount">{{ courses|length }}</strong>
+      </div>
+      <div class="stat-pill">
+        <div class="dot" style="background:var(--accent)"></div>
+        <span>Showing</span>
+        <strong id="showingCount">0</strong>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-section">
+      <h2>Browse By</h2>
+      <div class="filter-wrap" id="filterWrap"></div>
+    </div>
+
+    <!-- RESULTS HEADER -->
+    <div class="results-row">
+      <h2>My Courses</h2>
+      <span class="results-count" id="resultLabel">Showing 12 courses</span>
+    </div>
+
+    <!-- GRID -->
+    <div class="courses-grid" id="coursesGrid"></div>
+
+    <!-- LOAD MORE -->
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+      <button class="btn-load" onclick="loadMore()">Learn More <i class="fa-solid fa-chevron-down"></i></button>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<footer class="foot">©️ 2026 <strong>Student Club</strong>. All rights reserved.</footer>
+
+<!-- ═══ MODAL ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-thumb">
+      <img id="m-img" src="" alt="">
+      <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tags" id="m-tags"></div>
+      <h2 id="m-title"></h2>
+      <p class="desc" id="m-desc"></p>
+      <div class="modal-info-grid">
+        <div class="info-box"><i class="fa-solid fa-clock"></i><div><small>Duration</small><strong id="m-duration"></strong></div></div>
+        <div class="info-box"><i class="fa-solid fa-users"></i><div><small>Students</small><strong id="m-students"></strong></div></div>
+        <div class="info-box"><i class="fa-solid fa-layer-group"></i><div><small>Lessons</small><strong id="m-lessons"></strong></div></div>
+        <div class="info-box"><i class="fa-solid fa-certificate"></i><div><small>Certificate</small><strong id="m-cert"></strong></div></div>
+      </div>
+      <div class="date-row" style="margin-bottom:18px;">
+        <div class="date-tag"><i class="fa-solid fa-calendar-day"></i><span id="m-start"></span></div>
+        <div class="date-tag"><i class="fa-solid fa-calendar-check"></i><span id="m-end"></span></div>
+      </div>
+      <div class="modal-price-row">
+        <div class="price-box">
+          <span class="price-now" id="m-price"></span>
+          <span class="price-old" id="m-old"></span>
+          <span class="discount-tag" id="m-disc" style="display:none;"></span>
+        </div>
+        <div class="stars">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-regular fa-star"></i>
+          <span class="rating" id="m-rating"></span>
+        </div>
+      </div>
+      <div class="modal-actions" id="m-actions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══════════════════════════════════════════════ -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">Enrolled successfully!</span>
+</div>
+
+<!-- ═══ SCRIPTS ═════════════════════════════════════════════ -->
+<script>
+
+    
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+
+/* ── DATA ─────────────────────────────────────────────────── */
+const COURSES = {{ courses_json | safe }};
+
+const FILTERS = [
+  {label:"All Courses", value:"all"},
+  {label:"🔴 Live", value:"live"},
+  {label:"📹 Live + Recorded", value:"live+recorded"},
+  {label:"🎬 Recorded", value:"recorded"},
+  {label:"🆓 Free", value:"free"},
+  {label:"💳 Paid", value:"paid"},
+];
+
+/* ── STATE ────────────────────────────────────────────────── */
+let activeFilter = "all";
+let searchQ = "";
+let visibleCount = 6;
+let wishlist = new Set();
+
+/* ── SIDEBAR ──────────────────────────────────────────────── */
+function toggleSidebar(){
+  document.getElementById("layout").classList.toggle("open");
+}
+
+/* ── LOGOUT ───────────────────────────────────────────────── */
+function logout(){ window.location.href = "{{ url_for('logout') }}"; }
+
+/* ── FILTERS RENDER ───────────────────────────────────────── */
+function renderFilters(){
+  const wrap = document.getElementById("filterWrap");
+  wrap.innerHTML = FILTERS.map(f=>`
+    <button class="filter-btn ${f.value===activeFilter?'active':''}" onclick="setFilter('${f.value}')">
+      ${f.label}
+    </button>
+  `).join("");
+}
+
+function setFilter(val){
+  activeFilter = val;
+  visibleCount = 6;
+  renderFilters();
+  renderCourses();
+}
+
+/* ── SEARCH ───────────────────────────────────────────────── */
+function handleSearch(){
+  searchQ = document.getElementById("searchInput").value.toLowerCase().trim();
+  visibleCount = 6;
+  renderCourses();
+}
+
+/* ── FILTER LOGIC ─────────────────────────────────────────── */
+function getFiltered(){
+  return COURSES.filter(c=>{
+    const matchFilter =
+      activeFilter==="all"          ? true :
+      activeFilter==="free"         ? c.type==="free" :
+      activeFilter==="paid"         ? c.type==="paid" :
+      activeFilter==="live"         ? c.mode==="live" :
+      activeFilter==="recorded"     ? c.mode==="recorded" :
+      activeFilter==="live+recorded"? c.mode==="live+recorded" :
+      true;
+    const matchSearch = searchQ===""||
+      c.title.toLowerCase().includes(searchQ)||
+      c.category.toLowerCase().includes(searchQ)||
+      c.desc.toLowerCase().includes(searchQ);
+    return matchFilter && matchSearch;
+  });
+}
+
+/* ── STARS HTML ───────────────────────────────────────────── */
+function starsHtml(r){
+  const full = Math.floor(r);
+  const half = r-full>=0.5;
+  let h="";
+  for(let i=0;i<full;i++) h+=`<i class="fa-solid fa-star"></i>`;
+  if(half) h+=`<i class="fa-solid fa-star-half-stroke"></i>`;
+  for(let i=full+(half?1:0);i<5;i++) h+=`<i class="fa-regular fa-star"></i>`;
+  return h;
+}
+
+/* ── CARD HTML ────────────────────────────────────────────── */
+function cardHtml(c){
+  const isFree = c.type==="free";
+  const priceHtml = isFree
+    ? `<span class="price-now free">Free</span>`
+    : `<span class="price-now">₹${c.price.toLocaleString()}</span>
+       <span class="price-old">₹${c.oldPrice.toLocaleString()}</span>
+       <span class="discount-tag">${Math.round((1-c.price/c.oldPrice)*100)}% OFF</span>`;
+
+  const progHtml = c.enrolled && c.progress>0 ? `
+    <div class="prog-wrap">
+      <div class="prog-label"><span>Progress</span><span>${c.progress}%</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${c.progress}%"></div></div>
+    </div>
+  ` : "";
+
+  const tagHtml = c.tag==="bestseller"
+    ? `<span class="ribbon bestseller" style="top:auto;bottom:12px;left:12px;">🏆 Best Seller</span>`
+    : c.tag==="trending"
+    ? `<span class="ribbon trending" style="top:auto;bottom:12px;left:12px;">🔥 Trending</span>`
+    : "";
+
+  const btnHtml = c.enrolled
+    ? `<button class="btn btn-outline" onclick="window.location.href='/course/${c.id}';event.stopPropagation()">✓ Resume</button>`
+    : (isFree
+      ? `<button class="btn btn-free" onclick="openModal(${c.id});event.stopPropagation()">Enroll Free</button>`
+      : `<button class="btn btn-primary" onclick="openModal(${c.id});event.stopPropagation()">Buy Now</button>`);
+
+  const wishedClass = wishlist.has(c.id)?"active":"";
+
+  return `
+  <div class="card" onclick="openModal(${c.id})">
+    <div class="card-thumb">
+      <img src="${c.img}" alt="${c.title}" loading="lazy">
+      <span class="ribbon ${c.ribbon}">${c.ribbon.charAt(0).toUpperCase()+c.ribbon.slice(1)}</span>
+      ${tagHtml}
+      <button class="wish-btn ${wishedClass}" id="wish-${c.id}" onclick="toggleWish(${c.id},event)" title="Wishlist">
+        <i class="fa-${wishlist.has(c.id)?'solid':'regular'} fa-heart"></i>
+      </button>
+      <div class="cert-badge"><i class="fa-solid fa-certificate"></i> Certificate</div>
+    </div>
+    <div class="card-body">
+      <div class="card-category">${c.category}</div>
+      <div class="card-title">${c.title}</div>
+      <div class="card-desc">${c.desc}</div>
+      <div class="card-meta">
+        <div class="meta-item"><i class="fa-solid fa-layer-group"></i>${c.lessons} lessons</div>
+        <div class="meta-item"><i class="fa-solid fa-clock"></i>${c.duration}</div>
+        <div class="meta-item"><i class="fa-solid fa-users"></i>${c.students}</div>
+      </div>
+      <div class="stars">
+        ${starsHtml(c.rating)}
+        <span class="rating">${c.rating}</span>
+        <span class="count">(${c.students})</span>
+      </div>
+      <div class="date-row">
+        <div class="date-tag"><i class="fa-solid fa-calendar-day"></i>${c.start}</div>
+        <div class="date-tag"><i class="fa-solid fa-flag-checkered"></i>${c.end}</div>
+      </div>
+      ${progHtml}
+      <div class="price-row">
+        <div class="price-box">${priceHtml}</div>
+      </div>
+      <div class="card-actions">
+  ${btnHtml}
+</div>
+    </div>
+  </div>`;
+}
+
+/* ── RENDER COURSES ───────────────────────────────────────── */
+function renderCourses(){
+  const filtered = getFiltered();
+  const grid = document.getElementById("coursesGrid");
+  const slice = filtered.slice(0, visibleCount);
+
+  document.getElementById("showingCount").textContent = slice.length;
+  document.getElementById("totalCount").textContent = filtered.length;
+  document.getElementById("resultLabel").textContent =
+    `Showing ${slice.length} of ${filtered.length} courses`;
+
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="no-results"><i class="fa-solid fa-face-meh"></i><p>No courses found. Try a different search or filter.</p></div>`;
+    document.getElementById("loadMoreWrap").style.display="none";
+    return;
+  }
+
+  grid.innerHTML = slice.map(cardHtml).join("");
+  document.getElementById("loadMoreWrap").style.display =
+    visibleCount < filtered.length ? "block" : "none";
+}
+
+/* ── LOAD MORE ────────────────────────────────────────────── */
+function loadMore(){
+  visibleCount += 6;
+  renderCourses();
+}
+
+/* ── WISHLIST ─────────────────────────────────────────────── */
+function toggleWish(id, e){
+  e.stopPropagation();
+  if(wishlist.has(id)){
+    wishlist.delete(id);
+    showToast("Removed from wishlist");
+  } else {
+    wishlist.add(id);
+    showToast("Added to wishlist ❤️");
+  }
+  renderCourses();
+}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+function openModal(id){
+  const c = COURSES.find(x=>x.id===id);
+  const isFree = c.type==="free";
+
+  document.getElementById("m-img").src = c.img;
+  document.getElementById("m-title").textContent = c.title;
+  document.getElementById("m-desc").textContent = c.desc;
+  document.getElementById("m-duration").textContent = c.duration;
+  document.getElementById("m-students").textContent = c.students+" students";
+  document.getElementById("m-lessons").textContent = c.lessons+" lessons";
+  document.getElementById("m-cert").textContent = c.cert;
+  document.getElementById("m-start").textContent = "Start: "+c.start;
+  document.getElementById("m-end").textContent = "End: "+c.end;
+  document.getElementById("m-rating").textContent = c.rating+"/5";
+
+  const mTags = document.getElementById("m-tags");
+  mTags.innerHTML = `
+    <span class="ribbon ${c.ribbon}" style="position:static;">${c.ribbon.toUpperCase()}</span>
+    <span class="ribbon ${c.mode}" style="position:static;background:#7209b7;">${c.mode.toUpperCase()}</span>
+    ${c.tag?`<span class="ribbon trending" style="position:static;">${c.tag.toUpperCase()}</span>`:""}
+  `;
+
+  const mPrice = document.getElementById("m-price");
+  const mOld = document.getElementById("m-old");
+  const mDisc = document.getElementById("m-disc");
+  if(isFree){
+    mPrice.textContent="Free";
+    mPrice.className="price-now free";
+    mOld.textContent="";
+    mDisc.style.display="none";
+  } else {
+    mPrice.textContent="₹"+c.price.toLocaleString();
+    mPrice.className="price-now";
+    mOld.textContent="₹"+c.oldPrice.toLocaleString();
+    const pct = Math.round((1-c.price/c.oldPrice)*100);
+    mDisc.textContent=pct+"% OFF";
+    mDisc.style.display="inline-block";
+  }
+
+    const mActions = document.getElementById("m-actions");
+    if (c.enrolled) {
+        mActions.innerHTML = `
+            <button class="btn btn-outline" onclick="closeModal()">Close</button>
+            <button class="btn btn-free" onclick="window.location.href='/course/${c.id}'">✓ Start Learning</button>
+        `;
+    } else {
+        if (isFree) {
+            mActions.innerHTML = `
+                <button class="btn btn-outline" onclick="closeModal()">Maybe Later</button>
+                <form action="/enroll-course/${c.id}" method="POST" style="flex:1; display:flex;">
+                    <button type="submit" class="btn btn-free" style="width:100%;">✓ Enroll Free</button>
+                </form>
+            `;
+        } else {
+            mActions.innerHTML = `
+                <button class="btn btn-outline" onclick="closeModal()">Not Now</button>
+                <button class="btn btn-primary" onclick="window.location.href='/purchase/${c.id}'">🛒 Buy Now</button>
+            `;
+        }
+    }
+
+  document.getElementById("modalOverlay").classList.add("show");
+  document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("show");
+  document.body.style.overflow="";
+}
+
+function closeModalOnBg(e){
+  if(e.target===document.getElementById("modalOverlay")) closeModal();
+}
+
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* ── ENROLL ───────────────────────────────────────────────── */
+function enroll(id, title){
+  const c = COURSES.find(x=>x.id===id);
+  c.enrolled = true;
+  if(c.progress===0) c.progress=0;
+  closeModal();
+  showToast(`Enrolled in "${title}" 🎉`);
+  renderCourses();
+}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+function showToast(msg){
+  const t = document.getElementById("toast");
+  document.getElementById("toastMsg").textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 3000);
+}
+
+/* ── INIT ─────────────────────────────────────────────────── */
+renderFilters();
+renderCourses();
+</script>
+</body>
+</html>

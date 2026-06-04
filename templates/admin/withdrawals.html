@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Withdrawals - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+        body { background-color:#f9fafb; color:#111827; }
+
+        .top-nav { background:#2c2a99; color:white; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+        .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:bold; }
+        .logo i { cursor:pointer; }
+        .nav-actions { display:flex; gap:15px; align-items:center; font-size:14px; }
+        
+        .layout { display:grid; grid-template-columns:0px 1fr; transition:0.35s ease; min-height:calc(100vh - 60px); }
+        .layout.show { grid-template-columns:220px 1fr; }
+        
+        .sidebar { background:lightgrey; min-height:calc(100vh - 60px); border-right:1px solid #ddd; overflow:hidden; transition:0.35s ease; }
+        .sidebar ul { list-style:none; padding-top:10px; }
+        .sidebar li { padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.25s; }
+        .sidebar li:hover { background:#e5efff; color:#2563eb; }
+        .sidebar i { min-width:22px; }
+        .sidebar li.active { background:#e5efff; color:#2563eb; border-left:4px solid #2563eb; }
+        
+        .foot { background-color:#2c2a99; color:white; text-align:center; padding:18px; font-size:16px; }
+        a { text-decoration:none; color:inherit; }
+
+        .content { padding: 40px; }
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 28px; color: #1e3a8a; margin-bottom: 10px; }
+
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #f3f4f6; }
+        th { background: #f9fafb; font-weight: 600; color: #4b5563; }
+        
+        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-approved { background: #dcfce7; color: #16a34a; }
+        .status-rejected { background: #fee2e2; color: #dc2626; }
+
+        .btn { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; color: white; transition: 0.2s; }
+        .btn-approve { background: #16a34a; }
+        .btn-approve:hover { background: #15803d; }
+        .btn-reject { background: #dc2626; margin-left: 5px; }
+        .btn-reject:hover { background: #b91c1c; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        @media(max-width:768px) {
+            .layout.show { grid-template-columns:60px 1fr; }
+            .sidebar span { display:none; }
+            .top-nav { padding:12px 14px; }
+            .nav-actions span { display:none; }
+            .layout { grid-template-columns:0px 1fr; }
+            .sidebar li { justify-content:center; }
+            .content { padding: 20px; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ================= TOP NAV ================= -->
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/admin/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/admin/profile" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+        <!-- LOGOUT ICON (UNCHANGED) -->
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+<ul>
+    <li><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+    <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+   
+    <li><a href="/admin/courses"><i class="fa-solid fa-book-open"></i><span>Course Approvals</span></a></li>
+    <li><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+    <li ><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li class="active"><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+    <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+    <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+    <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+    <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+</ul>
+</aside>
+
+        <main class="content">
+            <div class="header">
+                <h1>Withdrawal Requests</h1>
+                <p>Manage teacher earnings withdrawal requests.</p>
+            </div>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Teacher</th>
+                            <th>Amount</th>
+                            <th>Bank Details</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if withdrawals %}
+                            {% for req in withdrawals %}
+                            <tr>
+                                <td>#{{ req.id }}</td>
+                                <td>
+                                    <strong>{{ req.teacher_name }}</strong><br>
+                                    <small style="color:#6b7280;">{{ req.teacher_email }}</small>
+                                </td>
+                                <td style="font-weight:bold;">₹{{ "%.2f"|format(req.amount) }}</td>
+                                <td>
+                                    <div>Bank: {{ req.bank_name }}</div>
+                                    <div>A/C: {{ req.account_number }}</div>
+                                    <div>IFSC: {{ req.ifsc_code }}</div>
+                                </td>
+                                <td>{{ req.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ req.status }}">{{ req.status }}</span>
+                                </td>
+                                <td>
+                                    {% if req.status == 'pending' %}
+                                    <button class="btn btn-approve" onclick="handleWithdrawal('approve', {{ req.id }})">Approve</button>
+                                    <button class="btn btn-reject" onclick="handleWithdrawal('reject', {{ req.id }})">Reject</button>
+                                    {% else %}
+                                    <span style="color:#6b7280; font-size:12px;">Processed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 30px; color: #6b7280;">
+                                    No withdrawal requests found.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+    <script>
+        function side(){
+            document.getElementById("layout").classList.toggle("show");
+        }
+
+        function handleWithdrawal(action, reqId) {
+            if (!confirm(`Are you sure you want to ${action} this request?`)) return;
+            
+            fetch(`/admin/withdraw/${action}/${reqId}`, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the request.');
+            });
+        }
+    </script>
+</body>
+</html>

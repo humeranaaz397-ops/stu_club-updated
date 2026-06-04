@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher profile</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+
+} 
+ 
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+ 
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+ 
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+ 
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+ 
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+ 
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+ 
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+         
+@media (max-width: 768px) {
+
+ 
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+ 
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+ 
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+ 
+  .main-content {
+    padding: 12px;
+  }
+
+ 
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions input {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
+.ask-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.ask-btn:hover {
+    background-color:  #2c2a99;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.profile-card {
+  background: whitesmoke;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.avatar-lg {
+  width: 80px;
+  height: 80px;
+  background: goldenrod;
+  color: whitesmoke;
+  font-size: 32px;
+  border-radius: 50%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role {
+  color: gray;
+}
+
+.rating {
+  margin: 8px 0;
+}
+
+.badge {
+  display: inline-block;
+  background: whitesmoke;
+  color: #007bff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background: #0d6efd;
+  color:whitesmoke;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.content .box {
+  background: whitesmoke;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background:whitesmoke;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.course-card {
+  background: #f8f9ff;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.review {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.avatar-sm {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pink { background: #ff6b81; }
+.blue { background: #1e90ff; }
+.green { background: #2ed573; }
+
+ 
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+ 
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+}
+
+.modal-content label {
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.cancel-btn {
+  background: #ccc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#listContent {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+#listContent li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+
+@media (max-width: 768px) {
+  
+  .top-nav {
+    padding: 14px 16px;
+  }
+
+  .logo {
+    font-size: 18px;
+    gap: 8px;
+  }
+
+  .nav-actions {
+    gap: 12px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+ 
+  .layout {
+    grid-template-columns: 0 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .sidebar {
+    min-height: calc(100vh - 58px);
+  }
+
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+    padding: 14px 8px;
+  }
+
+ 
+  .content {
+    padding: 14px;
+  }
+
+  .hero,
+  .container {
+    margin-top: 14px;
+  }
+
+ 
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 16px;
+    gap: 16px;
+    border-radius: 12px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-actions input,
+  .hero-actions button {
+    width: 100%;
+  }
+
+  .hero-image {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+
+ 
+  .container {
+    grid-template-columns: 1fr;
+    padding: 0;
+    gap: 16px;
+  }
+
+  .profile-card,
+  .content .box,
+  .stat-box,
+  .course-card {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .profile-card {
+    padding: 18px 14px;
+  }
+
+ 
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-box {
+    padding: 14px 10px;
+  }
+
+ 
+  .courses {
+    grid-template-columns: 1fr;
+  }
+
+   
+  .review {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .review span {
+    align-self: flex-start;
+  }
+
+   
+  .modal-content {
+    width: calc(100% - 24px);
+    padding: 18px;
+    margin: 12px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+ 
+  .foot {
+    margin-top: 16px;
+    padding: 16px 12px;
+    font-size: 14px;
+  }
+
+  
+  body,
+  html {
+    overflow-x: hidden;
+  }
+}
+.content {
+  padding: 10px;
+}
+
+.hero {
+  margin-top: 3px;
+}
+</style>
+</head>
+<body>
+    
+     
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+       <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+      
+        <a href="{{ url_for('teacher_notifications') }}" style="color:white; position: relative;">
+            <i class="fa-regular fa-bell"></i>
+        
+            {% if total_alerts and total_alerts > 0 %}
+            <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+            {% endif %}
+        </a>
+
+        <a href="{{ url_for('teacher_profile') }}" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ session.get('name', 'Teacher') }}</span>
+        </a>
+ 
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+ 
+<aside class="sidebar">
+    <ul>
+        <li><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span> Dashboard</span></a></li>
+                <li><a href="/teacher/earnings"><i class="fa-solid fa-wallet"></i><span>Earnings</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload Material</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload Video</span></a></li>
+        <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i> <span>Create Course</span></a></li>
+                <li><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create Quiz</span></a></li>
+                <li><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live Classes</span></a></li>
+                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer Q&A</span></a></li>
+                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post Notification</span></a></li>
+                <li><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find People</span></a></li>
+          
+         </ul>
+</aside>
+
+        <main class="content">
+           <div class="hero">
+      <div class="hero-text">
+        <h1>Ignite Minds, Inspire Futures! ✨</h1>
+        <p class="hero-sub">Building the Future, One Mind at a Time. You aren't just teaching a class; you're shaping history. Let's go!.</p>
+        <div class="hero-actions">
+          <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+          <button id="searchBtn" class="ask-btn small">Search</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/HkxjkcNB/file-0000000017307208ab9cbd047c7bd9be.png" alt="Students studying together">
+      </div>
+    </div>
+    
+   
+<div class="container">
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'success' %}
+        <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#d4edda; color:#155724; grid-column: 1 / -1;">
+          {{ message }}
+        </div>
+      {% else %}
+        <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#f8d7da; color:#721c24; grid-column: 1 / -1;">
+          {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+ 
+  <aside class="profile-card">
+    <div class="avatar-lg">{{ user.name[0].upper() }}</div>
+    <h3>{{ user.name }}</h3>
+    <p class="role">{{ user.subject or 'Teacher' }} | {{ user.experience or '0' }} yrs exp</p>
+    <p class="email">📧 {{ user.email }}</p><br>
+    <p>📞 {{ user.phone or 'N/A' }}</p><br>
+    <span class="badge">Expert Instructor</span>
+    <button class="btn-primary" onclick="openEdit()">✏ Edit Profile</button>
+<br><br>
+    <p class="hint">Complete your profile to attract more students</p>
+  </aside>
+
+ 
+  <main class="content">
+
+    
+    <section class="stats">
+     <div class="stat-box" onclick="showData('students')">
+        <i class="fa fa-users"></i>
+        <h4>{{ stats.total_students }}</h4>
+        <p>Total Students</p>
+      </div>
+      <div class="stat-box" onclick="showData('courses')">
+        <i class="fa fa-book"></i>
+        <h4>{{ stats.total_courses }}</h4>
+        <p>Courses</p>
+      </div>
+      <div class="stat-box" onclick="showData('videos')">
+        <i class="fa fa-video"></i>
+        <h4>{{ stats.total_videos }}</h4>
+        <p>Videos</p>
+      </div>
+      <div class="stat-box">
+        <i class="fa fa-star"></i>
+        <h4>{{ stats.total_materials }}</h4>
+        <p>Materials</p>
+      </div>
+    </section>
+
+    
+    <section class="box">
+      <h3>About Me</h3>
+      <p>Subject: <strong>{{ user.subject or 'N/A' }}</strong></p>
+      <p>Experience: <strong>{{ user.experience or '0' }} years</strong></p>
+      <p>Teacher ID: <strong>{{ user.teacher_id_code or 'N/A' }}</strong></p>
+      <p>Gender: <strong>{{ user.gender or 'N/A' }}</strong></p>
+      <p>Age: <strong>{{ user.age or 'N/A' }}</strong></p>
+    </section>
+
+   
+    <section class="box">
+      <h3>My Courses</h3>
+      <div class="courses">
+        {% for course in courses %}
+        <div class="course-card">
+          <h4>{{ course.title }}</h4>
+          <p>👥 {{ course.student_count }} students</p>
+        </div>
+        {% else %}
+        <p style="color:#888;">No courses yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+     
+    <section class="box">
+      <h3>Student Reviews
+        {% if avg_rating and avg_rating > 0 %}
+          <span style="font-size:15px; color:#f59e0b; margin-left:10px;">
+            {% for i in range(avg_rating|int) %}⭐{% endfor %}
+            {{ avg_rating }}/5
+          </span>
+          <span style="font-size:13px; color:#888; margin-left:6px;">({{ reviews|length }} review{{ 's' if reviews|length != 1 else '' }})</span>
+        {% endif %}
+      </h3>
+
+      {% if reviews %}
+        {% for rev in reviews[:5] %}
+        <div class="review" style="margin-top:14px; padding:14px; background:#f8f9ff; border-radius:10px; border-left:4px solid #a78bfa;">
+          <div class="avatar-sm" style="background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; flex-shrink:0;">
+            {{ rev.student_name[:2].upper() }}
+          </div>
+          <div style="flex:1;">
+            <strong>{{ rev.student_name }}</strong>
+            <div style="color:#f59e0b; font-size:16px; margin:2px 0;">
+              {% for i in range(rev.rating) %}★{% endfor %}{% for i in range(5 - rev.rating) %}<span style="color:#ddd;">★</span>{% endfor %}
+            </div>
+            <p style="color:#555; font-size:14px; margin-top:4px;">{{ rev.review_text }}</p>
+            <small style="color:#aaa;">{{ rev.created_at.strftime('%d %b %Y') if rev.created_at else '' }}</small>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="color:#888; margin-top:10px;">No reviews yet. Students who connect with you can leave reviews from the Find People page.</p>
+      {% endif %}
+    </section>
+ 
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Edit Profile</h2>
+    <form method="POST" action="{{ url_for('teacher_profile') }}">
+      <label>Name</label>
+      <input type="text" name="name" value="{{ user.name }}" required>
+
+      <label>Phone</label>
+      <input type="text" name="phone" value="{{ user.phone or '' }}">
+
+      <label>Age</label>
+      <input type="number" name="age" value="{{ user.age or '' }}">
+
+      <label>Gender</label>
+      <input type="text" name="gender" value="{{ user.gender or '' }}">
+
+      <label>Subject / Specialization</label>
+      <input type="text" name="subject" value="{{ user.subject or '' }}">
+
+      <label>Years of Experience</label>
+      <input type="number" name="experience" value="{{ user.experience or '' }}">
+
+      <div class="modal-actions">
+        <button type="button" onclick="closeEdit()" class="cancel-btn">Cancel</button>
+        <button type="submit" class="save-btn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="listModal" class="modal">
+  <div class="modal-content">
+    <h2 id="listTitle"></h2>
+    <ul id="listContent"></ul>
+
+    <div class="modal-actions">
+      <button onclick="closeList()" class="cancel-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+  </main>
+</div>
+</main>
+</div>
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+const typeButtons = document.querySelectorAll(".type");
+
+typeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    typeButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+function openEdit() {
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function closeEdit() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+ 
+const studentsData = {{ students_json | safe | default('[]') }};
+const coursesData = {{ courses_json | safe | default('[]') }};
+const videosData = {{ videos_json | safe | default('[]') }};
+function showData(type) {
+  const title = document.getElementById("listTitle");
+  const list = document.getElementById("listContent");
+
+  list.innerHTML = ""; // clear old items
+
+  let data = [];
+
+  if (type === "students") {
+    title.innerText = "Total Students";
+    data = studentsData;
+  }
+
+  if (type === "courses") {
+    title.innerText = "Courses";
+    data = coursesData;
+  }
+
+  if (type === "videos") {
+    title.innerText = "Videos";
+    data = videosData;
+  }
+
+  data.forEach(item => {
+    list.innerHTML += `<li>${item}</li>`;
+  });
+
+  document.getElementById("listModal").style.display = "flex";
+}
+function closeList() {
+  document.getElementById("listModal").style.display = "none";
+}
+
+
+</script>
+
+
+</body>
+</html>
+

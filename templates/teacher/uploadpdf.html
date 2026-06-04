@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Study Materials</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+ 
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+ 
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+ 
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+ 
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+ 
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+.container {
+    width: 100%;
+    margin: auto;
+    padding: auto;
+}
+.card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+h2, h3 {
+    color: #2563eb;
+    margin-bottom: 15px;
+}
+.upload-box {
+    border: 2px dashed #2563eb;
+    padding: 20px;
+    text-align: center;
+    color: #2563eb;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    transition: background 0.3s;
+    font-size: 16px;
+    width: 100%;
+}
+.upload-box:hover {
+    background: #e5efff;
+}
+.upload-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.upload-btn:hover {
+    background: #1e40af;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+table th, table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+table th {
+    background: #f0f4ff;
+}
+table td .actions span {
+    cursor: pointer;
+    margin-right: 10px;
+}
+table td .actions .delete {
+    color: red;
+}
+
+  
+  .main-content {
+    padding: 14px;
+  }
+
+@media (max-width: 768px) {
+    .upload-box {
+        width: 100%;
+    }
+    table {
+        font-size: 12px;
+        width: 100%;
+        margin: auto;
+    }
+    .card {
+        padding: 5px;
+        width: 100%;
+    }
+    table th, table td {
+        padding: 8px;
+        width: 100%;
+    }
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+.ask-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.ask-btn:hover {
+    background-color:  #2c2a99;
+}
+#title{
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+#course{
+    width: 100%;   
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Upload form stacked layout */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1f2937;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+     
+@media (max-width: 768px) {
+
+ 
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+ 
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+ 
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  
+  .main-content {
+    padding: 12px;
+  }
+
+  
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions input {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  
+  .main {
+    padding: 16px;
+  }
+
+
+}
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .card {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 15px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions input,
+  .hero-actions button {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .upload-box,
+  .upload-btn,
+  #course,
+  #title {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr,
+  table tr {
+    background: #fff;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 10px 8px;
+    text-align: left;
+    position: relative;
+    padding-left: 42%;
+    min-height: 40px;
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  td:last-child {
+    border-bottom: none;
+  }
+
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    width: 35%;
+    font-weight: bold;
+    color: #2563eb;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .foot {
+    font-size: 14px;
+    padding: 14px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+     
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+ <div class="nav-actions">
+            <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+            <a href="{{ url_for('teacher_notifications') }}" style="color:white; position: relative;">
+                <i class="fa-regular fa-bell"></i>
+                {% if total_alerts and total_alerts > 0 %}
+                <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+                {% endif %}
+            </a>
+            <a href="{{ url_for('teacher_profile') }}" style="color:white">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ session.get('name', 'Teacher') }}</span>
+            </a>
+            <a href="{{ url_for('logout') }}" style="color:white" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+    </header>
+
+<div class="layout" id="layout">
+
+ 
+<aside class="sidebar">
+    <ul>
+        <li ><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span> Dashboard</span></a></li>
+                <li><a href="/teacher/earnings"><i class="fa-solid fa-wallet"></i><span>Earnings</span></a></li>
+                <li class="active"><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload Material</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload Video</span></a></li>
+        <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i> <span>Create Course</span></a></li>
+                <li ><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create Quiz</span></a></li>
+                <li><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live Classes</span></a></li>
+                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer Q&A</span></a></li>
+                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post Notification</span></a></li>
+                <li><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find People</a></li>
+          
+         </ul>
+</aside>
+
+ <div class="main-content">
+    <div class="hero">
+      <div class="hero-text">
+        <h1>Empower their journey! ✨</h1>
+        <p class="hero-sub"> Every resource you share today is a seed for tomorrow's success. Let’s build their future together.</p>
+        <div class="hero-actions">
+          <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+          <button id="searchBtn" class="ask-btn small">Search</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/8Cg0TtMX/1768586784855.png" alt="Students studying together">
+      </div>
+    </div>
+
+<div class="container">
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px;
+           background:{% if category=='success' %}#d4edda{% elif category=='danger' %}#f8d7da{% else %}#d1ecf1{% endif %};
+           color:{% if category=='success' %}#155724{% elif category=='danger' %}#721c24{% else %}#0c5460{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<!-- Upload Form -->
+<div class="card">
+  <h2>Upload Study Material</h2>
+  <form action="{{ url_for('teacher_upload_material') }}" method="POST" enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="form-label">Select Course (Optional)</label>
+      <select name="course_id" class="form-input">
+        <option value="">-- General (All Students) --</option>
+        {% for course in teacher_courses %}
+        <option value="{{ course.id }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% if not teacher_courses %}
+    <p style="background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:13px;color:#92400e;margin-bottom:14px;">
+      ⚠️ You haven't created any courses yet.
+      <a href="{{ url_for('teacher_upload_course') }}" style="color:#2563eb;font-weight:600;">Create a course first →</a>
+    </p>
+    {% endif %}
+
+    <div class="form-group">
+      <label class="form-label">Material Title <span style="color:red;">*</span></label>
+      <input class="form-input" type="text" id="title" name="title" placeholder="e.g. Introduction to HTML" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <input class="form-input" type="text" name="subject" placeholder="e.g. Web Development">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Class</label>
+      <input class="form-input" type="number" id="class_level" name="class_level" placeholder="e.g. 10, 11, 12" oninput="checkClassLevel()">
+    </div>
+
+    <div class="form-group" id="streamGroup" style="display: none;">
+      <label class="form-label">Stream</label>
+      <select name="stream" id="streamSelect" class="form-input">
+        <option value="">-- Select Stream --</option>
+        <option value="Science">Science</option>
+        <option value="Commerce">Commerce</option>
+        <option value="Arts">Arts</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description (optional)</label>
+      <input class="form-input" type="text" name="description" placeholder="Brief description about this material">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Upload File <span style="color:#555;font-weight:400;">(PDF, DOC, DOCX, PPT)</span></label>
+      <div class="upload-box" onclick="document.getElementById('material_file').click()">
+          ⬆️ Tap to select file
+          <p id="fileName" style="margin-top:6px; font-size:13px; color:#555;"></p>
+      </div>
+      <input type="file" id="material_file" name="material_file" accept=".pdf,.doc,.docx,.ppt,.pptx" hidden
+             onchange="document.getElementById('fileName').textContent=this.files[0].name">
+    </div>
+
+    <button type="submit" class="upload-btn">Upload Material</button>
+  </form>
+</div>
+
+<!-- Uploaded Materials Table -->
+<div class="card">
+<h3>My Uploaded Materials</h3>
+{% if materials %}
+<table>
+<thead>
+<tr>
+    <th>Title</th>
+    <th>Course</th>
+    <th>Subject</th>
+    <th>Date</th>
+    <th>Actions</th>
+</tr>
+</thead>
+<tbody>
+{% for mat in materials %}
+<tr>
+    <td data-label="Title">{{ mat.title }}</td>
+    <td data-label="Course">
+      {% if mat.course_title %}
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#eff6ff;color:#2563eb;padding:3px 9px;border-radius:5px;font-size:12px;font-weight:600;">
+          <i class="fa-solid fa-folder" style="font-size:10px;"></i> {{ mat.course_title }}
+        </span>
+      {% else %}
+        <span style="color:#9ca3af;font-size:12px;">No course</span>
+      {% endif %}
+    </td>
+    <td data-label="Subject">{{ mat.subject }}</td>
+    <td data-label="Date">{{ mat.created_at.strftime('%Y-%m-%d') if mat.created_at else '' }}</td>
+    <td data-label="Actions" class="actions">
+        {% if mat.file_url %}
+        <a href="{{ mat.file_url }}" target="_blank"><span>⬇️ View</span></a>
+        {% endif %}
+        <form action="{{ url_for('teacher_delete_material', material_id=mat.id) }}" method="POST" style="display:inline;"
+              onsubmit="return confirm('Delete this material?')">
+            <span class="delete" style="cursor:pointer;" onclick="this.closest('form').submit()">🗑️ Delete</span>
+        </form>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<p style="color:#888; padding:16px;">No materials uploaded yet.</p>
+{% endif %}
+</div>
+</div>
+
+<footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const fileNameText = document.getElementById("fileName");
+const table = document.getElementById("materialsTable");
+
+let selectedFile = null;
+
+fileInput.addEventListener("change", () => {
+    selectedFile = fileInput.files[0];
+    fileNameText.textContent = selectedFile.name;
+});
+
+function uploadMaterial() {
+    const title = document.getElementById("title").value;
+    const course = document.getElementById("course").value;
+
+    if (!selectedFile || title === "") {
+        alert("Please select file and enter title");
+        return;
+    }
+
+    const size = (selectedFile.size / (1024 * 1024)).toFixed(2) + " MB";
+    const date = new Date().toISOString().split("T")[0];
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td data-label="File">${selectedFile.name}</td>
+        <td data-label="Course">${course}</td>
+        <td data-label="Size">${size}</td>
+        <td data-label="Date">${date}</td>
+        <td data-label="Downloads" class="downloads">0</td>
+        <td data-label="Actions" class="actions">
+            <span onclick="download(this)">⬇️</span>
+            <span class="delete" onclick="deleteRow(this)">🗑️</span>
+        </td>
+    `;
+
+    table.appendChild(row);
+
+    fileInput.value = "";
+    fileNameText.textContent = "";
+    document.getElementById("title").value = "";
+    selectedFile = null;
+}
+
+function download(el) {
+    const d = el.closest("tr").querySelector(".downloads");
+    d.textContent = parseInt(d.textContent) + 1;
+}
+
+function deleteRow(el) {
+    el.closest("tr").remove();
+}
+
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+
+function checkClassLevel() {
+    const classInput = document.getElementById("class_level");
+    const streamGroup = document.getElementById("streamGroup");
+    const val = parseInt(classInput.value);
+    
+    if (!isNaN(val) && val >= 12) {
+        streamGroup.style.display = "flex";
+    } else {
+        streamGroup.style.display = "none";
+        document.getElementById("streamSelect").value = "";
+    }
+}
+</script>
+
+</body>
+</html>
+

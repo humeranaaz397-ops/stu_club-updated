@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+
+}           
+/* ================= TOP NAV ================= */
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+/* ================= LAYOUT ================= */
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+/* WHEN SIDEBAR OPEN */
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+/* ACTIVE ITEM */
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+/* ================= FOOTER ================= */
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+        /* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  /* TOP NAV */
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  /* LAYOUT */
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  /* SIDEBAR */
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    padding: 12px;
+
+  }
+}
+.dashboard {
+    flex: 1; /* fill remaining space above footer */
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.sub {
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h2 {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  background: #ccc;
+  border-radius: 34px;
+  inset: 0;
+  cursor: pointer;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background: #2563eb;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Progress bar */
+.progress {
+  height: 10px;
+  background: #ddd;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.bar {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+.main-content {
+    padding: 20px;
+    min-height: calc(100vh - 60px); /* minus header height */
+    background: #f5f5f5; /* optional, for visual clarity */
+}
+
+.sidebar {
+    background: lightgrey;
+    min-height: 100%;
+    border-right: 1px solid #ddd;
+}
+
+
+</style>
+</head>
+<body>
+    
+    <!-- ================= TOP NAV ================= -->
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/admin/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/admin/profile" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+        <!-- LOGOUT ICON  -->
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+<ul>
+    <li ><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+    <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+   
+    <li ><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+     <li ><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+    <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+    <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+    <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+    <li class="active"><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+</ul>
+</aside>
+
+<div class="main-content">
+<div class="dashboard">
+  <h1>Admin Dashboard</h1>
+  <p class="sub">System Settings</p>
+
+  <!-- Notification Settings -->
+  <div class="card">
+    <h2>🔔 Notification Settings</h2>
+
+    <div class="row">
+      <span>Email notifications for new users</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <span>Email notifications for flagged content</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <span>Weekly analytics summary</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Security Settings -->
+  <div class="card">
+    <h2>🔐 Security Settings</h2>
+
+    <label>Minimum Password Length</label>
+    <input type="number" value="8">
+
+    <label>Session Timeout (minutes)</label>
+    <input type="number" value="30">
+
+    <div class="row">
+      <span>Require two-factor authentication for admins</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Platform Settings -->
+  <div class="card">
+    <h2>🌐 Platform Settings</h2>
+
+    <label>Platform Name</label>
+    <input type="text" value="Studentclub">
+
+    <label>Support Email</label>
+    <input type="email" value="support@studentclub.com">
+
+    <label>Default Language</label>
+    <select>
+      <option>English</option>
+      <option>Hindi</option>
+      <option>French</option>
+    </select>
+  </div>
+
+  <!-- Storage & Limits -->
+  <div class="card">
+    <h2>💾 Storage & Limits</h2>
+
+    <label>Max Upload Size (MB)</label>
+    <input type="number" value="100">
+
+    <label>Max Video Duration (minutes)</label>
+    <input type="number" value="120">
+
+    <div class="progress">
+      <div class="bar" style="width:45%"></div>
+    </div>
+    <small>Storage Usage: 456 GB / 1 TB (45.6%)</small>
+  </div>
+
+  <!-- Email Configuration -->
+  <div class="card">
+    <h2>📧 Email Configuration</h2>
+
+    <label>SMTP Server</label>
+    <input type="text" value="smtp.eduplatform.com">
+
+    <label>SMTP Port</label>
+    <input type="number" value="587">
+
+    <label>From Email</label>
+    <input type="email" value="noreply@eduplatform.com">
+  </div>
+
+  <button onclick="saveSettings()">Save Settings</button>
+</div>
+</div>
+</div>
+<br>
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "/logout";
+}
+</script>
+
+
+
+</body>
+</html>
+

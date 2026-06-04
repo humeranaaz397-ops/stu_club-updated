@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply Now - Student Club</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f0f2ff;
+    min-height:100vh;
+}
+
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+    text-decoration:none;
+    color:white;
+}
+
+.nav-actions{
+    display:flex;
+    gap:18px;
+    align-items:center;
+}
+
+.page{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 16px;
+    min-height:calc(100vh - 60px);
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    width:100%;
+    max-width:600px;
+    overflow:hidden;
+    box-shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+
+.card-header{
+    background:#2c2a99;
+    padding:28px 32px;
+}
+
+.event-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    border-radius:20px;
+    padding:6px 14px;
+    font-size:13px;
+    margin-bottom:14px;
+}
+
+.card-header h2{
+    color:white;
+    font-size:24px;
+    margin-bottom:6px;
+}
+
+.card-header p{
+    color:#c5c4f0;
+    font-size:14px;
+}
+
+.card-body{
+    padding:30px 32px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    font-size:13px;
+    font-weight:700;
+    color:#333;
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    padding:11px 14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    transition:border 0.2s;
+    font-family:Arial,sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#2c2a99;
+}
+
+.form-group textarea{
+    resize:none;
+}
+
+.error{
+    color:red;
+    font-size:12px;
+    margin-top:5px;
+    display:none;
+}
+
+.divider{
+    height:1px;
+    background:#eee;
+    margin:4px 0 20px;
+}
+
+.submit-btn{
+    width:100%;
+    background:#2c2a99;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+
+.submit-btn:hover{
+    background:#1e1c7a;
+}
+
+.success-box{
+    display:none;
+    text-align:center;
+    padding:50px 32px;
+}
+
+.success-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#e8f5ee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 22px;
+}
+
+.success-icon i{
+    font-size:34px;
+    color:#15985d;
+}
+
+.success-box h3{
+    font-size:24px;
+    color:#15985d;
+    margin-bottom:12px;
+}
+
+.success-box p{
+    color:#555;
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:28px;
+}
+
+.back-btn{
+    background:#2c2a99;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+
+.back-btn:hover{
+    background:#1e1c7a;
+}
+
+.foot{
+    background:#2c2a99;
+    color:white;
+    text-align:center;
+    padding:18px;
+}
+
+@media(max-width:576px){
+    .card-header{ padding:22px 20px; }
+    .card-body{ padding:22px 20px; }
+    .form-row{ grid-template-columns:1fr; }
+    .card-header h2{ font-size:20px; }
+}
+
+</style>
+</head>
+<body>
+
+
+<header class="top-nav">
+    <a class="logo" href="#">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </a>
+    <div class="nav-actions">
+        <i class="fa-regular fa-bell"></i>
+        <i class="fa-solid fa-user"></i>
+        <span>Student</span>
+    </div>
+</header>
+
+
+<div class="page">
+    <div class="card">
+
+     
+        <div class="card-header">
+            <div class="event-badge">
+                <i class="fa-solid fa-calendar"></i>
+                {{ event.title }}
+            </div>
+            <h2><i class="fa-solid fa-paper-plane" style="margin-right:10px;"></i>Apply Now</h2>
+            <p>Fill in your details to register for this event.</p>
+        </div>
+
+        <div class="card-body" id="formSection">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" id="firstName" placeholder="Enter first name">
+                    <span class="error" id="firstNameErr">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" id="lastName" placeholder="Enter last name">
+                    <span class="error" id="lastNameErr">This field is required</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="email" placeholder="you@example.com">
+                <span class="error" id="emailErr">Enter a valid email address</span>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" id="phone" placeholder="+91 9876543210">
+                <span class="error" id="phoneErr">This field is required</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>College / University *</label>
+                    <input type="text" id="college" placeholder="College name">
+                    <span class="error" id="collegeErr">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>Year of Study *</label>
+                    <select id="year">
+                        <option value="">Select year</option>
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option>4th Year</option>
+                    </select>
+                    <span class="error" id="yearErr">Please select your year</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Department / Branch *</label>
+                <select id="dept">
+                    <option value="">Select department</option>
+                    <option>Computer Science</option>
+                    <option>Information Technology</option>
+                    <option>Electronics & Communication</option>
+                    <option>Mechanical Engineering</option>
+                    <option>Civil Engineering</option>
+                    <option>Other</option>
+                </select>
+                <span class="error" id="deptErr">Please select your department</span>
+            </div>
+
+            <div class="form-group">
+                <label>Team Name <span style="color:#888;font-weight:400;">(optional)</span></label>
+                <input type="text" id="team" placeholder="Enter your team name">
+            </div>
+
+            <div class="form-group">
+                <label>Why do you want to join? *</label>
+                <textarea rows="3" id="reason" placeholder="Write a short reason..."></textarea>
+                <span class="error" id="reasonErr">This field is required</span>
+            </div>
+
+            <div class="form-group">
+                <label>ID Card / Proof *</label>
+                <input type="file" id="idCard" accept="image/*,.pdf" required>
+                <span class="error" id="idCardErr">Please upload your ID card or proof</span>
+            </div>
+
+            {% if event.price and event.price > 0 %}
+            <div class="form-group" id="paymentGroup">
+                <label style="font-size: 16px; font-weight: bold; margin-bottom: 15px; display: block;">Choose Payment Type (₹{{ event.price }})</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                    <button type="button" class="method-btn active" onclick="showPayment('upi', this)" id="btn-upi" style="border: 2px solid #4361ee; background: #f4f7ff; border-radius: 14px; padding: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-mobile-screen-button" style="font-size: 32px; color: #4361ee;"></i>
+                        <span style="font-size: 14px; font-weight: 600;">UPI</span>
+                    </button>
+                    <button type="button" class="method-btn" onclick="showPayment('card', this)" id="btn-card" style="border: 2px solid #ddd; background: white; border-radius: 14px; padding: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                        <i class="fa-regular fa-credit-card" style="font-size: 32px; color: #4361ee;"></i>
+                        <span style="font-size: 14px; font-weight: 600;">Card</span>
+                    </button>
+                </div>
+                <input type="hidden" id="payment" value="UPI">
+
+                <!-- UPI SECTION -->
+                <div id="upiSection" style="background: #f4f7ff; border-radius: 16px; padding: 18px; text-align: center; margin-bottom: 20px;">
+                    <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=studentclub@upi&pn=StudentClub&am={{ event.price }}" alt="QR Code" style="width: 170px; max-width: 100%; margin-bottom: 10px;">
+                    <p style="font-size: 14px; color: #444; margin-bottom: 15px;">Scan QR using any UPI app</p>
+                    <div class="form-group" style="text-align: left;">
+                        <label>UPI ID</label>
+                        <input type="text" placeholder="example@upi">
+                    </div>
+                </div>
+
+                <!-- CARD SECTION -->
+                <div id="cardSection" style="display:none; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label>Card Holder Name</label>
+                        <input type="text" placeholder="Enter card holder name">
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="password" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="color: #2c2a99; font-weight: bold;">Upload Payment Screenshot *</label>
+                    <input type="file" id="paymentScreenshot" accept="image/*" style="border: 2px dashed #4361ee; padding: 10px; background: #f4f7ff;">
+                    <span class="error" id="paymentScreenshotErr">Please upload your payment screenshot</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="divider"></div>
+
+            <button class="submit-btn" onclick="submitForm()">
+                <i class="fa-solid fa-paper-plane" style="margin-right:8px;"></i>
+                Submit Application
+            </button>
+
+        </div>
+
+       
+        <div class="success-box" id="successBox">
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3>Application Submitted!</h3>
+            <p>Thank you for applying to <strong>{{ event.title }}</strong>.<br>
+            We will review your application and get back to you soon via email.</p>
+            <button class="back-btn" onclick="resetForm()">
+                <i class="fa-solid fa-arrow-left" style="margin-right:8px;"></i>
+                Back to Events
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<footer class="foot">
+    &copy; 2026 Student Club. All rights reserved.
+</footer>
+
+<script>
+
+function validate(id, errId, checkFn){
+    const el = document.getElementById(id);
+    if (!el) return true; // skip if element doesn't exist
+    const val = el.value.trim();
+    const err = document.getElementById(errId);
+    if(!checkFn(val)){
+        err.style.display = "block";
+        return false;
+    }
+    err.style.display = "none";
+    return true;
+}
+
+function submitForm(){
+    let valid = true;
+    valid = validate("firstName", "firstNameErr", v => v !== "")                             && valid;
+    valid = validate("lastName",  "lastNameErr",  v => v !== "")                             && valid;
+    valid = validate("email",     "emailErr",     v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && valid;
+    valid = validate("phone",     "phoneErr",     v => v !== "")                             && valid;
+    valid = validate("college",   "collegeErr",   v => v !== "")                             && valid;
+    valid = validate("year",      "yearErr",      v => v !== "")                             && valid;
+    valid = validate("dept",      "deptErr",      v => v !== "")                             && valid;
+    valid = validate("reason",    "reasonErr",    v => v !== "")                             && valid;
+    if (document.getElementById("payment")) {
+        valid = validate("payment",   "paymentErr",   v => v !== "")                             && valid;
+        valid = validate("paymentScreenshot", "paymentScreenshotErr", v => document.getElementById("paymentScreenshot").files.length > 0) && valid;
+    }
+    if(!valid) return;
+
+    let formData = new FormData();
+    formData.append("first_name", document.getElementById("firstName").value.trim());
+    formData.append("last_name", document.getElementById("lastName").value.trim());
+    formData.append("email", document.getElementById("email").value.trim());
+    formData.append("phone", document.getElementById("phone").value.trim());
+    formData.append("college", document.getElementById("college").value.trim());
+    formData.append("year_of_study", document.getElementById("year").value);
+    formData.append("department", document.getElementById("dept").value);
+    formData.append("team_name", document.getElementById("team").value.trim());
+    formData.append("why_join", document.getElementById("reason").value.trim());
+    
+    if (document.getElementById("payment")) {
+        formData.append("payment_method", document.getElementById("payment").value);
+        const psFile = document.getElementById("paymentScreenshot").files[0];
+        if(psFile) {
+            formData.append("payment_screenshot", psFile);
+        }
+    } else {
+        formData.append("payment_method", "None");
+    }
+    
+    const idCardFile = document.getElementById("idCard").files[0];
+    if(idCardFile) {
+        formData.append("id_card", idCardFile);
+    }
+
+    fetch(window.location.pathname, {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.success) {
+            document.getElementById("formSection").style.display = "none";
+            document.getElementById("successBox").style.display  = "block";
+        } else {
+            alert('Registration failed: ' + res.message);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('An error occurred.');
+    });
+}
+
+function resetForm(){
+    window.location.href = "{{ url_for('student_event') }}";
+}
+
+document.getElementById("firstName").addEventListener("blur", () => validate("firstName","firstNameErr", v => v !== ""));
+document.getElementById("lastName").addEventListener("blur",  () => validate("lastName","lastNameErr",   v => v !== ""));
+document.getElementById("email").addEventListener("blur",     () => validate("email","emailErr",         v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
+document.getElementById("phone").addEventListener("blur",     () => validate("phone","phoneErr",         v => v !== ""));
+document.getElementById("college").addEventListener("blur",   () => validate("college","collegeErr",     v => v !== ""));
+document.getElementById("year").addEventListener("change",    () => validate("year","yearErr",           v => v !== ""));
+document.getElementById("dept").addEventListener("change",    () => validate("dept","deptErr",           v => v !== ""));
+if (document.getElementById("payment")) {
+    document.getElementById("payment").addEventListener("change", () => validate("payment","paymentErr",       v => v !== ""));
+    document.getElementById("paymentScreenshot").addEventListener("change", () => validate("paymentScreenshot","paymentScreenshotErr", v => document.getElementById("paymentScreenshot").files.length > 0));
+}
+document.getElementById("reason").addEventListener("blur",    () => validate("reason","reasonErr",       v => v !== ""));
+
+function showPayment(type, el) {
+    document.querySelectorAll('.method-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.border = '2px solid #ddd';
+        btn.style.background = 'white';
+    });
+    el.classList.add('active');
+    el.style.border = '2px solid #4361ee';
+    el.style.background = '#f4f7ff';
+
+    if (type === 'upi') {
+        document.getElementById('upiSection').style.display = 'block';
+        document.getElementById('cardSection').style.display = 'none';
+        document.getElementById('payment').value = 'UPI';
+    } else {
+        document.getElementById('upiSection').style.display = 'none';
+        document.getElementById('cardSection').style.display = 'block';
+        document.getElementById('payment').value = 'Card';
+    }
+}
+
+
+</script>
+
+</body>
+</html>

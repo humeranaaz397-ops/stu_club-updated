@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Club – Login / Signup</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f9ff;
+      overflow-x: hidden;
+    }
+
+    i {
+      color: #2c2a99;
+      font-size: 34px;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      padding: 16px;
+      max-height: 720px;
+    }
+
+    .left {
+      flex: 1;
+      max-height: 720px;
+      overflow-y: auto;
+    }
+
+    #loginBox,
+    #signupBox {
+      max-height: 700px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    #loginBox::-webkit-scrollbar,
+    #signupBox::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #loginBox::-webkit-scrollbar-thumb,
+    #signupBox::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.18);
+      border-radius: 10px;
+    }
+
+    .right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .right img {
+      width: 100%;
+      max-height: 700px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+      height: auto;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 40px auto;
+      max-width: 1000px;
+      width: 90%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="file"],
+    select {
+      width: 90%;
+      padding: 10px;
+      border: none;
+      background: #f1f1ff;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    #log,
+    #sign {
+      width: 95%;
+      background: #3f37c9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 12px;
+    }
+
+    #log:hover,
+    #sign:hover {
+      background: #2c2a99;
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .switch span {
+      color: #5f3bff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .radio-group,
+    .radio-group1 {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .radio-group label,
+    .radio-group1 label {
+      font-size: 14px;
+    }
+
+    #btn {
+      background-color: #3f37c9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 16px;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    /* Flash messages */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .alert-warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .alert-info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    @media(max-width:768px) {
+      .container {
+        flex-direction: column;
+        margin: 40px auto;
+        max-width: 90%;
+        padding: 15px;
+      }
+
+      .right {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      <h2><i id="logo-icon" class="fa-solid fa-graduation-cap"></i> Student Club</h2>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <i id="logo-icon" class="fa-solid fa-bars"></i>
+    </div>
+
+    <ul id="nav-links">
+      <li><a href="{{ url_for('home') }}" id="a2">Home</a></li>
+      <li><a href="{{ url_for('features') }}" id="a2">Features</a></li>
+      <li><a href="{{ url_for('contact') }}" id="a2">Contact</a></li>
+      <li><a href="{{ url_for('login') }}" id="btn">Login</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <div class="left">
+
+      <!-- ========== FLASH MESSAGES ========== -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <!-- ========== LOGIN BOX ========== -->
+      <div id="loginBox">
+        <h1 style="text-align: center;">LOGIN</h1>
+        <p>Welcome back to Student Club</p>
+
+        <form action="{{ url_for('login') }}" method="POST">
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <button type="submit" id="log">Login</button>
+        </form>
+
+        <div class="switch">
+          Don't have an account? <span onclick="showSignup()">Signup</span>
+        </div>
+      </div>
+
+      <!-- ========== SIGNUP BOX ========== -->
+      <div id="signupBox" class="hide">
+        <h2>SIGN UP</h2>
+        <p>Create your account</p>
+
+        <form action="{{ url_for('signup') }}" method="POST" enctype="multipart/form-data" id="signupForm">
+
+          <h3>Role</h3>
+          <div class="radio-group1">
+            <label><input type="radio" name="role2" value="student" checked onchange="updateSignupRole()">
+              Student</label>
+            <label><input type="radio" name="role2" value="teacher" onchange="updateSignupRole()"> Teacher</label>
+          </div>
+
+          <div class="common-fields">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="number" name="age" placeholder="Age" required>
+
+            <h3>Gender</h3>
+            <div class="radio-group">
+              <label><input type="radio" name="gender" value="Male" checked> Male</label>
+              <label><input type="radio" name="gender" value="Female"> Female</label>
+              <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone Number" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+          </div>
+
+          <!-- Student-specific fields -->
+          <div id="studentFields">
+            <h3>Student Details</h3>
+            <input type="text" name="class_level" placeholder="Current class/level (e.g. 12th, Diploma, Degree)">
+            <input type="text" name="stream" placeholder="Stream / field of study">
+
+            <label for="competitive_exam" style="display:block; margin-top:10px; font-weight:600;">Preparing for
+              Competitive Exam?</label>
+            <select name="competitive_exam" id="competitive_exam">
+              <option value="">No / None</option>
+              <option value="NEET">NEET</option>
+              <option value="UPSC">UPSC</option>
+              <option value="JEE">JEE (Main/Advanced)</option>
+              <option value="GATE">GATE</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <label for="idCardUpload" style="display:block; margin-top:10px; font-weight:600;">ID Card </label>
+            <input type="file" id="idCardUpload" name="id_card" accept="image/*">
+          </div>
+
+          <!-- Teacher-specific fields -->
+          <div id="teacherFields" class="hide">
+            <h3>Teacher Registration</h3>
+            <input type="text" name="subject" placeholder="Subject(s) you want to teach">
+            <input type="text" name="teacher_id" placeholder="Teacher ID">
+            <input type="number" name="experience" placeholder="Teaching experience (years)">
+            <label for="resumeUpload" style="display:block; margin-top:10px; font-weight:600;">Resume / CV
+              upload</label>
+            <input type="file" id="resumeUpload" name="resume" accept=".pdf,.doc,.docx">
+          </div>
+
+          <button type="submit" id="sign">Signup</button>
+        </form>
+
+        <div class="switch">
+          Already have an account? <span onclick="showLogin()">Login</span>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="right">
+      <img id="loginImg" src="https://i.postimg.cc/y83WwfNR/IMG-20260114-WA0061.jpg" alt="Student studying together">
+      <img id="signupImg" src="https://i.postimg.cc/X7mYcwgM/IMG-20260114-WA0062.jpg" alt="Students celebrating"
+        class="hide" height="auto">
+    </div>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("nav-links");
+      menu.classList.toggle("active");
+    }
+
+    function showSignup() {
+      document.getElementById("loginBox").classList.add("hide");
+      document.getElementById("signupBox").classList.remove("hide");
+      const li = document.getElementById('loginImg');
+      const si = document.getElementById('signupImg');
+      if (li) li.classList.add('hide');
+      if (si) si.classList.remove('hide');
+    }
+    function showLogin() {
+      document.getElementById("signupBox").classList.add("hide");
+      document.getElementById("loginBox").classList.remove("hide");
+      const li = document.getElementById('loginImg');
+      const si = document.getElementById('signupImg');
+      if (si) si.classList.add('hide');
+      if (li) li.classList.remove('hide');
+    }
+
+    function updateSignupRole() {
+      const studentFields = document.getElementById('studentFields');
+      const teacherFields = document.getElementById('teacherFields');
+      const selectedRole = document.querySelector('input[name="role2"]:checked').value;
+
+      if (selectedRole === 'teacher') {
+        teacherFields.classList.remove('hide');
+        studentFields.classList.add('hide');
+      } else {
+        teacherFields.classList.add('hide');
+        studentFields.classList.remove('hide');
+      }
+    }
+
+    // Auto-show signup if redirected with signup tab needed
+    window.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'signup') {
+        showSignup();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

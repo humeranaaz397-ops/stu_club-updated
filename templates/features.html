@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student-club Features</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f9ff;
+      overflow-x: hidden;
+    }
+
+
+    i {
+      color: #2c2a99;
+      font-size: 34px;
+    }
+
+
+    .box {
+      width: 250px;
+      margin: 2px;
+      text-align: center;
+      padding: 10px;
+      background-color: whitesmoke;
+      border-radius: 10px;
+      height: 340px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .box:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    img {
+      width: 230px;
+      height: 100px;
+      margin-top: 10px;
+    }
+
+
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 100px;
+      gap: 30px;
+    }
+
+
+    button {
+      padding: 10px 15px;
+      background-color: #3f37c9;
+      color: whitesmoke;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2c2a99;
+    }
+
+    .foot {
+      background-color: #2c2a99;
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 16px;
+    }
+
+    .testimonials-section {
+      background-color: lightgray;
+      padding: 60px 10%;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      text-align: left;
+      font-size: 24px;
+      margin-bottom: 100px;
+    }
+
+    .testimonials-section h2 {
+      font-size: 32px;
+      margin-bottom: 35px;
+    }
+
+    .testimonial-container {
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      flex-wrap: wrap;
+    }
+
+    .testimonial-card {
+      background: whitesmoke;
+      width: 300px;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .testimonial-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .testimonial-card h3 {
+      font-size: 18px;
+      margin: 12px 0;
+    }
+
+    .date,
+    .course {
+      color: #e91e63;
+      font-size: 14px;
+      margin: 6px 0;
+    }
+
+    .dots {
+      margin: 35px 0 18px;
+    }
+
+    .dots span {
+      display: inline-block;
+      width: 22px;
+      height: 4px;
+      background: #bdbdbd;
+      margin: 0 4px;
+    }
+
+    .view-btn {
+      background: #d31145;
+      color: white;
+      border: none;
+      padding: 15px 70px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .view-btn:hover {
+      background: #aa0d37;
+    }
+
+    @media (max-width: 768px) {
+      .section-subtitle {
+        margin-bottom: 40px;
+        font-size: 20px;
+      }
+
+      .testimonial-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .view-btn {
+        width: 90%;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <nav>
+    <div class="logo">
+      <h2><i id="logo-icon" class="fa-solid fa-graduation-cap"></i> Student Club</h2>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <i id="logo-icon" class="fa-solid fa-bars"></i>
+    </div>
+
+    <ul id="nav-links">
+      <li><a href="{{ url_for('home') }}" id="a2">Home</a></li>
+      <li><a href="{{ url_for('features') }}" id="btn">Features</a></li>
+      <li><a href="{{ url_for('contact') }}" id="a2">Contact</a></li>
+      <li><a href="{{ url_for('login') }}" id="a2">Login</a></li>
+    </ul>
+  </nav>
+
+
+  <h1 style="text-align: center;">Features</h1>
+  <h3 style="text-align: center;">Explore the key fetures of Student Club</h3>
+  <main class="content">
+    <div class="box">
+      <i class="fa-brands fa-youtube"></i>
+      <h2>Courses</h2>
+      <p>Browse and enroll in a variety of courses.</p>
+      <img src="https://i.postimg.cc/1ztX9qL7/IMG-20260113-193907.png" alt="Courses"><br>
+      <a href="{{ url_for('explore') }}"><button>Explore Courses</button></a>
+    </div>
+    <div class="box">
+      <i class="fa-solid fa-question"></i>
+      <h2>Q&A</h2>
+      <p>Ask and answer questions with the community.</p>
+      <img src="https://i.postimg.cc/hjk7tRQ5/IMG-20260113-193939.png" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>Join the discussion</button></a>
+    </div>
+    <div class="box">
+      <i class="fa-solid fa-bullhorn"></i>
+      <h2>Announcements</h2>
+      <p>Stay up-to-date with latest news and updates.</p>
+      <img src="https://i.postimg.cc/7LB3DRNn/IMG-20260113-194005.png" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>View Updates</button></a>
+    </div>
+    <div class="box">
+      <i class="fa-solid fa-handshake"></i>
+      <h2>Events</h2>
+      <p>Participate in webinars, workshops,events and more.</p>
+      <img src="https://i.postimg.cc/fbpMq43d/IMG-20260114-131705.png" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>Join challenges</button></a>
+    </div>
+    <div class="box">
+      <i class="fa-solid fa-comment-nodes"></i>
+      <h2>Community</h2>
+      <p>Join a friendly community of learners.</p>
+      <img src="https://i.postimg.cc/vmMRSQhN/1768312512320.jpg" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>learn now</button></a>
+    </div>
+    <div class="box">
+      <i class="fa-solid fa-person" style="width: 33px;"></i><i class="fa-solid fa-arrow-up-right-dots"></i>
+
+      <h2>Career Guidance</h2>
+      <p>Get career advice and guidance from experts.</p>
+      <img src="https://i.postimg.cc/WzmtpFv3/IMG-20260113-WA0012.jpg" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>Get Career Guidance</button></a>
+    </div>
+
+    <div class="box">
+      <i class="fa-solid fa-book"></i>
+      <h2>Resources</h2>
+      <p>Access a library of useful study materials and resources.</p>
+      <img src="https://i.postimg.cc/mg7qf06d/IMG-20260114-133242.png" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>Explore Resources</button></a>
+    </div>
+
+
+    <div class="box">
+      <i class="fa-solid fa-tv"></i>
+
+      <h2>Live classes</h2>
+      <p>Attend live sessions, guest talks, and interactive learning events.</p>
+      <img src="https://i.postimg.cc/cLYq1K6k/file-00000000899072079c0bcf10521af5cf.png" alt="Courses"><br>
+      <a href="{{ url_for('login') }}"><button>Join Live</button></a>
+    </div>
+  </main><br><br>
+
+  <section class="testimonials-section">
+    <p class="section-subtitle">Feedback from Learners</p>
+    <h2>Testimonials</h2>
+
+    <div class="testimonial-container">
+      <div class="testimonial-card">
+        <img src="../static/images/humera.jpeg" alt="Testimonial">
+        <h3>HUMERA NAAZ</h3>
+        <p style="font-size: 15px;">my name is humera naaz i successfully completed ai&ml course in this platform which
+          improves my confidence and gain good knowledge on AI&ML</p>
+        <p class="date">22 May 2024</p>
+        <p class="course">Course : AI&ML</p>
+      </div>
+
+      <div class="testimonial-card">
+        <img src="../static/images/charan.jpeg" alt="Testimonial">
+        <h3>Sai charan</h3>
+        <P style="font-size: 15px;">Student club is a great platform for beginners i was not able to learn PYTHON for
+          the last few months once after enroll PYTHON course in this website now i know about clearly.</P>
+        <p class="date">22 May 2025</p>
+        <p class="course">Course : PYTHON</p>
+      </div>
+
+      <div class="testimonial-card">
+        <img src="../static/images/rohithrajpoot.jpeg" alt="Testimonial">
+        <h3>Rohith</h3>
+        <p style="font-size: 15px;">I have recently completed a DevOps course where I learned tools and concepts like
+          Git, GitHub, Docker, CI/CD pipelines, Linux, and deployment processes.</p>
+        <p class="date">21 feb 2026</p>
+        <p class="course">Course : DEVEOPS</p>
+      </div>
+      <div class="testimonial-card">
+        <img src="../static/images/sudha.jpeg" alt="Testimonial">
+        <h3>Sudharshan</h3>
+        <p style="font-size: 15px;">I completed a Web Development course to improve my front-end development skills and
+          gained practical experience in building responsive websites.</p>
+        <p class="date">22 May 2026</p>
+        <p class="course">Course : WEB DEVELOPMENT</p>
+      </div>
+
+    </div>
+
+    <div class="dots">
+      <!-- <span></span><span></span><span></span><span></span><span></span> -->
+    </div>
+
+    <!-- <button class="view-btn">VIEW MORE POSTS</button> -->
+  </section>
+
+  <footer class="foot">@ 2026 Student Club All rights reseved</footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("nav-links");
+      menu.classList.toggle("active");
+    }
+  </script>
+
+</body>
+
+</html>

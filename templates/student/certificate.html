@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student-Club Certificate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;800&family=Montserrat:wght@300;400;500;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #0f172a;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #1e293b;
+    }
+
+    /* Print control panel */
+    .controls {
+      margin-bottom: 25px;
+      display: flex;
+      gap: 15px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .btn-print {
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #0f172a;
+    }
+    .btn-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4);
+    }
+    .btn-back {
+      background: #334155;
+      color: #f8fafc;
+    }
+    .btn-back:hover {
+      background: #475569;
+      transform: translateY(-2px);
+    }
+
+    /* Certificate Outer Frame */
+    .cert-frame {
+      background: #fff;
+      width: 900px;
+      height: 640px;
+      padding: 30px;
+      border-radius: 4px;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid #e2e8f0;
+      background-image: radial-gradient(#fafaf9 1px, transparent 0), radial-gradient(#fafaf9 1px, transparent 0);
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px;
+    }
+
+    /* Double Border Frame */
+    .cert-border-outer {
+      border: 8px double #ca8a04;
+      width: 100%;
+      height: 100%;
+      padding: 5px;
+      position: relative;
+    }
+    .cert-border-inner {
+      border: 2px solid #ca8a04;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Background Watermark/Corners */
+    .corner-decoration {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #ca8a04;
+    }
+    .top-left     { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+    .top-right    { top: 5px; right: 5px; border-left: none; border-bottom: none; }
+    .bottom-left  { bottom: 5px; left: 5px; border-right: none; border-top: none; }
+    .bottom-right { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+    /* Content Styling */
+    .cert-header {
+      text-align: center;
+    }
+    .logo-container {
+      font-size: 28px;
+      color: #2c2a99;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .logo-container i {
+      color: #ca8a04;
+    }
+    .cert-title {
+      font-family: 'Cinzel', serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 4px;
+      margin-top: 15px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #1e293b, #ca8a04);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .cert-sub {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      color: #64748b;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .cert-present {
+      font-size: 14px;
+      color: #64748b;
+      font-style: italic;
+      margin: 18px 0;
+    }
+
+    .recipient-name {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 52px;
+      color: #1e3a8a;
+      margin: 10px 0;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .recipient-underline {
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ca8a04, transparent);
+      margin-bottom: 18px;
+    }
+
+    .cert-reason {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      max-width: 80%;
+      text-align: center;
+      font-weight: 400;
+    }
+    .course-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30%;
+    }
+    .footer-col.seal {
+      width: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .signature-line {
+      width: 100%;
+      border-top: 1.5px solid #ca8a04;
+      margin-bottom: 8px;
+    }
+    .footer-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .signature-text {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 24px;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    /* Seal Badge styling */
+    .medal-seal {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #facc15 0%, #ca8a04 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(202, 138, 4, 0.4);
+      border: 3px double #fef08a;
+    }
+    .medal-seal::before, .medal-seal::after {
+      content: '';
+      position: absolute;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 35px solid #ca8a04;
+      top: 60px;
+      z-index: -1;
+    }
+    .medal-seal::before {
+      transform: rotate(-15deg);
+      left: 10px;
+    }
+    .medal-seal::after {
+      transform: rotate(15deg);
+      right: 10px;
+    }
+    .medal-seal i {
+      color: #fef08a;
+      font-size: 32px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .meta-details {
+      margin-top: 15px;
+      font-size: 11px;
+      color: #94a3b8;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .meta-details span {
+      color: #475569;
+      font-weight: 600;
+    }
+
+    /* Print styling overrides */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .controls {
+        display: none !important;
+      }
+      .cert-frame {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        transform: none !important;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button class="btn btn-back" onclick="window.close(); window.location.href='/student/dashboard';"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+    <button class="btn btn-print" onclick="window.print();"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+  </div>
+
+  <div class="cert-frame">
+    <div class="cert-border-outer">
+      <div class="cert-border-inner">
+        <!-- Corner Decorations -->
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+
+        <!-- Header -->
+        <div class="cert-header">
+          <div class="logo-container">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+          </div>
+          <h2 class="cert-title">Certificate of Completion</h2>
+          <div class="cert-sub">Honor &amp; Excellence</div>
+        </div>
+
+        <!-- Presenting text -->
+        <div class="cert-present">This is proudly presented to</div>
+
+        <!-- Recipient -->
+        <div class="recipient-name">{{ cert.student_name }}</div>
+        <div class="recipient-underline"></div>
+
+        <!-- Reason -->
+        <div class="cert-reason">
+          for successfully and honorably completing all course requirements and examinations for the professional curriculum program of
+          <div class="course-title">{{ cert.course_title }}</div>
+        </div>
+
+        <!-- Footer signatures & seal -->
+        <div class="cert-footer">
+          <div class="footer-col">
+            <div class="signature-text">{{ cert.issued_at.strftime('%d %b %Y') if cert.issued_at else '' }}</div>
+            <div class="signature-line"></div>
+            <div class="footer-label">Date of Issue</div>
+          </div>
+
+          <div class="footer-col seal">
+            <div class="medal-seal">
+              <i class="fa-solid fa-award"></i>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <div class="signature-text" style="font-family: 'Pinyon Script', cursive; font-size: 26px;">Humera</div>
+            <div class="signature-line"></div>
+            <div class="footer-label">Authorized Signature</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="meta-details">
+    Certificate Code: <span>{{ cert.certificate_code }}</span> &nbsp;|&nbsp; Verified Authenticity &copy; 2026 Student Club
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+
+.main{
+
+    padding:20px;
+    width: 100%;
+}
+
+
+.section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-header h2{
+    font-size: 24px;
+    color: #111827;
+}
+
+.section-header p{
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+.video-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 900px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.video-card{
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.video-card video{
+    width: 100%;
+    height: auto;
+    border-bottom: 3px solid #545858;
+    border-radius: 0;
+    object-fit: cover;
+}
+
+
+.video-body{
+    padding: 15px 18px 18px;
+}
+
+.video-title{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+.video-meta{
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #6b7280;
+}
+
+.highlight{
+    font-weight: bold;
+}
+
+.highlight.in-progress{
+    color: #f97316;
+}
+
+.highlight.not-started{
+    color: #9ca3af;
+}
+
+.progress{
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar{
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #4f46e5, #06b6d4);
+}
+
+.video-footer{
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.controls{
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 20px 22px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+}
+
+.controls h2{
+    font-size: 18px;
+    margin-bottom: 14px;
+    color: #111827;
+}
+
+.controls-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-modal.show {
+    display: flex;
+}
+
+.video-modal-content {
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+    background: #000;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 3010;
+}
+
+.video-thumb {
+    position: relative;
+    cursor: pointer;
+}
+
+.video-thumb::after {
+    content: '\f144'; /* FontAwesome play icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: rgba(255,255,255,0.8);
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.video-thumb:hover::after {
+    color: rgba(255,255,255,1);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+
+.control-block{
+    min-width: 200px;
+}
+
+.control-label{
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.pill-group{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.pill{
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: #eff1f4;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill:hover{
+    background: #e0e7ff;
+}
+
+.pill.active{
+    background: #e0e7ff;
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+
+
+.fab{
+    position: fixed;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.fab-chat{
+    bottom: 90px;
+}
+
+.fab-settings{
+    bottom: 30px;
+}
+
+@media (max-width: 768px) {
+
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  .layout {
+    grid-template-columns: 0 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  .content {
+    padding: 14px;
+  }
+}.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+
+.ask-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.ask-btn:hover {
+    background-color:  #2c2a99;
+}
+
+@media (max-width: 768px) {
+
+  /* HERO SECTION */
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions input,
+  .hero-actions button {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+
+ 
+  .main {
+    padding: 16px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .video-title {
+    font-size: 16px;
+  }
+
+  .controls {
+    padding: 14px;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+
+  .foot {
+    font-size: 14px;
+    padding: 14px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .top-nav {
+    padding: 10px 12px;
+  }
+
+  .logo span {
+    display: none;
+  }
+
+  .section-header h2 {
+    font-size: 20px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+             <a href="{{ url_for('student_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+
+        <a href="{{ url_for('student_notifications') }}" style="color:white; position: relative;">
+            <i class="fa-regular fa-bell"></i>
+        
+            {% if total_alerts and total_alerts > 0 %}
+            <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+            {% endif %}
+        </a>
+
+        <a href="{{ url_for('student_profile') }}" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ session.get('name', 'Student') }}</span>
+        </a>
+
+        <a href="{{ url_for('logout') }}" style="color:white" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        
+        <li ><a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('student_qa') }}"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+        <li><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study Materials</span></a></li>
+        <li class="active"><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+        <li><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+        <li><a href="{{ url_for('student_courses') }}"><i class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+        <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+        <li><a href="{{ url_for('student_chat') }}"><i class="fa-solid fa-comment-dots"></i><span>Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+         <li><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+        <li><a href="{{ url_for('student_progress') }}"><i class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+        
+
+    </ul>
+</aside>
+
+<main class="main">
+ <div class="hero">
+      <div class="hero-text">
+        <h1>Don't! just watch-immerse ✨</h1>
+        <p class="hero-sub">every frame tells a story.Press play and explore</p>
+        <div class="hero-actions">
+          <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+          <button id="searchBtn" class="ask-btn small">Search</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/7ZvXG04G/1768419227023.png" alt="Students studying together">
+      </div>
+    </div>
+   
+  
+    <section class="content">
+        <div class="section-header">
+            <div>
+                <h2>Video Learning</h2>
+                <p>Watch recorded lectures and track your progress.</p>
+            </div>
+        </div>
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'success' %}
+                <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#d4edda; color:#155724;">
+                  {{ message }}
+                </div>
+              {% else %}
+                <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#f8d7da; color:#721c24;">
+                  {{ message }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="video-grid">
+            {% if videos %}
+                {% for video in videos %}
+                    <article class="video-card">
+                        <div class="video-thumb">
+                            <video src="{{ video.video_url }}#t=0.1" preload="metadata" data-src="{{ video.video_url }}" style="width: 100%; height: auto; border-bottom: 3px solid #545858; object-fit: cover;"></video>
+                        </div>
+                        <div class="video-body">
+                            <h3 class="video-title">{{ video.title }}</h3>
+                            <p class="video-meta" style="margin-bottom: 8px; font-style: italic;">{{ video.description or 'No description provided.' }}</p>
+                            <p class="video-meta">Uploaded by: <span class="highlight">{{ video.teacher_name }}</span></p>
+                            
+                            {% if video.watched and video.progress_percentage >= 100 %}
+                                <p class="video-meta">Progress: <span class="highlight" style="color: #10b981;">Watched (100%)</span></p>
+                                <div class="progress" style="background:#e5e7eb; border-radius:4px; height:8px; overflow:hidden;">
+                                    <div class="progress-bar" style="width: 100%; background: #10b981; height:100%;"></div>
+                                </div>
+                            {% else %}
+                                <p class="video-meta" id="progress-text-{{ video.id }}">Progress: <span class="highlight not-started">{{ video.progress_percentage }}%</span></p>
+                                <div class="progress" style="background:#e5e7eb; border-radius:4px; height:8px; overflow:hidden;">
+                                    <div class="progress-bar" id="progress-bar-{{ video.id }}" style="width: {{ video.progress_percentage }}%; background: #2563eb; height:100%;"></div>
+                                </div>
+                                <button type="button" class="ask-btn small" style="width: 100%; padding: 8px 12px; font-size: 13px; margin-top: 12px;" onclick="openReviewModal('{{ video.id }}')">Mark as Finished</button>
+                            {% endif %}
+                            
+                            <div class="video-footer" style="margin-top: 12px;">
+                                <span>Uploaded: {{ video.created_at.strftime('%Y-%m-%d') if video.created_at else '' }}</span>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #f9fafb; border-radius: 12px; border: 1px dashed #ccc;">
+                    <i class="fa-solid fa-video-slash" style="font-size: 48px; color: #9ca3af; margin-bottom: 12px;"></i>
+                    <h3 style="font-size: 18px; color: #374151;">No videos available</h3>
+                    <p style="color: #6b7280; font-size: 14px; margin-top: 6px;">You will see videos here once your connected teachers upload them.</p>
+                </div>
+            {% endif %}
+        </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Modal for Video Playback -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <span class="video-modal-close" onclick="closeVideoModal()">&times;</span>
+            <video id="modalVideoPlayer" controls style="width: 100%; height: auto; max-height: 85vh; border-bottom: 3px solid #545858; display: block;"></video>
+        </div>
+    </div>
+
+    <!-- Mandatory Review Modal -->
+    <div id="reviewModal" class="video-modal" style="display:none; align-items:center;">
+        <div class="video-modal-content" style="max-width: 500px; background: white; color: black; padding: 24px; border-radius: 12px;">
+            <span class="video-modal-close" onclick="closeReviewModal()" style="color: black; top: 10px; right: 15px;">&times;</span>
+            <h3 style="margin-bottom: 10px; font-size: 20px; color:#111827;">Review Teacher</h3>
+            <p style="margin-bottom: 20px; font-size: 14px; color: #555;">Please rate the teacher and leave a mandatory review to complete this video.</p>
+            <form id="reviewForm" method="POST" action="{{ url_for('student_videos') }}">
+                <input type="hidden" name="video_id" id="reviewVideoId" value="">
+                
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:14px;">Rating (1-5)</label>
+                <select name="rating" required style="width:100%; padding:10px; margin-bottom:16px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Terrible</option>
+                </select>
+                
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:14px;">Message / Review</label>
+                <textarea name="review_text" required rows="4" style="width:100%; padding:10px; margin-bottom:20px; border-radius:8px; border:1px solid #ccc; font-size:14px;" placeholder="How was the video?"></textarea>
+                
+                <button type="submit" class="ask-btn small" style="width: 100%; padding: 12px; font-size: 16px;">Submit & Finish</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+</div>
+
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+
+// Variables for modal tracking
+let activeVideoId = null;
+let lastUpdate = 0;
+const modalVideoPlayer = document.getElementById("modalVideoPlayer");
+const videoModal = document.getElementById("videoModal");
+
+function openVideoModal(src, videoId) {
+    if (!src) return;
+    activeVideoId = videoId;
+    lastUpdate = 0;
+    modalVideoPlayer.src = src;
+    videoModal.classList.add("show");
+    modalVideoPlayer.play().catch(e => console.log("Autoplay prevented:", e));
+}
+
+function closeVideoModal() {
+    videoModal.classList.remove("show");
+    modalVideoPlayer.pause();
+    modalVideoPlayer.src = "";
+    activeVideoId = null;
+}
+
+function openReviewModal(videoId) {
+    document.getElementById('reviewVideoId').value = videoId;
+    document.getElementById('reviewModal').style.display = 'flex';
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+}
+
+// Update progress from modal video player
+modalVideoPlayer.addEventListener("timeupdate", function() {
+    if (!activeVideoId) return;
+    
+    const currentTime = modalVideoPlayer.currentTime;
+    // Update every 5 seconds or if it ends
+    if (Math.abs(currentTime - lastUpdate) > 5 || modalVideoPlayer.ended) {
+        lastUpdate = currentTime;
+        
+        const duration = modalVideoPlayer.duration;
+        if (!duration) return;
+        
+        let percentage = Math.round((currentTime / duration) * 100);
+        if (percentage > 100) percentage = 100;
+        
+        const progressBar = document.getElementById("progress-bar-" + activeVideoId);
+        const progressText = document.getElementById("progress-text-" + activeVideoId);
+        
+        if (progressBar) progressBar.style.width = percentage + "%";
+        if (progressText) progressText.innerHTML = 'Progress: <span class="highlight not-started">' + percentage + '%</span>';
+        
+        // AJAX call to backend
+        fetch("{{ url_for('student_update_video_progress') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                video_id: activeVideoId,
+                progress_percentage: percentage,
+                last_position: currentTime
+            })
+        }).catch(err => console.error("Error updating progress:", err));
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".video-card").forEach(card => {
+        const videoElement = card.querySelector("video");
+        const thumbElement = card.querySelector(".video-thumb");
+        
+        if (videoElement && thumbElement) {
+            const src = videoElement.getAttribute("data-src");
+            const videoId = card.querySelector("input[name='video_id']")?.value || null;
+            
+            if (src) {
+                // Clicking the thumbnail opens the modal
+                thumbElement.addEventListener("click", () => openVideoModal(src, videoId));
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
+
+

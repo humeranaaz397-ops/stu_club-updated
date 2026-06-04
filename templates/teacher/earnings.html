@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Earnings - Teacher Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, Helvetica, sans-serif; }
+        
+        .top-nav { background:#2c2a99; color:white; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:1000; }
+        .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:bold; }
+        .logo i { cursor:pointer; }
+        .nav-actions { display:flex; gap:15px; align-items:center; font-size:14px; }
+        
+        .layout { display:grid; grid-template-columns:0px 1fr; transition:grid-template-columns 0.35s ease; min-height:calc(100vh - 60px); }
+        .layout.show { grid-template-columns:220px 1fr; }
+        
+        .sidebar { background:lightgrey; min-height:calc(100vh - 60px); border-right:1px solid #ddd; overflow:hidden; transition:0.35s ease; }
+        .sidebar ul { list-style:none; padding-top:10px; }
+        .sidebar li { padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.25s; }
+        .sidebar li:hover { background:#e5efff; color:#2563eb; }
+        .sidebar i { min-width:22px; }
+        .sidebar li.active { background:#e5efff; color:#2563eb; border-left:4px solid #2563eb; }
+        
+        .foot { background-color:#2c2a99; color:white; text-align:center; padding:18px; font-size:16px; }
+        
+        @media(max-width:768px) {
+            .layout.show { grid-template-columns:60px 1fr; }
+            .sidebar span { display:none; }
+            .top-nav { padding:12px 14px; }
+            .nav-actions span { display:none; }
+            .layout { grid-template-columns:0px 1fr; }
+            .sidebar li { justify-content:center; }
+            .content { padding:12px; }
+        }
+        
+        a { text-decoration:none; color:black; }
+        
+        /* EARNINGS STYLES */
+        .content { flex:1; padding:40px; background:#f9fafb; color:#111827; }
+        .header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; }
+        .header h1 { font-size:28px; color:#1e3a8a; }
+        
+        .earnings-card { background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:15px; padding:30px; box-shadow:0 10px 25px rgba(37,99,235,0.2); margin-bottom:40px; display:inline-block; min-width:300px; }
+        .earnings-card h3 { font-size:16px; font-weight:500; opacity:0.9; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
+        .earnings-card .amount { font-size:42px; font-weight:700; }
+        
+        .history-card { background:white; border-radius:12px; padding:25px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid #f3f4f6; }
+        .history-card h2 { font-size:20px; margin-bottom:20px; color:#111827; border-bottom:1px solid #f3f4f6; padding-bottom:15px; }
+        
+        .txn-list { list-style:none; }
+        .txn-item { display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #f3f4f6; }
+        .txn-item:last-child { border-bottom:none; }
+        .txn-info { display:flex; gap:15px; align-items:center; }
+        .txn-icon { width:45px; height:45px; border-radius:50%; background:#dcfce7; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:18px; }
+        .txn-details h4 { font-size:16px; color:#111827; margin-bottom:4px; }
+        .txn-details p { font-size:13px; color:#6b7280; }
+        .txn-amount { font-size:18px; font-weight:700; color:#16a34a; }
+        
+        .empty-state { text-align:center; padding:40px; color:#6b7280; }
+        .empty-state i { font-size:48px; color:#d1d5db; margin-bottom:15px; }
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}        
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; padding: 20px 16px; }
+            .hero-text { max-width: 100%; }
+            .hero-text h1 { font-size: 20px; }
+            .hero-actions { flex-direction: column; width: 100%; }
+            .hero-actions input { width: 100%; }
+            .hero-image img { max-width: 120px; }
+        }
+        
+
+.ask-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.ask-btn:hover {
+    background-color:  #2c2a99;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-bars" onclick="side()"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
+        <div class="nav-actions">
+            <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+            <a href="{{ url_for('teacher_notifications') }}" style="color:white; position: relative;">
+                <i class="fa-regular fa-bell"></i>
+                {% if total_alerts and total_alerts > 0 %}
+                <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+                {% endif %}
+            </a>
+            <a href="{{ url_for('teacher_profile') }}" style="color:white">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ session.get('name', 'Teacher') }}</span>
+            </a>
+            <a href="{{ url_for('logout') }}" style="color:white" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="layout" id="layout">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span> Dashboard</span></a></li>
+                <li class="active"><a href="/teacher/earnings"><i class="fa-solid fa-wallet"></i><span>Earnings</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload Material</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload Video</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i> <span>Create Course</span></a></li>
+                <li><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create Quiz</span></a></li>
+                <li><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live Classes</span></a></li>
+                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer Q&amp;A</span></a></li>
+                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post Notification</span></a></li>
+                <li><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find People</span></a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <!-- HERO SECTION -->
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Your Earnings, <span>Your Reward! 💰</span></h1>
+                    <p class="hero-sub">Every course you create and every student you inspire adds to your earnings.<br>Keep teaching — your effort pays off!</p>
+                    <div class="hero-actions">
+                        <input id="earningsSearch" type="text" placeholder="Search payout history..." oninput="filterPayouts(this.value)" />
+                        <button class="ask-btn small" onclick="filterPayouts(document.getElementById('earningsSearch').value)">Search</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://i.postimg.cc/rw92TPQJ/IMG-20260117-WA0014.jpg" alt="Teacher earning illustration">
+                </div>
+            </div>
+
+            <div class="header">
+                <div>
+                    <h1>My Earnings</h1>
+                    <p style="color:#6b7280; margin-top:5px;">Track your performance payouts and bonuses.</p>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="padding:15px; margin-bottom:20px; border-radius:5px; color:white; background-color: {% if category == 'success' %}#16a34a{% elif category == 'danger' %}#dc2626{% else %}#3b82f6{% endif %};">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <div class="earnings-card">
+                <h3>Total Lifetime Earnings</h3>
+                <div class="amount">₹{{ "%.2f"|format(total_earnings) }}</div>
+            </div>
+
+            <!-- Withdrawal Form -->
+            <div class="history-card" style="margin-bottom: 40px;">
+                <h2>Request Withdrawal</h2>
+                <form action="{{ url_for('teacher_withdraw') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:bold;">Amount (₹)</label>
+                        <input type="number" name="amount" min="1" step="0.01" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;" placeholder="e.g. 500">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:bold;">Bank Name</label>
+                        <input type="text" name="bank_name" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;" placeholder="e.g. State Bank of India">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:bold;">Account Number</label>
+                        <input type="text" name="account_number" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;" placeholder="Account Number">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:bold;">IFSC Code</label>
+                        <input type="text" name="ifsc_code" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;" placeholder="IFSC Code">
+                    </div>
+                    <button type="submit" class="ask-btn">Submit Request</button>
+                </form>
+            </div>
+            
+            <!-- Withdrawal Requests History -->
+            <div class="history-card" style="margin-bottom: 40px;">
+                <h2>Withdrawal Requests</h2>
+                {% if withdrawals %}
+                <ul class="txn-list">
+                    {% for req in withdrawals %}
+                    <li class="txn-item">
+                        <div class="txn-info">
+                            <div class="txn-icon" style="background: {% if req.status == 'approved' %}#dcfce7; color:#16a34a{% elif req.status == 'rejected' %}#fee2e2; color:#dc2626{% else %}#fef3c7; color:#d97706{% endif %};">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div class="txn-details">
+                                <h4>Status: <span style="text-transform: capitalize;">{{ req.status }}</span></h4>
+                                <p>{{ req.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+                                <p style="font-size:12px; color:#9ca3af;">{{ req.bank_name }} (****{{ req.account_number[-4:] }})</p>
+                            </div>
+                        </div>
+                        <div class="txn-amount" style="color: {% if req.status == 'approved' %}#16a34a{% elif req.status == 'rejected' %}#dc2626{% else %}#d97706{% endif %};">
+                            - ₹{{ "%.2f"|format(req.amount) }}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <h3>No withdrawal requests</h3>
+                    <p>You haven't made any withdrawal requests yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="history-card">
+                <h2>Payout History</h2>
+                
+                {% if history %}
+                <ul class="txn-list">
+                    {% for txn in history %}
+                    <li class="txn-item">
+                        <div class="txn-info">
+                            <div class="txn-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                            <div class="txn-details">
+                                <h4>{{ txn.reason }}</h4>
+                                <p>{{ txn.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+                            </div>
+                        </div>
+                        <div class="txn-amount">+ ₹{{ "%.2f"|format(txn.amount) }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-receipt"></i>
+                    <h3>No payouts yet</h3>
+                    <p>Keep uploading courses and engaging students to earn performance bonuses!</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+    <script>
+        function side(){
+            document.getElementById("layout").classList.toggle("show");
+        }
+
+        function filterPayouts(query) {
+            const q = query.toLowerCase().trim();
+            const items = document.querySelectorAll('.txn-item');
+            items.forEach(item => {
+                const text = item.querySelector('.txn-details h4');
+                if (!text) return;
+                item.style.display = (q === '' || text.textContent.toLowerCase().includes(q)) ? 'flex' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

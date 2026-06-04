@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Course Learning System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;800&family=Montserrat:wght@300;400;500;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <!-- HTML2CANVAS -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        .top-nav {
+            background: #2c2a99;
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            cursor: pointer;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+        }
+
+
+        .layout {
+            display: grid;
+            grid-template-columns: 0px 1fr;
+            transition: grid-template-columns 0.35s ease;
+        }
+
+
+        .layout.show {
+            grid-template-columns: 220px 1fr;
+        }
+
+
+        .sidebar {
+            background: lightgrey;
+            min-height: calc(100vh - 60px);
+            border-right: 1px solid #ddd;
+            overflow: hidden;
+            transition: 0.35s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-top: 10px;
+        }
+
+        .sidebar li {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .sidebar li:hover {
+            background: #e5efff;
+            color: #2563eb;
+        }
+
+        .sidebar i {
+            min-width: 22px;
+        }
+
+
+        .sidebar li.active {
+            background: #e5efff;
+            color: #2563eb;
+            border-left: 4px solid #2563eb;
+        }
+
+
+
+        .foot {
+            background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+        @media(max-width:768px) {
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        @media (max-width: 768px) {
+
+            .top-nav {
+                padding: 12px 14px;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+
+            .layout {
+                grid-template-columns: 0px 1fr;
+            }
+
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+
+            .sidebar li {
+                justify-content: center;
+            }
+        }
+
+        /* LAYOUT */
+
+        .container {
+            width: 95%;
+            margin: 30px auto;
+            display: flex;
+            gap: 25px;
+        }
+
+        /* COURSE SIDEBAR */
+
+        .course-sidebar {
+            width: 320px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-sidebar h2 {
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        .lesson {
+            background: #e2e8f0;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .lesson:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .lesson.completed {
+            background: #16a34a;
+            color: white;
+        }
+
+        /* CONTENT */
+
+        .content {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        video, iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        /* BUTTON */
+
+        .complete-btn {
+            padding: 14px 25px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            font-size: 17px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .complete-btn:hover {
+            background: #1e40af;
+        }
+
+        /* PROGRESS */
+
+        .progress-box {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        /* CERTIFICATE */
+
+        #certificateSection {
+            display: none;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        /* INPUT */
+
+        #studentName {
+            padding: 14px;
+            width: 320px;
+            border-radius: 10px;
+            border: 2px solid #2563eb;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        /* CERTIFICATE DESIGN */
+
+        .cert-frame {
+            background: #1a1a1a;
+            width: 900px;
+            height: 640px;
+            padding: 30px;
+            border-radius: 4px;
+            position: relative;
+            margin: auto;
+        }
+
+        .cert-border-outer {
+            border: 8px double #ca8a04;
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+            position: relative;
+        }
+        
+        .cert-border-inner {
+            border: 2px solid #ca8a04;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ca8a04;
+        }
+        .top-left     { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+        .top-right    { top: 5px; right: 5px; border-left: none; border-bottom: none; }
+        .bottom-left  { bottom: 5px; left: 5px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+        .cert-header {
+            text-align: center;
+        }
+        .logo-container {
+            font-size: 28px;
+            color: #60a5fa;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .logo-container i {
+            color: #ca8a04;
+        }
+        .cert-title {
+            font-family: 'Cinzel', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: #ca8a04;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+        
+        .cert-sub {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+        }
+
+        .cert-present {
+            font-size: 14px;
+            color: #94a3b8;
+            font-family: 'Montserrat', sans-serif;
+            font-style: italic;
+            margin: 18px 0;
+        }
+
+        .recipient-name {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 52px;
+            color: #60a5fa;
+            margin: 10px 0;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .recipient-underline {
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ca8a04, transparent);
+            margin-bottom: 18px;
+        }
+
+        .cert-reason {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            font-family: 'Montserrat', sans-serif;
+            max-width: 80%;
+            text-align: center;
+            font-weight: 400;
+        }
+        .course-title {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            color: #f8fafc;
+            font-weight: 700;
+            margin-top: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+        }
+        .footer-col.seal {
+            width: 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signature-line {
+            width: 100%;
+            border-top: 1.5px solid #ca8a04;
+            margin-bottom: 8px;
+        }
+        .footer-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        .signature-text {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 24px;
+            color: #cbd5e1;
+            margin-bottom: 2px;
+        }
+
+        /* Seal Badge styling */
+        .medal-seal {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #facc15 0%, #ca8a04 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(202, 138, 4, 0.4);
+            border: 3px double #fef08a;
+        }
+        .medal-seal::before, .medal-seal::after {
+            content: '';
+            position: absolute;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 35px solid #ca8a04;
+            top: 60px;
+            z-index: -1;
+        }
+        .medal-seal::before {
+            transform: rotate(-15deg);
+            left: 10px;
+        }
+        .medal-seal::after {
+            transform: rotate(15deg);
+            right: 10px;
+        }
+        .medal-seal i {
+            color: #fef08a;
+            font-size: 32px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+        }
+
+        .meta-details {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #94a3b8;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .meta-details span {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        /* DOWNLOAD BUTTON */
+        .download-btn {
+            margin-top: 30px;
+            padding: 16px 35px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: #15803d;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-bars" onclick="side()"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
+
+        <div class="nav-actions">
+            <a href="/student/events" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+
+            <a href="/student/notifications" style="color:white">
+                <i class="fa-regular fa-bell"></i>
+            </a>
+
+            <a href="/student/dashboard" style="color:white">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ student.name }}</span>
+            </a>
+
+
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+
+        </div>
+    </header>
+
+    <div class="layout" id="layout">
+
+
+        <aside class="sidebar">
+            <ul>
+
+                <li><a href="/student/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+                <li><a href="/student/qa"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+                <li><a href="/student/quizzes"><i class="fa-solid fa-list-check"></i><span>Quizzes</span></a></li>
+                <li><a href="/student/materials"><i class="fa-solid fa-file-lines"></i><span>Study
+                            Materials</span></a></li>
+                <li><a href="/student/videos"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+                <li><a href="/student/live-classes"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+                <li class="active"><a href="/student/dashboard"><i
+                            class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+                <li><a href="/student/connections"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+                <li><a href="/student/chat"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a></li>
+                <li><a href="/student/progress"><i
+                            class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+
+            </ul>
+        </aside>
+
+        <div class="container">
+
+            <!-- COURSE SIDEBAR -->
+
+            <div class="course-sidebar">
+
+                <h2 id="courseName">
+                    {{ course.title }}
+                </h2>
+
+                {% for video in videos %}
+                {% set v_url = video.video_url if (video.video_url.startswith('/') or video.video_url.startswith('http')) else '/static/' ~ video.video_url %}
+                <div class="lesson {% if video.id in completed_video_ids %}completed{% endif %}"
+                    id="lesson-{{ video.id }}" onclick="selectVideo({{ video.id }}, '{{ v_url }}')">
+                    ▶ 1.{{ loop.index }} {{ video.title }}
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- CONTENT -->
+
+            <div class="content">
+
+                <h1>
+                    {{ course.title }}
+                </h1>
+
+                <!-- VIDEO CONTAINER -->
+                <div id="videoPlayerContainer">
+                    <!-- Loaded dynamically via JavaScript -->
+                </div>
+
+                <p style="font-size:18px;">
+                    Complete all videos fully to unlock your certificate.
+                </p>
+
+                <!-- COMPLETE BUTTON -->
+
+                <button class="complete-btn" onclick="completeVideo()">
+                    Mark Video Completed
+                </button>
+
+                <!-- PROGRESS -->
+
+                <div class="progress-box">
+                    Completed Videos:
+                    <span id="progress">{{ completed_count }}</span> / {{ videos|length }}
+                </div>
+
+                <!-- CERTIFICATE SECTION -->
+
+                <div id="certificateSection"
+                <div id="certificateSection"
+                    style="{% if cert_unlocked %}display:block;{% else %}display:none;{% endif %}">
+
+                    <h1 style="margin-bottom:20px;color:#16a34a;">
+                        🎉 Congratulations!
+                    </h1>
+
+                    <p style="font-size:18px; margin-bottom:30px;">
+                        You have successfully completed this course. Your certificate is ready!
+                    </p>
+
+                    <!-- VIEW CERTIFICATE BUTTON -->
+                    <a href="/student/certificate/{{ course.id }}" class="download-btn" style="text-decoration:none; display:inline-block;" target="_blank">
+                        View Certificate
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <script>
+
+            function side() {
+                document.getElementById("layout").classList.toggle("show");
+            }
+
+            function logout() {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+
+            /* COMPLETED VIDEOS */
+            let currentVideoId = {% if videos %}{{ videos[0].id }}{% else %}null{% endif %};
+            let totalVideos = {{ videos| length }};
+
+            function getYoutubeEmbedUrl(url) {
+                let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                let match = url.match(regExp);
+                if (match && match[2].length == 11) {
+                    return "https://www.youtube.com/embed/" + match[2];
+                }
+                return null;
+            }
+
+            function selectVideo(id, url, autoplay = true) {
+                currentVideoId = id;
+                const container = document.getElementById("videoPlayerContainer");
+                
+                let embedUrl = getYoutubeEmbedUrl(url);
+                if (embedUrl) {
+                    container.innerHTML = `<iframe id="courseIframe" src="${embedUrl}?enablejsapi=1&autoplay=${autoplay ? 1 : 0}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    container.innerHTML = `<video controls id="courseVideo"><source src="${url}" type="video/mp4"></video>`;
+                    const videoEl = document.getElementById("courseVideo");
+                    if (videoEl && autoplay) {
+                        videoEl.play().catch(e => console.log("Autoplay blocked:", e));
+                    }
+                }
+
+                // Highlight the active video
+                document.querySelectorAll('.lesson').forEach(el => {
+                    el.style.border = 'none';
+                });
+                const selectedEl = document.getElementById("lesson-" + id);
+                if (selectedEl) selectedEl.style.border = '2px solid #2563eb';
+            }
+
+            // Initial load of the first video without autoplay
+            {% if videos %}
+            selectVideo({{ videos[0].id }}, '{% if videos[0].video_url.startswith("/") or videos[0].video_url.startswith("http") %}{{ videos[0].video_url }}{% else %}/static/{{ videos[0].video_url }}{% endif %}', false);
+            {% endif %}
+
+            /* COMPLETE VIDEO */
+            function completeVideo() {
+                if (!currentVideoId) {
+                    alert("Please select a video first.");
+                    return;
+                }
+
+                fetch('/progress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        video_id: currentVideoId,
+                        completed: true
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const lessonEl = document.getElementById("lesson-" + currentVideoId);
+                            if (lessonEl) lessonEl.classList.add("completed");
+                            alert("Lesson marked completed! Progress updated.");
+                            window.location.reload();
+                        } else {
+                            alert("Error updating progress.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Server error updating progress.");
+                    });
+            }
+
+        </script>
+</body>
+
+</html>

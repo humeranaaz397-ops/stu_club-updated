@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+@media(max-width: 768px){
+   
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+    
+    .sidebar span{
+        display:none;
+    }
+
+    .top-nav .nav-actions span{
+        display:none; 
+    }
+  }
+  
+    .main{
+      padding:30px;
+    }
+
+    .hero{
+      background:#eef3ff;
+      border-radius:12px;
+      padding:25px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:25px;
+    }
+
+    .hero h1{
+      font-size:34px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .hero p{
+      font-size:18px;
+      color:#333;
+    }
+
+    .search-box{
+      display:flex;
+      gap:12px;
+      margin-top:20px;
+      max-width:650px;
+    }
+
+    .search-box input{
+      height:48px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      padding:0 15px;
+      flex:1;
+    }
+
+    .search-box button{
+      background:#3b82f6;
+      color:white;
+      border:none;
+      border-radius:6px;
+      padding:0 25px;
+      font-weight:600;
+    }
+
+    .hero img{
+      width:260px;
+      height:150px;
+      object-fit:cover;
+      border-radius:10px;
+    }
+
+    .section-title h2{
+      font-size:36px;
+      font-weight:800;
+      margin-bottom:3px;
+    }
+
+    .section-title p{
+      font-size:18px;
+      color:#333;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:25px;
+      margin:55px 0 30px;
+    }
+
+    .stat-card{
+      background:#d1d1d1;
+      border-radius:12px;
+      padding:22px 25px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:95px;
+    }
+
+    .stat-card h4{
+      font-size:20px;
+      font-weight:800;
+      margin:0;
+    }
+
+    .stat-card h3{
+      font-size:26px;
+      font-weight:800;
+      margin:0;
+    }
+
+    .stat-card i{
+      font-size:26px;
+    }
+
+    .event-area{
+      background:#f4f4f4;
+      border-radius:12px;
+      padding:25px;
+    }
+
+    .event-card{
+      background:white;
+      border-radius:12px;
+      padding:22px;
+      margin-bottom:22px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .event-header{
+      display:flex;
+      gap:20px;
+    }
+
+    .event-img{
+      width:220px;
+      height:145px;
+      object-fit:cover;
+      border-radius:10px;
+    }
+
+    .event-content{
+      flex:1;
+    }
+
+    .event-content h3{
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .event-content p{
+      color:#333;
+      margin-bottom:8px;
+      line-height:1.5;
+    }
+
+    .tag{
+      display:inline-block;
+      background:#e9f5ff;
+      color:#2563eb;
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:10px;
+    }
+
+    .event-info{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      font-size:15px;
+      margin:12px 0;
+    }
+
+    .apply-btn{
+      background:#0000ff;
+      color:white;
+      border:none;
+      border-radius:7px;
+      padding:10px 22px;
+      text-decoration:none;
+      display:inline-block;
+      font-weight:600;
+    }
+
+    .apply-btn:hover{
+      color:white;
+      background:#1d4ed8;
+    }
+
+    .actions{
+      border-top:1px solid #ccc;
+      margin-top:18px;
+      padding-top:16px;
+      display:flex;
+      justify-content:space-around;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .action-btn{
+      border:none;
+      background:transparent;
+      font-size:16px;
+      font-weight:600;
+      color:#333;
+      cursor:pointer;
+    }
+
+    .action-btn i{
+      margin-right:7px;
+    }
+
+    .like-active{
+      color:red;
+    }
+
+    .save-active{
+      color:#312b9b;
+    }
+
+    .comment-section{
+      display:none;
+      margin-top:18px;
+      border-top:1px solid #ddd;
+      padding-top:18px;
+    }
+
+    .comment-section textarea{
+      border-radius:8px;
+      resize:none;
+      margin-bottom:10px;
+    }
+
+    .post-btn{
+      background:#3b82f6;
+      color:white;
+      border:none;
+      padding:8px 20px;
+      border-radius:7px;
+      font-weight:600;
+    }
+
+    .comment{
+      background:#eef3ff;
+      padding:10px 14px;
+      border-radius:8px;
+      margin-top:12px;
+    }
+
+    @media(max-width:992px){
+      .hero{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+      }
+
+      .hero img{
+        width:100%;
+        height:220px;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .event-header{
+        flex-direction:column;
+      }
+
+      .event-img{
+        width:100%;
+        height:220px;
+      }
+    }
+
+    @media(max-width:576px){
+      .main{
+        padding:18px;
+      }
+
+      .topbar{
+        padding:0 15px;
+      }
+
+      .brand{
+        font-size:20px;
+      }
+
+      .hero h1{
+        font-size:26px;
+      }
+
+      .section-title h2{
+        font-size:28px;
+      }
+
+      .search-box{
+        flex-direction:column;
+      }
+
+      .search-box button{
+        height:45px;
+      }
+    }
+
+</style>
+</head>
+
+<body>
+
+
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+       <a href="{{ url_for('student_dashboard') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+        <a href="{{ url_for('student_notifications') }}" style="color:white; position: relative;">
+            
+            <i class="fa-regular fa-bell"></i>
+        
+            {% if total_alerts and total_alerts > 0 %}
+            <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+            {% endif %}
+        </a>
+
+        <a href="{{ url_for('student_profile') }}" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ session.get('name', 'Student') }}</span>
+        </a>
+
+       
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        
+        <li ><a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('student_qa') }}"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+        <li ><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study Materials</span></a></li>
+        <li><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+        <li><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+        <li><a href="{{ url_for('student_courses') }}"><i class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+        <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+        <li><a href="{{ url_for('student_chat') }}"><i class="fa-solid fa-comment-dots"></i><span>Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+         <li><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+        <li><a href="{{ url_for('student_progress') }}"><i class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+        
+
+    </ul>
+</aside>
+
+
+  <div class="main">
+
+    <div class="hero">
+      <div>
+        <h1>Discover Events & Hackathons 🚀</h1>
+        <p>Apply, participate, learn new skills, and grow with the Student Club community.</p>
+
+        <div class="search-box">
+          <input type="text" placeholder="Search events, hackathons or workshops...">
+          <button>Search</button>
+        </div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=900&auto=format&fit=crop" alt="Events">
+    </div>
+
+    <div class="section-title">
+      <h2>Events & Hackathons</h2>
+      <p>Find upcoming events, apply easily, like, comment, and save your favorite events.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div>
+          <h4>Total Events</h4>
+          <h3>{{ stats.total }}</h3>
+        </div>
+        <i class="fa-solid fa-calendar-days"></i>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <h4>Applied</h4>
+          <h3>{{ stats.applied }}</h3>
+        </div>
+        <i class="fa-solid fa-circle-check" style="color:#15985d;"></i>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <h4>Saved</h4>
+          <h3>{{ stats.saved }}</h3>
+        </div>
+        <i class="fa-solid fa-bookmark" style="color:#d17a00;"></i>
+      </div>
+    </div>
+
+    <div class="event-area">
+      {% for item in events %}
+      <div class="event-card" data-event-id="{{ item.id }}">
+        <div class="event-header">
+          <img class="event-img" src="{{ item.image_url or 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=900&auto=format&fit=crop' }}" alt="{{ item.event_type }}">
+
+          <div class="event-content">
+            <span class="tag">{{ item.event_type }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+
+            <div class="event-info">
+              <span><i class="fa-regular fa-calendar"></i> {{ item.event_date.strftime('%d %b %Y') if item.event_date else '' }}</span>
+              <span><i class="fa-solid fa-location-dot"></i> {{ item.location }}</span>
+              <span><i class="fa-solid fa-globe"></i> {{ item.mode }}</span>
+              {% if item.prize %}
+              <span><i class="fa-solid fa-trophy"></i> {{ item.prize }}</span>
+              {% endif %}
+              {% if item.price > 0 %}
+              <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹{{ item.price }}</span>
+              {% else %}
+              <span><i class="fa-solid fa-circle-check" style="color:green;"></i> Free</span>
+              {% endif %}
+            </div>
+
+            {% if item.is_applied %}
+            <button class="apply-btn" style="background:#15985d; cursor:default; border:none;" disabled>
+              <i class="fa-solid fa-circle-check"></i> Applied
+            </button>
+            {% else %}
+            <a href="{{ url_for('student_event_apply', event_id=item.id) }}" class="apply-btn">
+              <i class="fa-solid fa-link"></i> Apply Now
+            </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn like-btn {% if item.is_liked %}like-active{% endif %}" onclick="toggleEventAction({{ item.id }}, 'like')">
+            <i class="fa-solid fa-heart"></i><span class="like-count">{{ item.likes_count }}</span> Like
+          </button>
+
+          <button class="action-btn comment-btn" onclick="toggleComments({{ item.id }})">
+            <i class="fa-solid fa-comment"></i>{{ item.comments|length }} Comment
+          </button>
+
+          <button class="action-btn save-btn {% if item.is_saved %}save-active{% endif %}" onclick="toggleEventAction({{ item.id }}, 'save')">
+            <i class="fa-solid fa-bookmark"></i>{% if item.is_saved %}Saved{% else %}Save{% endif %}
+          </button>
+
+          <button class="action-btn" onclick="shareEvent(this.closest('.event-card').querySelector('h3').innerText)">
+            <i class="fa-solid fa-share"></i>Share
+          </button>
+        </div>
+
+        <div class="comment-section" id="comment-section-{{ item.id }}">
+          <textarea class="form-control" rows="3" placeholder="Write a comment..." id="comment-text-{{ item.id }}" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; resize: none; margin-bottom: 10px;"></textarea>
+          <button class="post-btn" onclick="postEventComment({{ item.id }})">Post Comment</button>
+
+          <div class="comments-list" id="comments-list-{{ item.id }}" style="margin-top: 15px;">
+            {% for c in item.comments %}
+            <div class="comment" style="background:#eef3ff; padding:10px 14px; border-radius:8px; margin-top:8px;">
+              <strong>{{ c.student_name }}:</strong> {{ c.comment_text }}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="event-card" style="text-align:center; padding:40px; color:#666;">
+        <i class="fa-solid fa-calendar-xmark" style="font-size:45px; margin-bottom:15px; color:#888;"></i>
+        <h3>No Upcoming Events</h3>
+        <p>There are no approved events at this time. Please check back later!</p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <script>
+    function toggleEventAction(eventId, actionType) {
+      fetch(`/student/event/action/${eventId}/${actionType}`, { method: 'POST' })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            location.reload();
+          } else {
+            alert('Action failed: ' + res.message);
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function toggleComments(eventId) {
+      const sect = document.getElementById(`comment-section-${eventId}`);
+      if (sect.style.display === "block") {
+        sect.style.display = "none";
+      } else {
+        sect.style.display = "block";
+      }
+    }
+
+    function postEventComment(eventId) {
+      const txtVal = document.getElementById(`comment-text-${eventId}`).value.strip ? document.getElementById(`comment-text-${eventId}`).value.strip() : document.getElementById(`comment-text-${eventId}`).value.trim();
+      if (!txtVal) {
+        alert('Please write a comment first.');
+        return;
+      }
+      
+      const formParams = new URLSearchParams();
+      formParams.append('comment_text', txtVal);
+      
+      fetch(`/student/event/comment/${eventId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formParams
+      })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            location.reload();
+          } else {
+            alert('Comment failed: ' + res.message);
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function shareEvent(title) {
+      alert(`Event link for "${title}" copied to clipboard!`);
+    }
+  </script>
+</div>
+
+<footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+function startQuiz1(){
+     alert("⚠️ Please complete the study material before attempting the quiz.");
+        return;
+    }
+
+
+
+</script>
+
+</body>
+</html>
+
+

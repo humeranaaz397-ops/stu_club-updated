@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results - Student Club</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        body { background:#f4f5fb; color:#374151; }
+        
+        .top-nav {
+            background:#2c2a99; color:white; padding:14px 20px;
+            display:flex; justify-content:space-between; align-items:center;
+            box-shadow:0 2px 12px rgba(44,42,153,0.3);
+        }
+        .logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .score-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-top: 5px solid #2c2a99;
+        }
+        
+        .score-card h1 { color: #1e1b4b; margin-bottom: 10px; font-size: 28px; }
+        .score-circle {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            margin: 20px auto;
+            border: 4px solid #bfdbfe;
+        }
+        .score-circle span { font-size: 32px; font-weight: 800; }
+        .score-circle small { font-size: 14px; font-weight: 500; color: #60a5fa; }
+        
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .q-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .q-text { font-size: 16px; font-weight: 600; color: #1e1b4b; line-height: 1.5; }
+        
+        .status-badge {
+            padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .status-correct { background: #dcfce7; color: #166534; }
+        .status-wrong { background: #fee2e2; color: #991b1b; }
+        
+        .options-list { list-style: none; margin-bottom: 20px; }
+        .option-item {
+            padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;
+            background: #f9fafb; border: 1px solid #f3f4f6;
+            display: flex; gap: 10px;
+        }
+        .opt-letter { font-weight: 700; color: #6b7280; width: 20px; }
+        
+        .option-item.is-correct { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
+        .option-item.is-submitted-wrong { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+        
+        .explanation-box {
+            background: #f8fafc; border-left: 4px solid #3b82f6;
+            padding: 16px; border-radius: 0 8px 8px 0;
+            font-size: 14px; line-height: 1.6;
+        }
+        .explanation-box strong { color: #1e40af; display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .back-btn {
+            display: inline-block; padding: 12px 24px;
+            background: #2c2a99; color: white; border-radius: 8px;
+            font-weight: 600; text-decoration: none; transition: 0.2s;
+            margin-top: 10px;
+        }
+        .back-btn:hover { background: #1e1b4b; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
+        <a href="{{ url_for('student_dashboard') }}" style="color:white; font-size:14px; font-weight:600; text-decoration:none;">Dashboard</a>
+    </header>
+
+    <div class="container">
+        <div class="score-card">
+            <h1>Quiz Results</h1>
+            <p>You have successfully submitted the quiz.</p>
+            
+            <div class="score-circle">
+                <span>{{ "%.0f"|format(score) }}%</span>
+                <small>Score</small>
+            </div>
+            <p style="font-weight: 600; color: #4b5563;">You got {{ correct_count }} out of {{ total_count }} questions right!</p>
+            
+            <a href="{{ url_for('student_quizzes') }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Quizzes</a>
+        </div>
+        
+        <h2 style="font-size: 20px; margin-bottom: 16px; color: #1e1b4b;">Detailed Breakdown</h2>
+        
+        {% for res in results %}
+        <div class="question-card">
+            <div class="q-header">
+                <div class="q-text">Q{{ loop.index }}. {{ res.question_text }}</div>
+                {% if res.is_correct %}
+                <span class="status-badge status-correct"><i class="fa-solid fa-check"></i> Correct</span>
+                {% else %}
+                <span class="status-badge status-wrong"><i class="fa-solid fa-xmark"></i> Incorrect</span>
+                {% endif %}
+            </div>
+            
+            <ul class="options-list">
+                {% set options = [('A', res.option_a), ('B', res.option_b), ('C', res.option_c), ('D', res.option_d)] %}
+                {% for letter, text in options %}
+                    {% set is_correct_ans = (letter == res.correct) %}
+                    {% set is_submitted_ans = (letter == res.submitted) %}
+                    
+                    <li class="option-item 
+                        {% if is_correct_ans %}is-correct{% endif %}
+                        {% if is_submitted_ans and not is_correct_ans %}is-submitted-wrong{% endif %}">
+                        
+                        <div class="opt-letter">{{ letter }}</div>
+                        <div class="opt-text">{{ text }}</div>
+                        
+                        {% if is_correct_ans %}
+                            <i class="fa-solid fa-check-circle" style="margin-left:auto; color:#166534;"></i>
+                        {% elif is_submitted_ans %}
+                            <i class="fa-solid fa-times-circle" style="margin-left:auto; color:#991b1b;"></i>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            
+            {% if res.explanation %}
+            <div class="explanation-box">
+                <strong><i class="fa-solid fa-lightbulb"></i> Explanation</strong>
+                {{ res.explanation }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

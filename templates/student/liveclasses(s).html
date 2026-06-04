@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Club</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        .top-nav {
+            background: #2c2a99;
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            cursor: pointer;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+        }
+
+
+        .layout {
+            display: grid;
+            grid-template-columns: 0px 1fr;
+            transition: grid-template-columns 0.35s ease;
+        }
+
+
+        .layout.show {
+            grid-template-columns: 220px 1fr;
+        }
+
+        .sidebar {
+            background: lightgrey;
+            min-height: calc(100vh - 60px);
+            border-right: 1px solid #ddd;
+            overflow: hidden;
+            transition: 0.35s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-top: 10px;
+        }
+
+        .sidebar li {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .sidebar li:hover {
+            background: #e5efff;
+            color: #2563eb;
+        }
+
+        .sidebar i {
+            min-width: 22px;
+        }
+
+
+        .sidebar li.active {
+            background: #e5efff;
+            color: #2563eb;
+            border-left: 4px solid #2563eb;
+        }
+
+        .foot {
+            background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+        @media(max-width:768px) {
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+
+
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+
+        .content h1 {
+            margin: 20px 0;
+            font-size: 32px;
+            color: #333;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+
+        .card {
+            background: #ffe5ec;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .card button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .card .live-btn {
+            background: #4361ee;
+        }
+
+        .card .join-btn {
+            background: #2563eb;
+        }
+
+
+        .pending,
+        .pending1 {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0f4ff;
+        }
+
+        .pending-item,
+        .pending-item1,
+        .pending-item2 {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-matter,
+        .item-matter2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .item-matter h4,
+        .item-matter2 h4 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .item-matter p,
+        .item-matter2 p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .pending-item button,
+        button {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 2px solid #4361ee;
+            background: #4361ee;
+            color: whitesmoke;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pending-item button:hover {
+            background: #2c2a99;
+            color: white;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text {
+            max-width: 60%;
+        }
+
+        .hero-text h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .hero-sub {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .hero-actions input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .hero-actions .ask-btn.small {
+            padding: 10px 16px;
+            font-size: 14px;
+        }
+
+        .hero-image img {
+            max-width: 200px;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #1e40af;
+        }
+
+
+
+        @media (max-width: 768px) {
+
+            .top-nav {
+                padding: 12px 14px;
+            }
+
+            .nav-actions span {
+                display: none;
+            }
+
+
+            .layout {
+                grid-template-columns: 0px 1fr;
+            }
+
+            .layout.show {
+                grid-template-columns: 60px 1fr;
+            }
+
+
+            .sidebar span {
+                display: none;
+            }
+
+            .sidebar li {
+                justify-content: center;
+            }
+
+
+            .main-content {
+                padding: 12px;
+            }
+
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 22px;
+            }
+
+            .hero-sub {
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions input {
+                width: 100%;
+            }
+
+            .hero-image img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        }
+
+        .join-btn:hover {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header class="top-nav">
+        <div class="logo">
+            <i class="fa-solid fa-bars" onclick="side()"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Student Club</span>
+        </div>
+
+        <div class="nav-actions">
+            <a href="/student/events" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+
+            <a href="/student/notifications" style="color:white">
+                <i class="fa-regular fa-bell"></i>
+            </a>
+
+            <a href="/student/dashboard" style="color:white">
+                <i class="fa-solid fa-user"></i>
+                <span>{{ current_user.name }}</span>
+            </a>
+
+
+            <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+
+
+        </div>
+    </header>
+
+    <div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        <li a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('student_qa') }}"><i class="fa-solid fa-clipboard-question"></i><span>Q&A</span></a></li>
+        <li><a href="{{ url_for('student_materials') }}"><i class="fa-solid fa-file-lines"></i><span>Study Materials</span></a></li>
+        <li><a href="{{ url_for('student_videos') }}"><i class="fa-solid fa-video"></i><span>Video Learning</span></a></li>
+        <li class="active"><a href="{{ url_for('student_live_classes') }}"><i class="fa-brands fa-youtube"></i><span>Live Classes</span></a></li>
+        <li><a href="{{ url_for('student_courses') }}"><i class="fa-solid fa-book-open"></i><span>Courses</span></a></li>
+        <li><a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i><span>Find People</span></a></li>
+       
+        <li><a href="{{ url_for('student_chat') }}"><i class="fa-solid fa-comment-dots"></i><span>Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li> <li><a href="{{ url_for('student_quizzes') }}"><i class="fa-solid fa-clipboard-list"></i><span>Quizzes</span></a></li>
+         <li><a href="{{ url_for('student_progress') }}"><i class="fa-solid fa-arrow-trend-up"></i><span>Progress</span></a></li>
+    </ul>
+</aside>
+
+
+
+        <div class="content">
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Learn it live.Use it now! ✨</h1>
+                    <p class="hero-sub">live classes Connect minds, ideas, and real-time Understanding.</p>
+                    <div class="hero-actions">
+                        <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+                        <button id="searchBtn" class="ask-btn small">Search</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://i.postimg.cc/7ZvXG04G/1768419227023.png" alt="Students studying together">
+                </div>
+            </div>
+
+            <h1>Live Classroom</h1>
+            <p>Join live classes and interact with teachers</p>
+            <div class="cards">
+                {% if active_class %}
+                <div class="card">
+                    <div>
+                        <h2>{{ active_class.title }}</h2>
+                        <p>🧑‍🏫 {{ active_class.teacher_name }} 👥 156 participants ⌚ Scheduled: {{
+                            active_class.scheduled_at.strftime('%H:%M') }}</p>
+                        <button class="live-btn">⭕Live</button>
+                        <b>Ends in {{ active_class.duration }} min</b>
+                    </div>
+
+                    <button class="join-btn" onclick="openLiveClass({{ active_class.id }})">
+                        Join Now
+                    </button>
+                </div>
+                {% else %}
+                <div class="card"
+                    style="background: #e2e8f0; border: 1px solid #cbd5e1; justify-content: center; padding: 30px; width: 100%;">
+                    <h2 style="color: gray; margin: 0;">No active live classes at the moment.</h2>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="pending">
+                <h3>Upcoming Classes</h3>
+                <div style="display:flex; flex-wrap:wrap; gap:20px;">
+                    {% for lc in upcoming_classes %}
+                    <div class="pending-item">
+                        <div class="item-matter2">
+                            <div>
+                                <h4>{{ lc.title }}</h4>
+                                Upcoming
+                                <p>🧑‍🏫 {{ lc.teacher_name }} <br>🗓️ {{ lc.scheduled_at.strftime('%d/%m/%Y, %H:%M') }}
+                                    <br>🎥 Duration: {{ lc.duration }} minutes</p>
+                                <button onclick="set()">Set Reminder</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p style="padding: 10px; color: gray;">No scheduled upcoming classes.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="pending1">
+                <h3>Past Class Recordings</h3>
+                {% for lc in past_classes %}
+                <div class="pending-item1">
+                    <div class="item-matter">
+                        <div>
+                            <h4>{{ lc.title }}</h4>
+                            <p>🧑‍🏫 {{ lc.teacher_name }} 📅 {{ lc.scheduled_at.strftime('%b %d, %Y') }} ⏲️ {{
+                                lc.duration }} min 💬Chat Available</p>
+                        </div>
+                        <a href="{{ url_for('static', filename='Videos/7 React Lessons I Wish I Knew Earlier - Code Bootcamp (1080p, h264).mp4') }}"
+                            target="_blank"><button>Watch Recording</button></a>
+                    </div>
+                </div>
+                {% else %}
+                <p style="padding: 10px; color: gray;">No past recordings available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+    <script>
+        function side() {
+            document.getElementById("layout").classList.toggle("show");
+        }
+
+        function logout() {
+            window.location.href = "{{ url_for('logout') }}";
+        }
+        function set() {
+            alert("Reminder set successfully you'll be notified at the schedule time.")
+        }
+
+        /* IMPORTANT FIX */
+
+        function openLiveClass(classId) {
+            window.location.href = "/student/live-class?id=" + classId;
+        }
+    </script>
+
+</body>
+
+</html>

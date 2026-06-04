@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Teacher – Student Club</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', Arial, sans-serif; }
+
+    body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* NAV */
+    .top-nav { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.12); color: white; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+    .nav-actions { display: flex; gap: 16px; align-items: center; font-size: 14px; }
+    .nav-actions a { color: rgba(255,255,255,0.85); text-decoration: none; transition: color .2s; }
+    .nav-actions a:hover { color: #a78bfa; }
+
+    /* MAIN */
+    .page-center { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
+
+    .card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+      animation: slideUp .45s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Teacher badge */
+    .teacher-badge {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(167,139,250,0.12);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+    }
+    .teacher-avatar {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .teacher-info h3 { color: #fff; font-size: 17px; }
+    .teacher-info p  { color: rgba(255,255,255,0.55); font-size: 13px; margin-top: 2px; }
+
+    h2 { color: #fff; font-size: 22px; margin-bottom: 6px; }
+    .subtitle { color: rgba(255,255,255,0.55); font-size: 14px; margin-bottom: 28px; }
+
+    /* Existing badge */
+    .existing-badge {
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #6ee7b7;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Stars */
+    .star-label { color: rgba(255,255,255,0.75); font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    .stars-container { display: flex; gap: 6px; margin-bottom: 24px; flex-direction: row-reverse; justify-content: flex-end; }
+    .stars-container input[type="radio"] { display: none; }
+    .stars-container label {
+      font-size: 36px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.18);
+      transition: color .18s, transform .18s;
+    }
+    .stars-container input:checked ~ label,
+    .stars-container label:hover,
+    .stars-container label:hover ~ label {
+      color: #fbbf24;
+      transform: scale(1.15);
+    }
+
+    /* Textarea */
+    label.field-label { display: block; color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      color: #fff;
+      padding: 14px 16px;
+      font-size: 15px;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    textarea::placeholder { color: rgba(255,255,255,0.3); }
+    textarea:focus { border-color: #a78bfa; box-shadow: 0 0 0 3px rgba(167,139,250,0.2); }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-submit {
+      flex: 1;
+      padding: 13px;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-cancel {
+      padding: 13px 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: background .2s;
+    }
+    .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+    /* Flash */
+    .flash { padding: 12px 16px; border-radius: 10px; margin-bottom: 18px; font-size: 14px; }
+    .flash.success { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
+    .flash.danger  { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+    @media (max-width: 500px) {
+      .card { padding: 24px 18px; }
+      .stars-container label { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-nav">
+  <div class="logo">
+    <i class="fa-solid fa-graduation-cap"></i>
+    <span>Student Club</span>
+  </div>
+  <div class="nav-actions">
+    <a href="{{ url_for('student_connections') }}"><i class="fa-solid fa-users"></i> People</a>
+    <a href="{{ url_for('student_dashboard') }}"><i class="fa-solid fa-grip"></i> Dashboard</a>
+    <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i></a>
+  </div>
+</header>
+
+<div class="page-center">
+  <div class="card">
+
+    <!-- Teacher badge -->
+    <div class="teacher-badge">
+      <div class="teacher-avatar">{{ teacher.name[0].upper() }}</div>
+      <div class="teacher-info">
+        <h3>{{ teacher.name }}</h3>
+        <p>{{ teacher.subject or 'Teacher' }} &nbsp;·&nbsp; {{ teacher.experience or '0' }} yrs exp</p>
+      </div>
+    </div>
+
+    <!-- Heading -->
+    <h2>{% if existing_review %}Update Your Review{% else %}Leave a Review{% endif %}</h2>
+    <p class="subtitle">Your honest feedback helps other students find great teachers ✨</p>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Existing review notice -->
+    {% if existing_review %}
+    <div class="existing-badge">
+      <i class="fa-solid fa-circle-check"></i>
+      You already reviewed this teacher on {{ existing_review.created_at.strftime('%d %b %Y') if existing_review.created_at else '' }}. Submitting again will update your review.
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST" action="{{ url_for('student_review_teacher', teacher_id=teacher_id) }}">
+      <!-- Star rating -->
+      <div class="star-label">Your Rating <span style="color:#fbbf24">★</span></div>
+      <div class="stars-container" id="starContainer">
+        {% set current_rating = existing_review.rating if existing_review else 5 %}
+        {% for val in [5,4,3,2,1] %}
+          <input type="radio" name="rating" id="star{{ val }}" value="{{ val }}" {% if current_rating == val %}checked{% endif %}>
+          <label for="star{{ val }}" title="{{ val }} stars"><i class="fa-solid fa-star"></i></label>
+        {% endfor %}
+      </div>
+
+      <!-- Review text -->
+      <label class="field-label">Your Review</label>
+      <textarea name="review_text" placeholder="Share what you liked, what was helpful, or how the teacher could improve..." required>{{ existing_review.review_text if existing_review else '' }}</textarea>
+
+      <div class="btn-row">
+        <a href="{{ url_for('student_connections') }}" class="btn-cancel"><i class="fa-solid fa-arrow-left" style="margin-right:6px;"></i> Back</a>
+        <button type="submit" class="btn-submit">
+          <i class="fa-solid fa-paper-plane" style="margin-right:8px;"></i>
+          {% if existing_review %}Update Review{% else %}Submit Review{% endif %}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+</body>
+</html>

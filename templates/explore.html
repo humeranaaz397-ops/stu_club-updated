@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Club</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f9ff;
+        }
+
+        i {
+            color: #2c2a99;
+            font-size: 34px;
+        }
+
+        .foot {
+            background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+            margin-top: 80px;
+        }
+
+        .foot {
+            background: #2c2a99;
+            color: #fff;
+            text-align: center;
+            padding: 18px;
+            font-size: 15px;
+            margin-top: 14%;
+        }
+
+
+        .parent20 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+            width: 100%;
+
+        }
+
+
+        .card1 {
+            background: aliceblue;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            overflow: hidden;
+
+        }
+
+        .card1:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .card1 img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body h3 {
+            margin-bottom: 10px;
+        }
+
+        .card-body p {
+            margin-bottom: 15px;
+        }
+
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4361ee;
+        }
+
+        .video-list {
+            background: white;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-item {
+            padding: 14px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            gap: 20px;
+        }
+
+        .video-item:hover {
+            background: #f0f4ff;
+        }
+
+        .video-number {
+            font-weight: bold;
+            color: #2563eb;
+            min-width: 40px;
+        }
+
+        .card1 {
+            cursor: pointer;
+        }
+
+
+        button {
+            background: #2563eb;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            ;
+        }
+
+        button {
+
+            background: #1e40af;
+            color: white;
+        }
+
+
+        @media (max-width: 768px) {
+            .parent20 {
+                grid-template-columns: 1fr;
+                /* one card per row */
+                gap: 20px;
+                padding: 10px;
+            }
+
+            .card1 img {
+                height: 160px;
+                /* reduce image height */
+            }
+
+            .card-body {
+                padding: 15px;
+            }
+
+            .card-body h3 {
+                font-size: 18px;
+            }
+
+            .card-body p {
+                font-size: 14px;
+            }
+        }
+
+        html,
+        body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .main-content {
+            flex: 1;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            <h2><i id="logo-icon" class="fa-solid fa-graduation-cap"></i> Student Club</h2>
+        </div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i id="logo-icon" class="fa-solid fa-bars"></i>
+        </div>
+
+        <ul id="nav-links">
+            <li><a href="{{ url_for('home') }}" id="a2">Home</a></li>
+            <li><a href="{{ url_for('features') }}" id="a2">Features</a></li>
+            <li><a href="{{ url_for('contact') }}" id="a2">Contact</a></li>
+            <li><a href="{{ url_for('login') }}" id="btn">Login</a></li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <h1 style="padding-left: 20px;">My Courses!</h1>
+        <p style="padding-left: 20px;">"Track your learning progress and earn Certificates"</p>
+
+        <div id="videoSection" style="display:none;">
+
+            <button onclick="goBack()" style="
+        margin-bottom:20px;
+        padding:8px 14px;
+        background:#2563eb;
+        color:white;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;">
+                ← Back to Courses
+            </button>
+
+            <h2>Introduction to Web Development</h2>
+            <p>Module 1: Basics</p>
+
+            <div class="video-list">
+
+                <div class="video-item">
+                    <span class="video-number">1.1</span>
+                    <a
+                        href="./Videos/The Web Dev Roadmap I Wish I Had (No One Tells You This!) - DevForge (1080p, h264).mp4">
+                        <span>Course Overview</span></a>
+                </div>
+
+                <div class="video-item">
+                    <span class="video-number">1.2</span>
+                    <a href="./Videos/HTML - Introduction - W3Schools.com - w3schools.com (1080p, h264).mp4"> <span>HTML
+                            Basics</span></a>
+                </div>
+
+                <div class="video-item">
+                    <span class="video-number">1.3</span>
+                    <a href="./Videos/CSS - Syntax - W3Schools.com - w3schools.com (1080p, h264).mp4"> <span>CSS
+                            Fundamentals</span></a>
+                </div>
+                <a href="{{ url_for('login') }}"> <button>For More</button></a>
+            </div>
+        </div>
+
+        <section class="parent20" style="padding-left: 10px;">
+
+            <!-- CARD 1 -->
+            <div class="card1" onclick="openVideos()">
+
+                <img src="https://images.stockcake.com/public/c/8/f/c8f3ac4b-50e9-48c3-9a74-539c8aaa72a6_large/late-night-coding-stockcake.jpg"
+                    alt="">
+                <div class="card-body">
+                    <h3>introduction to Webdevelopment</h3>
+                    <p>Learn HTML,CSS and javascript fundamentals</p>
+                    <p>03/24 lessons</p>
+                </div>
+            </div>
+
+
+            <div class="card1" onclick="openVideos()">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/003/343/387/small/desktop-source-code-and-wallpaper-by-coding-and-programming-free-photo.jpg"
+                    alt="">
+                <div class="card-body">
+                    <h3>Datastructures and Algorithms</h3>
+                    <p>Master fundamental CS concepts</p>
+                    <p>0/30 lessons</p>
+                </div>
+            </div>
+
+
+            <div class="card1" onclick="openVideos()">
+                <img src="https://www.skill-up.org/wp-content/uploads/2023/06/Python-for-beginners.webp" alt="">
+                <div class="card-body">
+                    <h3>Python for Beginners</h3>
+                    <p>Start your programming journey</p>
+                    <p>0/18</p>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    </div>
+    </div>
+    <br>
+
+
+    <footer class="foot">
+        &copy; 2026 Student Club. All rights reserved.
+    </footer>
+
+    <script>
+
+        function toggleMenu() {
+            const menu = document.getElementById("nav-links");
+            menu.classList.toggle("active");
+        }
+
+        function openVideos() {
+            document.getElementById("videoSection").style.display = "block";
+            document.querySelector(".parent20").style.display = "none";
+        }
+
+        function goBack() {
+            document.getElementById("videoSection").style.display = "none";
+            document.querySelector(".parent20").style.display = "grid";
+        }
+
+    </script>
+</body>
+
+</html>

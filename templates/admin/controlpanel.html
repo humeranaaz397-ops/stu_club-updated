@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+
+
+.container{
+  margin-top: 1%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8faff;
+  border: 1px solid #e1e6ef;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item:hover {
+  background: #eef3ff;
+}
+
+.icon {
+  color: #2f6fdc;
+  font-size: 22px;
+  width: 50px;
+}
+
+.menu-item span {
+  flex: 1;
+  font-size: 16px;
+  margin-left: 10px;
+  color: #1f2d3d;
+  margin-right: 10px;
+}
+
+.arrow {
+  color: #9aa4b2;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+           
+/* ================= TOP NAV ================= */
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+/* ================= LAYOUT ================= */
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+/* WHEN SIDEBAR OPEN */
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+/* ACTIVE ITEM */
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+/* ================= FOOTER ================= */
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+        
+@media (max-width: 768px) {
+
+  /* TOP NAV */
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  /* LAYOUT */
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  /* SIDEBAR */
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    padding: 12px;
+  }
+
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+}
+  </style>
+</head>
+<body>
+
+    
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/admin/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/admin/profile" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+
+<aside class="sidebar">
+    <ul>
+        
+    <li ><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+    <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+
+     <li ><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+    <li class="active"><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+   
+    <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+    <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+    <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+    <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+  
+         </ul>
+</aside>
+
+
+<div class="container">
+  <div class="sub-container">
+  <div class="menu-item">
+    <a href="/admin/users"> <i class="fas fa-users icon"></i>
+    <span>Add Users</span>
+    <i class="fas fa-chevron-right arrow"></i></a>
+  </div>
+
+  <div class="menu-item">
+    <a href="/admin/upload-material"><i class="fas fa-cloud-upload-alt icon"></i>
+    <span>Upload Material</span>
+    <i class="fas fa-chevron-right arrow"></i></a>
+  </div>
+
+  <div class="menu-item">
+   <a href="/admin/courses"> <i class="fas fa-book-open icon"></i>
+    <span>Upload Course</span>
+    <i class="fas fa-chevron-right arrow"></i></a>
+  </div>
+
+  <div class="menu-item">
+   <a href="/admin/upload-video"> <i class="fas fa-video icon"></i>
+    <span>Upload Video</span>
+    <i class="fas fa-chevron-right arrow"></i></a>
+  </div>
+
+  <div class="menu-item">
+    <a href="/admin/post-notification"><i class="fas fa-bell icon"></i>
+    <span>Post Notification</span>
+    <i class="fas fa-chevron-right arrow"></i></a>
+  </div>
+  </div>
+</div>
+</div>
+    <footer class="foot">@ 2026 Student Club All rights reseved</footer>
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "/logout";
+}
+</script>
+</body>
+
+</html>

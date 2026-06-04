@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Club Analytics</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+
+}           
+/* ================= TOP NAV ================= */
+.top-nav{
+    background:#2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+/* ================= LAYOUT ================= */
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+/* WHEN SIDEBAR OPEN */
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+/* ACTIVE ITEM */
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+/* ================= FOOTER ================= */
+
+
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+        /* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  /* TOP NAV */
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  /* LAYOUT */
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+  /* SIDEBAR */
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    flex: 1;
+    padding: 15px;
+  }
+}
+/* Main */
+.main-content{
+  flex:1;
+  padding:20px;
+}
+
+
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+.card{
+  background:whitesmoke;
+  padding:15px;
+  border-radius:10px;
+}
+.card span{
+  color:green;
+  font-size:13px;
+}
+
+/* Chart */
+.chart{
+  margin-top:20px;
+  background:whitesmoke;
+  padding:20px;
+  border-radius:10px;
+}
+.bars{
+  display:flex;
+  align-items:flex-end;
+  height:150px;
+  gap:5px;
+}
+.bar{
+  width:6px;
+  background:#3b82f6;
+}
+
+/* Section Layout */
+.section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:20px;
+}
+.box{
+  background:whitesmoke;
+  padding:20px;
+  border-radius:10px;
+}
+
+/* Lists */
+.item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+.badge{
+  background:wheat;
+  padding:3px 8px;
+  border-radius:6px;
+  font-size:12px;
+}
+.card{
+    cursor:pointer;
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+.card:active{
+    transform:scale(0.98);
+}
+
+</style>
+</head>
+<body>
+    
+    <!-- ================= TOP NAV ================= -->
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="/admin/notifications" style="color:white">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+
+        <a href="/admin/profile" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ current_user.name }}</span>
+        </a>
+
+        <!-- LOGOUT ICON  -->
+         <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+</header>
+
+<div class="layout" id="layout">
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+<ul>
+    <li ><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+    <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+   
+    <li ><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+     <li ><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+    <li class="active"><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+    <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+    <li><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+    <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+</ul>
+</aside>
+<div class="main-content">
+  <h1>Platform Analytics</h1><br>
+  <!-- Cards -->
+  <div class="cards">
+    <div class="card">
+      <h4>Daily Active Users</h4>
+      <h2>{{ daily_active_users }}</h2>
+      <span>+12.5%</span>
+    </div>
+    <div class="card">
+      <h4>Course Completion</h4>
+      <h2>{{ course_completion_rate }}</h2>
+      <span>+3.2%</span>
+    </div>
+    <div class="card">
+      <h4>Avg Watch Time</h4>
+      <h2>{{ avg_watch_time }}</h2>
+      <span>+8.7%</span>
+    </div>
+    <div class="card">
+      <h4>New Enrollments</h4>
+      <h2>{{ new_enrollments }}</h2>
+      <span>+15.3%</span>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart">
+    <h3>User Activity (Last 30 Days)</h3>
+    <div class="bars">
+      {% for height in user_activity_heights %}
+      <div class="bar" style="height:{{ height }}%;width:10px"></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Bottom Sections -->
+  <div class="section">
+
+    <!-- Courses -->
+    <div class="box">
+      <h3>Top Performing Courses</h3>
+
+      {% for course in top_courses %}
+      <div class="item">
+        <div>
+          <strong>{{ course.title }}</strong><br>
+          <small>Students: {{ course.student_count }} | Completion: {{ course.completion_rate }}%</small>
+        </div>
+        ⭐ {{ course.rating }}
+      </div>
+      {% else %}
+      <p style="color: #666; font-size: 14px;">No courses available yet.</p>
+      {% endfor %}
+
+    </div>
+
+    <!-- Teachers -->
+    <div class="box">
+      <h3>Top Performing Teachers</h3>
+
+      {% for teacher in top_teachers %}
+      <div class="item">
+        <div>
+          <strong>{{ teacher.name }}</strong><br>
+          <small>Courses: {{ teacher.course_count }} | Students: {{ teacher.student_count }}</small>
+        </div>
+        ⭐ {{ teacher.rating }}
+      </div>
+      {% else %}
+      <p style="color: #666; font-size: 14px;">No teachers approved yet.</p>
+      {% endfor %}
+
+    </div>
+</div>
+</div>
+</div><br>
+    <footer class="foot">@ 2026 Student Club All rights reserved</footer>
+
+
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "/logout";
+}
+</script>
+
+
+
+</body>
+</html>
+

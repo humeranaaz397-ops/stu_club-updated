@@ -1,0 +1,729 @@
+<!-- =========================
+FILE: liveclass.html
+========================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Club Live Class</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f9ff;
+        }
+
+        .top-nav {
+            background: #2c2a99;
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .live-wrapper {
+            padding: 25px;
+        }
+
+        .live-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .video-box {
+            width: 100%;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: black;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .waiting-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            font-size: 24px;
+            background: #111827;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .waiting-screen i {
+            font-size: 70px;
+            margin-bottom: 20px;
+            color: #2563eb;
+        }
+
+        .live-info {
+            margin-top: 20px;
+        }
+
+        .live-info h2 {
+            color: #1d4ed8;
+            margin-bottom: 10px;
+        }
+
+        .join-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .join-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .end-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .chat-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 650px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f9fafb;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            background: #eef2ff;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .system-message {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .send-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .footer {
+            margin-top: 30px;
+            background: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        @media(max-width:900px) {
+
+            .live-container {
+                grid-template-columns: 1fr;
+            }
+
+            .video-box {
+                height: 300px;
+            }
+
+            .chat-section {
+                height: 500px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top-nav">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-graduation-cap"></i>
+
+            <span>Student Club</span>
+
+        </div>
+
+        <div>
+
+            Welcome {{ current_user.name }}
+
+        </div>
+
+    </header>
+
+    <div class="live-wrapper">
+
+        <div class="live-container">
+
+            <!-- VIDEO SECTION -->
+
+            <div class="video-section">
+
+                <div class="video-box">
+
+                    <video id="video" autoplay muted playsinline>
+                    </video>
+
+                    <!-- WAITING SCREEN -->
+
+                    <div class="waiting-screen" id="waitingScreen">
+
+                        <i class="fa-solid fa-user-clock"></i>
+
+                        <h2>Waiting for teacher to join...</h2>
+
+                        <p>
+                            The class will start once the teacher joins the session.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="live-info">
+
+                    <h2>{{ live_class.title if live_class else "Introduction to Machine Learning" }}</h2>
+
+                    <p>
+                        Teacher: {{ live_class.teacher.name if (live_class and live_class.teacher) else "DR.HumeraNaaz"
+                        }}
+                    </p>
+
+                    <div class="join-actions">
+
+                        <button class="btn join-btn" onclick="joinClass()">
+
+                            Join Class
+
+                        </button>
+
+                        <button class="btn end-btn" onclick="leaveClass()">
+
+                            Leave Class
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CHAT SECTION -->
+
+            <div class="chat-section">
+
+                <div class="chat-header">
+
+                    <h3>Live Class Chat</h3>
+
+                    <div>
+
+                        Students:
+                        <span id="onlineCount">0</span>
+
+                    </div>
+
+                </div>
+
+                <div class="chat-messages" id="messages">
+
+                    <div class="system-message">
+
+                        Welcome to live class chat
+
+                    </div>
+
+                </div>
+
+                <div class="chat-input">
+
+                    <input type="text" id="messageInput" placeholder="Ask your doubt...">
+
+                    <button class="send-btn" onclick="sendMessage()">
+
+                        Send
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+
+        © 2026 Student Club All Rights Reserved
+
+    </footer>
+
+    <script>
+
+        /* ======================
+           VARIABLES & CONFIG
+        ====================== */
+
+        let joined = false;
+        let teacherJoined = false;
+        const username = "{{ current_user.name }}";
+        const room = "class-{{ live_class.id if live_class else 'default' }}";
+        window.liveClassName = "{{ live_class.title if live_class else 'Introduction to Machine Learning' }}";
+
+        let socket = null;
+        let useSocket = false;
+        let simulationActive = false;
+        let simulationIntervals = [];
+
+        /* ======================
+           SOCKET CONNECTION ATTEMPT
+        ====================== */
+
+        try {
+            if (typeof io !== 'undefined') {
+                socket = io("http://localhost:5000", { timeout: 2000, reconnection: false });
+
+                socket.on('connect', () => {
+                    useSocket = true;
+                    console.log("Socket connected! Using real-time sockets.");
+
+                    socket.on("receive_message", data => {
+                        addMessage(data.username, data.message);
+                    });
+
+                    socket.on("attendance_update", data => {
+                        document.getElementById("onlineCount").innerText = data.users.length;
+                    });
+
+                    socket.on("teacher_joined", () => {
+                        handleTeacherJoin();
+                    });
+
+                    socket.on("teacher_left", () => {
+                        handleTeacherLeave();
+                    });
+                });
+
+                socket.on('connect_error', () => {
+                    console.warn("Socket connection failed. Falling back to Simulation Mode.");
+                    initSimulation();
+                });
+            } else {
+                console.warn("Socket.io library not loaded. Falling back to Simulation Mode.");
+                initSimulation();
+            }
+        } catch (e) {
+            console.warn("Error initializing socket. Falling back to Simulation Mode.", e);
+            initSimulation();
+        }
+
+        function initSimulation() {
+            useSocket = false;
+            console.log("Simulation Mode Initialized.");
+        }
+
+        /* ======================
+           JOIN CLASS
+        ====================== */
+
+        function joinClass() {
+            if (joined) {
+                return;
+            }
+            joined = true;
+            addSystemMessage("You joined the class");
+
+            if (useSocket && socket) {
+                socket.emit("join_room", {
+                    username: username,
+                    room: room
+                });
+            } else {
+                // Start simulation
+                simulationActive = true;
+                document.getElementById("onlineCount").innerText = "15";
+
+                // Simulate teacher joining after 2 seconds
+                let teacherTimer = setTimeout(() => {
+                    if (!simulationActive) return;
+                    handleTeacherJoin();
+                }, 2000);
+                simulationIntervals.push(teacherTimer);
+
+                // Fluctuate student attendance
+                let attInterval = setInterval(() => {
+                    if (!simulationActive) return;
+                    let current = parseInt(document.getElementById("onlineCount").innerText);
+                    let diff = Math.random() > 0.5 ? 1 : -1;
+                    let next = Math.max(10, Math.min(30, current + diff));
+                    document.getElementById("onlineCount").innerText = next;
+                }, 5000);
+                simulationIntervals.push(attInterval);
+
+                // Periodic comments from simulated students
+                const simulatedComments = [
+                    { name: "Rahul Sharma", msg: "Good afternoon Teacher!" },
+                    { name: "Sneha Patel", msg: "Will the slide deck be shared after the class?" },
+                    { name: "Aman Verma", msg: "Yes, I was wondering about that too." },
+                    { name: "Priya Das", msg: "Awesome explanation! The math makes sense now." },
+                    { name: "Karan Johar", msg: "Is this model prone to overfitting?" },
+                    { name: "Riya Sen", msg: "Can we use regularization here?" },
+                    { name: "Vikram Malhotra", msg: "Teacher, could you explain the loss function again?" }
+                ];
+
+                let commentIdx = 0;
+                let commentInterval = setInterval(() => {
+                    if (!simulationActive || !teacherJoined) return;
+                    if (commentIdx < simulatedComments.length) {
+                        let comment = simulatedComments[commentIdx++];
+                        addMessage(comment.name, comment.msg);
+                    }
+                }, 8000);
+                simulationIntervals.push(commentInterval);
+            }
+        }
+
+        /* ======================
+           LEAVE CLASS
+        ====================== */
+
+        function leaveClass() {
+            simulationActive = false;
+            teacherJoined = false;
+            for (let timer of simulationIntervals) {
+                clearInterval(timer);
+                clearTimeout(timer);
+            }
+            simulationIntervals = [];
+
+            if (useSocket && socket) {
+                socket.emit("leave_room", {
+                    username: username,
+                    room: room
+                });
+            }
+
+            const canvas = document.getElementById("virtualScreen");
+            if (canvas) canvas.remove();
+
+            window.location.href = "{{ url_for('student_live_classes') }}";
+        }
+
+        /* ======================
+           SEND MESSAGE
+        ====================== */
+
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const message = input.value.trim();
+            if (message === "") {
+                return;
+            }
+
+            if (useSocket && socket) {
+                socket.emit("send_message", {
+                    username: username,
+                    room: room,
+                    message: message
+                });
+            } else {
+                // Local echo
+                addMessage(username, message);
+
+                // Simulate teacher or student response
+                setTimeout(() => {
+                    if (!simulationActive || !teacherJoined) return;
+                    const responses = [
+                        "That's a very good question! Let me explain that on the next slide.",
+                        "Exactly! Glad you pointed that out.",
+                        "Yes, that's correct.",
+                        "Let's cover this point in detail after this slide.",
+                        "Can anyone else answer that?"
+                    ];
+                    const randResponse = responses[Math.floor(Math.random() * responses.length)];
+                    const teacherName = "{{ live_class.teacher.name if (live_class and live_class.teacher) else 'DR.HumeraNaaz' }}";
+                    addMessage(teacherName + " (Teacher)", randResponse);
+                }, 2000);
+            }
+            input.value = "";
+        }
+
+        /* ======================
+           ADD MESSAGES TO UI
+        ====================== */
+
+        function addMessage(user, text) {
+            const messages = document.getElementById("messages");
+            messages.innerHTML += `
+        <div class="message">
+            <b>${user}</b><br>
+            ${text}
+        </div>
+    `;
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const messages = document.getElementById("messages");
+            messages.innerHTML += `
+        <div class="system-message">
+            ${text}
+        </div>
+    `;
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        /* ======================
+           TEACHER JOINED HANDLERS
+        ====================== */
+
+        function handleTeacherJoin() {
+            teacherJoined = true;
+            document.getElementById("waitingScreen").style.display = "none";
+
+            const video = document.getElementById("video");
+            video.style.display = "block";
+
+            // Attempt standard webcam access
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.log("Webcam not accessed: using virtual presentation screen.", err);
+                    showVirtualPresentation();
+                });
+
+            addSystemMessage("Teacher joined the session");
+        }
+
+        function handleTeacherLeave() {
+            teacherJoined = false;
+            document.getElementById("waitingScreen").style.display = "flex";
+            document.getElementById("video").style.display = "none";
+
+            const canvas = document.getElementById("virtualScreen");
+            if (canvas) canvas.remove();
+
+            addSystemMessage("Teacher left the session");
+        }
+
+        /* ======================
+           VIRTUAL PRESENTATION CANVAS
+        ====================== */
+
+        function showVirtualPresentation() {
+            const videoBox = document.querySelector(".video-box");
+            if (document.getElementById("virtualScreen")) return;
+
+            const canvas = document.createElement("canvas");
+            canvas.id = "virtualScreen";
+            canvas.width = 640;
+            canvas.height = 480;
+            canvas.style.position = "absolute";
+            canvas.style.top = "0";
+            canvas.style.left = "0";
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
+            canvas.style.background = "#0f172a";
+            videoBox.appendChild(canvas);
+
+            const ctx = canvas.getContext("2d");
+            let slideIdx = 0;
+            const slides = [
+                "Welcome to the Live Class!",
+                "Topic: Machine Learning Fundamentals",
+                "1. Supervised Learning: Classification & Regression",
+                "2. Unsupervised Learning: Clustering & Association",
+                "3. Model Evaluation: Bias vs Variance Trade-off",
+                "Q&A Session - Feel free to ask questions in the chat!"
+            ];
+
+            function drawSlide() {
+                if (!teacherJoined) return;
+                ctx.fillStyle = "#0f172a";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw grid
+                ctx.strokeStyle = "#1e293b";
+                ctx.lineWidth = 1;
+                for (let i = 0; i < canvas.width; i += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+                }
+                for (let j = 0; j < canvas.height; j += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, j);
+                    ctx.lineTo(canvas.width, j);
+                    ctx.stroke();
+                }
+
+                // Header
+                ctx.fillStyle = "#3b82f6";
+                ctx.fillRect(0, 0, canvas.width, 60);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 20px Arial";
+                ctx.fillText("LIVE CLASSROOM - " + window.liveClassName, 20, 38);
+
+                // Slide title
+                ctx.fillStyle = "#f8fafc";
+                ctx.font = "bold 24px Arial";
+                ctx.fillText(slides[slideIdx], 40, 140);
+
+                // Body content
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "16px Arial";
+                if (slideIdx === 1) {
+                    ctx.fillText("• Understanding datasets and features", 60, 200);
+                    ctx.fillText("• Training vs Testing splits", 60, 240);
+                    ctx.fillText("• The concept of cost/loss minimization", 60, 280);
+                } else if (slideIdx === 2) {
+                    ctx.fillText("• Examples: Linear Regression, Logistic Regression", 60, 200);
+                    ctx.fillText("• Algorithms: Decision Trees, SVM, Neural Networks", 60, 240);
+                    ctx.fillText("• Labels are present in training data", 60, 280);
+                } else if (slideIdx === 3) {
+                    ctx.fillText("• Examples: K-Means, Hierarchical Clustering", 60, 200);
+                    ctx.fillText("• Algorithms: PCA, Apriori", 60, 240);
+                    ctx.fillText("• Labels are not present in training data", 60, 280);
+                } else if (slideIdx === 4) {
+                    ctx.fillText("• High Bias = Underfitting", 60, 200);
+                    ctx.fillText("• High Variance = Overfitting", 60, 240);
+                    ctx.fillText("• Cross Validation & Regularization are key", 60, 280);
+                } else {
+                    ctx.fillText("• Please watch the board and listen to the teacher.", 60, 200);
+                    ctx.fillText("• Post your questions in the side panel.", 60, 240);
+                }
+
+                // Slide number
+                ctx.fillStyle = "#475569";
+                ctx.font = "14px Arial";
+                ctx.fillText(`Slide ${slideIdx + 1} of ${slides.length}`, canvas.width - 120, canvas.height - 20);
+
+                // Draw teacher avatar icon mock on bottom left
+                ctx.fillStyle = "#1e293b";
+                ctx.beginPath();
+                ctx.arc(60, canvas.height - 50, 25, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#60a5fa";
+                ctx.font = "bold 14px Arial";
+                ctx.fillText("TR", 50, canvas.height - 45);
+                ctx.fillStyle = "#34d399";
+                ctx.beginPath();
+                ctx.arc(80, canvas.height - 35, 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "12px Arial";
+                ctx.fillText("Teacher presenting...", 100, canvas.height - 45);
+            }
+
+            drawSlide();
+            let slideTimer = setInterval(() => {
+                if (!teacherJoined) return;
+                slideIdx = (slideIdx + 1) % slides.length;
+                drawSlide();
+            }, 12000);
+            simulationIntervals.push(slideTimer);
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student-Club Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+           
+ 
+.top-nav{
+    background: #2c2a99;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo i{ cursor:pointer; }
+
+.nav-actions{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    font-size:14px;
+}
+
+ 
+.layout{
+    display:grid;
+    grid-template-columns:0px 1fr;
+    transition:grid-template-columns 0.35s ease;
+}
+
+ 
+.layout.show{
+    grid-template-columns:220px 1fr;
+}
+
+ 
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+ 
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+ 
+        .foot{
+     background-color: #2c2a99;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 16px;
+        }
+
+ 
+@media(max-width:768px){
+    .layout.show{
+        grid-template-columns:60px 1fr;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:black;
+}
+
+ 
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+ 
+.quiz-form,
+.published-quizzes {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.quiz-form label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.quiz-form input,
+.quiz-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.quiz-form button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.note {
+  margin-top: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+ 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-responsive table {
+    width: 100%;
+    min-width: 600px;  
+    border-collapse: collapse;
+}
+
+.table-responsive th,
+.table-responsive td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.table-responsive thead {
+    background-color: #ecf0f1;
+}
+
+table button {
+  background-color:blue;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.hero-text {
+    max-width: 60%;
+}
+.hero-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}   
+.hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}   
+.hero-actions {
+    display: flex;
+    gap: 10px;
+}
+.hero-actions input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.hero-actions .ask-btn.small {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.hero-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+         
+@media (max-width: 768px) {
+
+ 
+  .top-nav {
+    padding: 12px 14px;
+  }
+
+  .nav-actions span {
+    display: none;
+  }
+
+  
+  .layout {
+    grid-template-columns: 0px 1fr;
+  }
+
+  .layout.show {
+    grid-template-columns: 60px 1fr;
+  }
+
+   
+  .sidebar span {
+    display: none;
+  }
+
+  .sidebar li {
+    justify-content: center;
+  }
+
+   
+  .main-content {
+    padding: 12px;
+  }
+
+ 
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 22px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions input {
+    width: 100%;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.ask-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.ask-btn:hover {
+    background-color:  #2c2a99;
+}
+button:hover {
+    background-color: darkblue;
+}
+
+    </style>
+</head>
+<body>
+ 
+     
+<header class="top-nav">
+    <div class="logo">
+        <i class="fa-solid fa-bars" onclick="side()"></i>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Student Club</span>
+    </div>
+
+    <div class="nav-actions">
+       <a href="{{ url_for('teacher_event') }}" style="color: white;"><i class="fa-regular fa-calendar"></i></a>
+      
+        <a href="{{ url_for('teacher_notifications') }}" style="color:white; position: relative;">
+            <i class="fa-regular fa-bell"></i>
+        
+            {% if total_alerts and total_alerts > 0 %}
+            <span style="position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">{{ total_alerts }}</span>
+            {% endif %}
+        </a>
+
+        <a href="{{ url_for('teacher_profile') }}" style="color:white">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ session.get('name', 'Teacher') }}</span>
+        </a>
+
+        
+          <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+
+        
+    </div>
+</header>
+
+<div class="layout" id="layout">
+
+ 
+<aside class="sidebar">
+    <ul>
+        <li ><a href="{{ url_for('teacher_dashboard') }}"><i class="fa-solid fa-grip"></i><span> Dashboard</span></a></li>
+                <li><a href="/teacher/earnings"><i class="fa-solid fa-wallet"></i><span>Earnings</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_material') }}"><i class="fa-solid fa-upload"></i> <span>Upload Material</span></a></li>
+                <li><a href="{{ url_for('teacher_upload_video') }}"><i class="fa-solid fa-video"></i> <span>Upload Video</span></a></li>
+        <li><a href="{{ url_for('teacher_upload_course') }}"><i class="fa-solid fa-folder-plus"></i> <span>Create Course</span></a></li>
+                <li class="active"><a href="{{ url_for('teacher_quiz') }}"><i class="fa-solid fa-clipboard-list"></i> <span>Create Quiz</span></a></li>
+                <li><a href="{{ url_for('teacher_live_classes') }}"><i class="fa-solid fa-wifi"></i> <span>Live Classes</span></a></li>
+                <li><a href="{{ url_for('teacher_qa') }}"><i class="fa-solid fa-circle-question"></i> <span>Answer Q&A</span></a></li>
+                <li><a href="{{ url_for('teacher_post_notification') }}"><i class="fa-regular fa-bell"></i> <span>Post Notification</span></a></li>
+                <li><a href="{{ url_for('teacher_chat') }}"><i class="fa-regular fa-comment"></i><span> Chat {% if unread_messages and unread_messages > 0 %}<span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; margin-left: 5px;">{{ unread_messages }}</span>{% endif %}</span></a></li>
+                <li><a href="{{ url_for('teacher_connections') }}"><i class="fa-solid fa-users"></i> <span>Find People</a></li>
+          
+         </ul>
+</aside>
+
+    <main class="main-content">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'success' %}
+            <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#d4edda; color:#155724; width: 100%;">
+                {{ message }}
+            </div>
+            {% else %}
+            <div style="padding:12px 16px; border-radius:8px; margin-bottom:14px; background:#f8d7da; color:#721c24; width: 100%;">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <div class="hero">
+      <div class="hero-text">
+        <h1>  Craft the challenge, ignite the genius! ✨</h1>
+        <p class="hero-sub">"You aren't just making a quiz; you're building the confidence they need to succeed. Let’s make learning fun today!".</p>
+        <div class="hero-actions">
+          <input id="searchInput" type="text" placeholder="Search questions, tags or topics..." />
+          <button id="searchBtn" class="ask-btn small">Search</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/3xFwZb84/1768586790166.png" alt="Students studying together">
+      </div>
+    </div>
+      {% if active_quiz_id %}
+      <section class="quiz-form" id="questionForm">
+        <h1>Add Question to: {{ active_quiz.title if active_quiz else 'Quiz' }}</h1>
+        <form method="POST" action="{{ url_for('teacher_quiz') }}">
+          <input type="hidden" name="action" value="add_question">
+          <input type="hidden" name="quiz_id" value="{{ active_quiz_id }}">
+
+          <label>Question</label>
+          <input type="text" name="question_text" required placeholder="Enter your question">
+
+          <label>Option A</label>
+          <input type="text" name="option_a" required placeholder="Option A">
+
+          <label>Option B</label>
+          <input type="text" name="option_b" required placeholder="Option B">
+
+          <label>Option C</label>
+          <input type="text" name="option_c" required placeholder="Option C">
+
+          <label>Option D</label>
+          <input type="text" name="option_d" required placeholder="Option D">
+
+          <label>Correct Answer</label>
+          <select name="correct_option" required>
+            <option value="A">Option A</option>
+            <option value="B">Option B</option>
+            <option value="C">Option C</option>
+            <option value="D">Option D</option>
+          </select>
+          
+          <label>Explanation (Optional)</label>
+          <textarea name="explanation" rows="3" placeholder="Why is this answer correct? This will be shown to students after they submit the quiz." style="width:100%; padding:8px; margin-top:5px; border-radius:4px; border:1px solid #ccc; font-family:inherit;"></textarea>
+
+          <button type="submit" style="display:block; width:100%; margin-top:15px; font-weight:bold;">Save Question</button>
+          <a href="{{ url_for('teacher_quiz') }}" style="display:block; width:100%; text-align:center; margin-top:10px; padding:10px; background:#6b7280; color:white; border-radius:4px; font-weight:bold;">Back to Create Quiz</a>
+        </form>
+
+        <p class="note" style="margin-top:20px;">Questions ({{ questions|length }}) added so far.</p>
+        {% if questions %}
+        <ul style="margin-top:10px; list-style-type:decimal; padding-left:20px;">
+            {% for q in questions %}
+            <li>{{ q.question_text }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+      </section>
+      {% else %}
+      <section class="quiz-form" id="createQuiz">
+        <h1>Create New Quiz Wrapper</h1>
+        <form method="POST" action="{{ url_for('teacher_quiz') }}">
+          <input type="hidden" name="action" value="create_quiz">
+
+          <label>Quiz Title</label>
+          <input type="text" name="title" required placeholder="e.g. HTML & CSS Basics Quiz">
+
+          <label>Select Course (Optional - leave blank for stream-wide quiz)</label>
+          <select name="course_id">
+            <option value="">-- No Course --</option>
+            {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.title }}</option>
+            {% endfor %}
+          </select>
+
+          <button type="submit">Create Quiz Wrapper & Add Questions</button>
+        </form>
+      </section>
+
+      <section class="published-quizzes">
+        <h2>My Published Quizzes</h2>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Quiz Title</th>
+                <th>Course</th>
+                <th>Questions</th>
+                <th>Date Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for quiz in quizzes %}
+              <tr>
+                <td>{{ quiz.title }}</td>
+                <td>{{ quiz.course_title or 'General/Stream' }}</td>
+                <td>{{ quiz.question_count }}</td>
+                <td>{{ quiz.created_at.strftime('%Y-%m-%d') if quiz.created_at else '' }}</td>
+                <td><a href="{{ url_for('teacher_quiz', active_quiz=quiz.id) }}"><button>Add Questions</button></a></td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="5" style="text-align:center; color:#888;">No quizzes created yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+      <footer class="foot">
+        @ Student Club All rights reserved
+      </footer>
+    </main>
+
+  </div>
+
+
+<script>
+function side(){
+    document.getElementById("layout").classList.toggle("show");
+}
+
+
+function logout() {
+    window.location.href = "{{ url_for('logout') }}";
+}
+function openQuestionForm() {
+  document.getElementById("createQuiz").style.display = "none";
+  document.getElementById("questionForm").style.display = "block";
+}
+
+function backToQuiz() {
+  document.getElementById("questionForm").style.display = "none";
+  document.getElementById("createQuiz").style.display = "block";
+}
+
+function saveQuestion() {
+  alert("Question saved successfully!");
+  backToQuiz();
+}
+
+
+</script>
+
+</body>
+</html>
+

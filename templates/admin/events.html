@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Events - Student Club</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  background: #2c2a99;
+  color: white;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(44,42,153,0.3);
+}
+.logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
+.logo i { cursor:pointer; }
+.nav-actions { display:flex; gap:15px; align-items:center; font-size:14px; }
+a { text-decoration:none; color:black; }
+
+/* ===== LAYOUT ===== */
+.layout { display:grid; grid-template-columns:0px 1fr; transition:grid-template-columns 0.35s ease; }
+.layout.show { grid-template-columns:220px 1fr; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  background: #f8f9fa;
+  min-height: calc(100vh - 60px);
+  border-right: 1px solid #e5e7eb;
+  overflow: hidden;
+  transition: 0.35s ease;
+}
+/* ================= SIDEBAR ================= */
+.sidebar{
+    background:lightgrey;
+    min-height:calc(100vh - 60px);
+    border-right:1px solid #ddd;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.sidebar li{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.sidebar li:hover{
+    background:#e5efff;
+    color:#2563eb;
+}
+
+.sidebar i{
+    min-width:22px;
+}
+
+/* ACTIVE ITEM */
+.sidebar li.active{
+    background:#e5efff;
+    color:#2563eb;
+    border-left:4px solid #2563eb;
+}
+/* ================= FOOTER ================= */
+
+/* ===== FOOTER ===== */
+.foot { background:#2c2a99; color:white; text-align:center; padding:18px; font-size:14px; }
+
+/* ===== MAIN ===== */
+.main { flex:1; min-width:0; padding:24px 28px; overflow:hidden; background:#f4f5fb; min-height:calc(100vh - 60px); }
+
+/* ===== PAGE TITLE ===== */
+.page-title { margin-bottom:22px; }
+.page-title h1 { font-size:26px; font-weight:800; color:#1e1b4b; margin-bottom:4px; }
+.page-title p { color:#6b7280; font-size:14px; }
+
+/* ===== STAT CARDS ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.card {
+  padding: 20px 18px;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.card::after {
+  content:'';
+  position:absolute; right:-18px; bottom:-18px;
+  width:80px; height:80px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+}
+.card:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(0,0,0,0.18); }
+.card p { font-size:12px; margin-bottom:8px; opacity:0.9; font-weight:500; }
+.card h3 { font-size:28px; font-weight:800; }
+.card.blue   { background:linear-gradient(135deg,#667eea,#764ba2); }
+.card.orange { background:linear-gradient(135deg,#f7971e,#ffd200); }
+.card.green  { background:linear-gradient(135deg,#11998e,#38ef7d); }
+.card.purple { background:linear-gradient(135deg,#4facfe,#00f2fe); }
+
+/* ===== TABS BAR ===== */
+.tabs-bar {
+  background:white;
+  border-radius:12px;
+  padding:6px;
+  display:inline-flex;
+  gap:4px;
+  margin-bottom:20px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+.tab-btn {
+  padding: 10px 22px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tab-btn:hover { color:#2c2a99; background:#f0f0ff; }
+.tab-btn.active { background:#2c2a99; color:white; }
+.tab-btn .badge {
+  background:rgba(255,255,255,0.25);
+  padding:2px 8px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+}
+.tab-btn:not(.active) .badge {
+  background:#f3f4f6;
+  color:#374151;
+}
+.tab-btn.active .badge { background:rgba(255,255,255,0.3); color:white; }
+
+/* ===== SCROLL HINT ===== */
+.scroll-hint { display:none; font-size:11px; color:#9ca3af; margin-bottom:8px; text-align:right; }
+
+/* ===== TABLE WRAPPER ===== */
+.table-wrapper {
+  background:white;
+  border-radius:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:#c7c7c7 transparent;
+}
+.table-wrapper::-webkit-scrollbar { height:5px; }
+.table-wrapper::-webkit-scrollbar-thumb { background:#c7c7c7; border-radius:10px; }
+
+table { width:100%; min-width:750px; border-collapse:collapse; }
+thead { background:#1e1b4b; }
+thead th { color:white; padding:14px 16px; text-align:left; font-size:13px; font-weight:600; white-space:nowrap; }
+td { padding:14px 16px; border-bottom:1px solid #f1f3f9; color:#374151; font-size:13px; vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover { background:#fafbff; }
+
+.cell-name strong { color:#1f2937; display:block; font-size:14px; font-weight:600; }
+.cell-name small  { color:#9ca3af; font-size:11px; display:block; margin-top:3px; }
+
+/* ===== BADGES ===== */
+.badge-status {
+  display:inline-block; padding:4px 12px; border-radius:20px;
+  font-size:11px; font-weight:600; white-space:nowrap;
+}
+.badge-approved { background:#d1fae5; color:#065f46; }
+.badge-pending  { background:#fef3c7; color:#92400e; }
+.badge-type     { background:#eff6ff; color:#1e40af; }
+.badge-free     { background:#f0fdf4; color:#166534; }
+
+/* ===== TABLE BTNS ===== */
+.action-btns { display:flex; gap:6px; flex-wrap:nowrap; }
+.btn {
+  border:none; padding:7px 12px; border-radius:7px;
+  cursor:pointer; font-size:12px; font-weight:600;
+  white-space:nowrap; transition:0.2s; display:flex; align-items:center; gap:5px;
+}
+.btn:hover { opacity:0.85; transform:translateY(-1px); }
+.btn-blue   { background:#2563eb; color:white; }
+.btn-red    { background:#dc2626; color:white; }
+.btn-green  { background:#16a34a; color:white; }
+
+/* ===== TEACHER AVATAR ===== */
+.teacher-cell { display:flex; align-items:center; gap:9px; }
+.teacher-avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  color:white; font-weight:800; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.teacher-info strong { display:block; font-size:13px; font-weight:600; color:#1f2937; }
+.teacher-info small  { font-size:11px; color:#9ca3af; }
+
+/* ===== PENDING CARDS SECTION ===== */
+.pending-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 18px;
+}
+
+.pending-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+  border: 1px solid #e8eaf6;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.pending-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+
+/* Orange left border to signal pending */
+.pending-card::before {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:4px;
+  background:linear-gradient(180deg,#f7971e,#ffd200);
+}
+
+.pending-card-header {
+  padding: 18px 20px 14px 24px;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.pending-card-header h3 {
+  font-size:16px; font-weight:700; color:#1e1b4b;
+  line-height:1.3; flex:1;
+}
+.pending-card-body {
+  padding: 16px 20px 16px 24px;
+}
+.pending-card-desc {
+  font-size:13px; color:#6b7280; line-height:1.6;
+  margin-bottom:14px;
+  display:-webkit-box; -webkit-line-clamp:3;
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* Who added it - prominent section */
+.submitted-by-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f5f3ff;
+  border: 1px solid #e0e7ff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.submitted-by-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#2c2a99,#6366f1);
+  color:white; font-weight:800; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.submitted-by-text small { display:block; font-size:11px; color:#6b7280; margin-bottom:2px; font-weight:500; text-transform:uppercase; letter-spacing:0.5px; }
+.submitted-by-text strong { font-size:14px; font-weight:700; color:#1e1b4b; }
+.submitted-by-text span { font-size:12px; color:#6366f1; font-weight:500; }
+
+.pending-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+.meta-item i { color:#2c2a99; font-size:11px; }
+.meta-item strong { color:#1f2937; font-weight:600; }
+
+.pending-card-actions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px 18px 24px;
+  border-top: 1px solid #f3f4f6;
+}
+.btn-approve {
+  flex:1; padding:11px 16px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  color:white; border:none; border-radius:10px;
+  font-size:14px; font-weight:700; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:0.2s; box-shadow:0 4px 12px rgba(22,163,74,0.3);
+}
+.btn-approve:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(22,163,74,0.4); }
+.btn-reject {
+  flex:1; padding:11px 16px;
+  background: linear-gradient(135deg,#dc2626,#ef4444);
+  color:white; border:none; border-radius:10px;
+  font-size:14px; font-weight:700; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:0.2s; box-shadow:0 4px 12px rgba(220,38,38,0.3);
+}
+.btn-reject:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(220,38,38,0.4); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align:center; padding:60px 20px; color:#9ca3af;
+}
+.empty-state i { font-size:52px; margin-bottom:16px; display:block; color:#d1d5db; }
+.empty-state h3 { font-size:18px; color:#6b7280; margin-bottom:6px; }
+.empty-state p { font-size:14px; }
+
+/* ===== MODAL ===== */
+.modal {
+  position:fixed; top:0; left:0;
+  width:100%; height:100vh;
+  background:rgba(0,0,0,0.65);
+  display:none; justify-content:center; align-items:center;
+  z-index:9999; padding:16px;
+  backdrop-filter:blur(4px);
+}
+.modal-content {
+  width:95%; max-width:1040px;
+  background:white; border-radius:16px;
+  overflow:hidden; display:flex; flex-direction:column;
+  max-height:90vh; box-shadow:0 24px 64px rgba(0,0,0,0.25);
+}
+.modal-header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 22px; background:#1e1b4b; color:white; flex-shrink:0;
+}
+.modal-header h2 { font-size:18px; font-weight:700; }
+.modal-header button {
+  background:rgba(255,255,255,0.15); color:white; border:none;
+  padding:7px 14px; border-radius:7px; cursor:pointer; font-size:14px; font-weight:600;
+  transition:0.2s;
+}
+.modal-header button:hover { background:rgba(255,255,255,0.25); }
+.modal-body { padding:20px; overflow-y:auto; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){ .cards{ grid-template-columns:repeat(2,1fr); } .scroll-hint{ display:block; } }
+@media(max-width:768px){
+  .main{ padding:14px; }
+  .page-title h1{ font-size:20px; }
+  .cards{ grid-template-columns:repeat(2,1fr)!important; gap:10px; }
+  .pending-cards-grid{ grid-template-columns:1fr; }
+  .layout.show{ grid-template-columns:60px 1fr; }
+  .sidebar span{ display:none; }
+  .sidebar li{ justify-content:center; }
+  .scroll-hint{ display:block; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="top-nav">
+  <div class="logo">
+    <i class="fa-solid fa-bars" onclick="side()"></i>
+    <i class="fa-solid fa-graduation-cap"></i>
+    <span>Student Club</span>
+  </div>
+  <div class="nav-actions">
+    <a href="/admin/notifications" style="color:white;"><i class="fa-regular fa-bell"></i></a>
+    <a href="/admin/profile" style="color:white;">
+      <i class="fa-solid fa-user"></i>
+      <span>{{ current_user.name if current_user else 'Admin' }}</span>
+    </a>
+    <i class="fa-solid fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout" id="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li><a href="/admin/dashboard"><i class="fa-solid fa-grip"></i><span>Dashboard</span></a></li>
+      <li><a href="/admin/manage"><i class="fa-solid fa-users"></i><span>Manage Users</span></a></li>
+      
+      <li><a href="/admin/content"><i class="fa-solid fa-file"></i><span>Content</span></a></li>
+      <li><a href="/admin/controlpanel"><i class="fa-solid fa-gamepad"></i><span>Control Panel</span></a></li>
+      <li><a href="/admin/teacher-performance"><i class="fa-solid fa-award"></i><span>Teacher Performance</span></a></li>
+      <li><a href="/admin/withdrawals"><i class="fa-solid fa-money-bill-transfer"></i><span> Withdrawals</span></a></li>
+      <li><a href="/admin/analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+      <li><a href="/admin/messages"><i class="fa-solid fa-flag"></i><span>Reports</span></a></li>
+      <li class="active"><a href="/admin/events"><i class="fa-regular fa-calendar"></i><span>Events</span></a></li>
+      <li><a href="/admin/settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <section class="page-title">
+      <h1><i class="fa-regular fa-calendar" style="color:#2c2a99;margin-right:8px;"></i>Event Management</h1>
+      <p>Review teacher event requests, approve or reject them, and track student registrations.</p>
+    </section>
+
+    <!-- Summary Cards -->
+    {% set ns = namespace(published_count=0, pending_count=0, total_regs=0, total_rev=0.0) %}
+    {% set ns.pending_count = pending_events | length %}
+    {% set ns.published_count = events_with_stats | length %}
+    {% for entry in events_with_stats %}
+      {% set ns.total_regs = ns.total_regs + entry.reg_count %}
+      {% set ns.total_rev = ns.total_rev + entry.total_revenue %}
+    {% endfor %}
+
+    <section class="cards">
+      <div class="card blue">
+        <p><i class="fa-solid fa-circle-check"></i> Active Events</p>
+        <h3>{{ ns.published_count }}</h3>
+      </div>
+      <div class="card orange">
+        <p><i class="fa-solid fa-clock"></i> Pending Approvals</p>
+        <h3>{{ ns.pending_count }}</h3>
+      </div>
+      <div class="card green">
+        <p><i class="fa-solid fa-users"></i> Total Registrations</p>
+        <h3>{{ ns.total_regs }}</h3>
+      </div>
+      <div class="card purple">
+        <p><i class="fa-solid fa-indian-rupee-sign"></i> Total Revenue</p>
+        <h3>₹{{ ns.total_rev }}</h3>
+      </div>
+    </section>
+
+    <!-- Tab Switcher -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" id="tab-active" onclick="switchTab('active')">
+        <i class="fa-solid fa-circle-check"></i> Active Events
+        <span class="badge">{{ ns.published_count }}</span>
+      </button>
+      <button class="tab-btn" id="tab-pending" onclick="switchTab('pending')">
+        <i class="fa-solid fa-clock"></i> Pending Approvals
+        <span class="badge">{{ ns.pending_count }}</span>
+      </button>
+    </div>
+
+    <p class="scroll-hint">⟵ swipe to scroll ⟶</p>
+
+    <!-- ======== ACTIVE EVENTS TABLE ======== -->
+    <div id="active-events-wrapper">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Event Title</th>
+              <th>Added By</th>
+              <th>Type</th>
+              <th>Date &amp; Location</th>
+              <th>Price</th>
+              <th>Registrants</th>
+              <th>Revenue</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in events_with_stats %}
+            <tr>
+              <td class="cell-name" style="min-width:180px;">
+                <strong>{{ entry.event.title }}</strong>
+                <small>Created: {{ entry.event.created_at.strftime('%d %b %Y') if entry.event.created_at else '' }}</small>
+              </td>
+              <td>
+                <div class="teacher-cell">
+                  <div class="teacher-avatar">{{ entry.event.teacher_name[0]|upper if entry.event.teacher_name else 'A' }}</div>
+                  <div class="teacher-info">
+                    <strong>{{ entry.event.teacher_name or 'Admin' }}</strong>
+                    <small>Teacher</small>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge-status badge-type">{{ entry.event.event_type }}</span></td>
+              <td>
+                <div style="font-size:13px;"><i class="fa-regular fa-calendar" style="color:#2c2a99;"></i> {{ entry.event.event_date.strftime('%d %b %Y') if entry.event.event_date else '' }}</div>
+                <div style="font-size:11px;color:#9ca3af;margin-top:3px;"><i class="fa-solid fa-location-dot"></i> {{ entry.event.location }} &bull; <i class="fa-solid fa-globe"></i> {{ entry.event.mode }}</div>
+              </td>
+              <td>
+                {% if entry.event.price == 0.0 %}
+                  <span class="badge-status badge-free">Free</span>
+                {% else %}
+                  <strong>₹{{ entry.event.price }}</strong>
+                {% endif %}
+              </td>
+              <td><strong style="color:#1e1b4b;">{{ entry.reg_count }}</strong> <span style="color:#9ca3af;font-size:11px;">students</span></td>
+              <td><strong style="color:#16a34a;">₹{{ entry.total_revenue }}</strong></td>
+              <td>
+                <div class="action-btns">
+                  <button class="btn btn-blue" onclick="viewRegistrations(this, {{ entry.event.id }})">
+                    <i class="fa-solid fa-users"></i> Registrants
+                  </button>
+                  <button class="btn btn-red" onclick="deleteEvent({{ entry.event.id }})">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="8">
+                <div class="empty-state">
+                  <i class="fa-regular fa-calendar-xmark"></i>
+                  <h3>No Active Events</h3>
+                  <p>Approved events will appear here.</p>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======== PENDING APPROVALS (CARD STYLE) ======== -->
+    <div id="pending-events-wrapper" style="display:none;">
+
+      {% if pending_events %}
+      <div class="pending-cards-grid">
+        {% for event in pending_events %}
+        <div class="pending-card">
+
+          <!-- Card Header: Event title + type badge -->
+          <div class="pending-card-header">
+            <h3>{{ event.title }}</h3>
+            <span class="badge-status badge-pending" style="flex-shrink:0;">{{ event.event_type }}</span>
+          </div>
+
+          <div class="pending-card-body">
+
+            <!-- Description -->
+            <p class="pending-card-desc">{{ event.description }}</p>
+
+            <!-- WHO ADDED IT - Prominent Section -->
+            <div class="submitted-by-section">
+              <div class="submitted-by-icon">{{ event.teacher_name[0]|upper if event.teacher_name else '?' }}</div>
+              <div class="submitted-by-text">
+                <small><i class="fa-solid fa-user-tie"></i> Submitted by</small>
+                <strong>{{ event.teacher_name or 'Unknown Teacher' }}</strong>
+                <span><i class="fa-solid fa-chalkboard-teacher"></i> Teacher</span>
+              </div>
+            </div>
+
+            <!-- Event Meta Info -->
+            <div class="pending-card-meta">
+              <div class="meta-item">
+                <i class="fa-regular fa-calendar"></i>
+                <strong>{{ event.event_date.strftime('%d %b %Y') if event.event_date else 'TBD' }}</strong>
+              </div>
+              <div class="meta-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <strong>{{ event.location }}</strong>
+              </div>
+              <div class="meta-item">
+                <i class="fa-solid fa-globe"></i>
+                <strong>{{ event.mode }}</strong>
+              </div>
+              <div class="meta-item">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+                <strong>{% if event.price == 0.0 %}Free{% else %}₹{{ event.price }}{% endif %}</strong>
+              </div>
+              <div class="meta-item">
+                <i class="fa-regular fa-clock"></i>
+                <strong>{{ event.created_at.strftime('%d %b %Y') if event.created_at else '' }}</strong>
+              </div>
+            </div>
+
+          </div><!-- /card-body -->
+
+          <!-- Action Buttons -->
+          <div class="pending-card-actions">
+            <button class="btn-approve" onclick="approveEvent({{ event.id }}, {{ event.price }})">
+              <i class="fa-solid fa-circle-check"></i> Approve
+            </button>
+            <button class="btn-reject" onclick="rejectEvent({{ event.id }})">
+              <i class="fa-solid fa-circle-xmark"></i> Reject
+            </button>
+          </div>
+
+        </div><!-- /pending-card -->
+        {% endfor %}
+      </div><!-- /pending-cards-grid -->
+
+      {% else %}
+      <div style="background:white;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+        <div class="empty-state">
+          <i class="fa-solid fa-inbox"></i>
+          <h3>No Pending Requests</h3>
+          <p>All event requests have been reviewed. New requests from teachers will appear here.</p>
+        </div>
+      </div>
+      {% endif %}
+
+    </div><!-- /pending-events-wrapper -->
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<footer class="foot">&copy; 2026 Student Club &mdash; All rights reserved</footer>
+
+<!-- Registrants Modal -->
+<div id="registrantsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalEventTitle">Event Registrants</h2>
+      <button onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="table-wrapper">
+        <table style="min-width:820px;">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Contact Info</th>
+              <th>College &amp; Dept</th>
+              <th>Team Name</th>
+              <th>Reason</th>
+              <th>Payment</th>
+              <th>Registered At</th>
+            </tr>
+          </thead>
+          <tbody id="registrantsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function side(){ document.getElementById("layout").classList.toggle("show"); }
+function logout(){ window.location.href = "/logout"; }
+
+/* ---- TAB SWITCHING ---- */
+function switchTab(tab) {
+  const isActive = (tab === 'active');
+  document.getElementById('tab-active').classList.toggle('active', isActive);
+  document.getElementById('tab-pending').classList.toggle('active', !isActive);
+  document.getElementById('active-events-wrapper').style.display  = isActive ? 'block' : 'none';
+  document.getElementById('pending-events-wrapper').style.display = isActive ? 'none'  : 'block';
+}
+
+/* ---- APPROVE EVENT ---- */
+function approveEvent(id, currentPrice) {
+  let newPrice = prompt(`Enter final price for the event (Current: ₹${currentPrice}):`, currentPrice);
+  if (newPrice === null) return; // User cancelled
+
+  let payload = { new_price: newPrice };
+  fetch('/admin/event/approve/' + id, { 
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        showToast('✅ ' + res.message, 'green');
+        setTimeout(() => location.reload(), 900);
+      } else {
+        showToast('❌ Error: ' + res.message, 'red');
+      }
+    })
+    .catch(() => showToast('❌ Network error.', 'red'));
+}
+
+/* ---- REJECT EVENT ---- */
+function rejectEvent(id) {
+  if (!confirm('Are you sure you want to reject and delete this event request?')) return;
+  fetch('/admin/event/reject/' + id, { method: 'POST' })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        showToast('🗑️ Event rejected.', 'red');
+        setTimeout(() => location.reload(), 900);
+      } else {
+        showToast('❌ Error: ' + res.message, 'red');
+      }
+    })
+    .catch(() => showToast('❌ Network error.', 'red'));
+}
+
+/* ---- DELETE ACTIVE EVENT ---- */
+function deleteEvent(id) {
+  if (!confirm('Delete this event? All registrations will also be deleted.')) return;
+  fetch('/admin/event/reject/' + id, { method: 'POST' })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        showToast('🗑️ Event deleted.', 'red');
+        setTimeout(() => location.reload(), 900);
+      } else {
+        showToast('❌ Error: ' + res.message, 'red');
+      }
+    })
+    .catch(() => showToast('❌ Network error.', 'red'));
+}
+
+/* ---- VIEW REGISTRANTS MODAL ---- */
+function viewRegistrations(btn, id) {
+  const title = btn.closest('tr').querySelector('.cell-name strong').innerText;
+  document.getElementById('modalEventTitle').innerText = 'Registrants: ' + title;
+  const tbody = document.getElementById('registrantsTableBody');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>';
+  document.getElementById('registrantsModal').style.display = 'flex';
+
+  fetch('/admin/event/registrations/' + id)
+    .then(r => r.json())
+    .then(res => {
+      tbody.innerHTML = '';
+      if (!res.success) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:red;">Failed: ${res.message}</td></tr>`;
+        return;
+      }
+      if (res.registrations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#9ca3af;"><i class="fa-solid fa-users-slash" style="font-size:28px;margin-bottom:10px;display:block;"></i>No registrations yet.</td></tr>';
+        return;
+      }
+      res.registrations.forEach(r => {
+        const pay = r.payment_status === 'free'
+          ? '<span class="badge-status badge-free">Free</span>'
+          : `<span class="badge-status badge-approved">Paid ₹${r.paid_amount}</span><div style="font-size:11px;color:#9ca3af;">via ${r.payment_method}</div>`;
+        tbody.innerHTML += `
+          <tr>
+            <td class="cell-name"><strong>${r.first_name} ${r.last_name}</strong></td>
+            <td><div>${r.email}</div><div style="font-size:11px;color:#9ca3af;">${r.phone}</div></td>
+            <td><div>${r.college}</div><div style="font-size:11px;color:#9ca3af;">${r.department} (${r.year_of_study})</div></td>
+            <td>${r.team_name ? `<strong>${r.team_name}</strong>` : '<em style="color:#ccc;">None</em>'}</td>
+            <td style="white-space:normal;max-width:190px;font-size:12px;">${r.why_join}</td>
+            <td>${pay}</td>
+            <td style="font-size:12px;">${r.registered_at}</td>
+          </tr>`;
+      });
+    })
+    .catch(() => {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;padding:20px;">Network error.</td></tr>';
+    });
+}
+
+function closeModal() { document.getElementById('registrantsModal').style.display = 'none'; }
+document.getElementById('registrantsModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+
+/* ---- TOAST NOTIFICATION ---- */
+function showToast(msg, color) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:28px;right:28px;padding:14px 22px;background:${color==='green'?'#16a34a':'#dc2626'};color:white;border-radius:10px;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.25);transition:opacity 0.4s;`;
+  t.innerText = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; setTimeout(() => t.remove(), 400); }, 2200);
+}
+</script>
+</body>
+</html>
