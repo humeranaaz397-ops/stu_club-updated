@@ -558,6 +558,13 @@ try:
     except Exception:
         pass
 
+    # 23. Alter live_classes (add status)
+    try:
+        _cursor.execute("ALTER TABLE live_classes ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'upcoming'")
+        _conn.commit()
+    except Exception:
+        pass
+
     _cursor.close()
     _conn.close()
 except Exception:
